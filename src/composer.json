@@ -8,5 +8,8 @@
       "name": "Michael Wilson",
       "email": "email@example.com"
     }
-  ]
+  ],
+  "require": {
+    "0k/php-oe-json": "0.0.2"
+  }
 }
