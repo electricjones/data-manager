@@ -1,0 +1,12 @@
+{
+  "name": "michaels/data-manager",
+  "description": "Manage data and such",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michael Wilson",
+      "email": "email@example.com"
+    }
+  ]
+}
