@@ -1,18 +1,21 @@
 {
-  "name": "michaels/data-manager",
-  "description": "this is my description",
-  "minimum-stability": "dev",
+  "name": "michaels/manager",
+  "description": "",
+  "keywords": [
+    "data", "midas", "algorithms", "algorithm"
+  ],
+  "homepage": "https://github.com/chrismichaels84/midas",
   "license": "MIT",
   "authors": [
     {
-      "name": "Michael Wilson",
-      "email": "phoenixlabsdev@gmail.com"
+      "name": "Michael",
+      "email": "phoenixlabsdev@gmail.com",
+      "homepage": "http://phoenixlabstech.org",
+      "role": "Lead Developer"
     }
   ],
   "require": {
-    "php": ">=5.4.0",
-    "container-interop/container-interop": "1.1.0"
-    
+    "php" : ">=5.4.0"
   },
   "require-dev": {
     "phpunit/phpunit" : "4.*",
@@ -26,6 +29,12 @@
   "autoload-dev": {
     "psr-4": {
       "Michaels\\Manager\\Test\\": "tests"
+    }
+  },
+
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
     }
   }
 }
