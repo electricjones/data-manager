@@ -2,13 +2,14 @@
 namespace Michaels\Manager;
 
 use ArrayAccess;
+use Interop\Container\ContainerInterface;
 
 /**
  * Manages Basic Items
  *
  * @package Michaels\Midas
  */
-class Manager implements ArrayAccess
+class DataManager implements ArrayAccess, ContainerInterface
 {
     /**
      * Arrayable items
@@ -148,6 +149,17 @@ class Manager implements ArrayAccess
         }
 
         return (isset($this->items[$alias]));
+    }
+
+    /**
+     * Check if an item exists in the manager
+     *
+     * @param string $alias
+     * @return bool
+     */
+    public function has($alias)
+    {
+        return $this->exists($alias);
     }
 
     /**

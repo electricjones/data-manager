@@ -1,10 +1,10 @@
 <?php
-namespace Michaels\Midas\Test\Unit;
+namespace Michaels\Manager\Test\Unit;
 
-use Michaels\Midas\Manager;
+use Michaels\Manager\DataManager as Manager;
 use stdClass;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class DataManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddSingle()
     {
@@ -150,10 +150,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('One\Two\Four', $four, "Failed get second deeply namespaced value.");
 
         $this->assertFalse($manager->get('does.not.exist'));
-
-//        $this->specify("it adds a command to an existing namespace", function () use ($midas) {
-//            $midas->addCommand('exists.two', 'Class');
-//        });
     }
 
     public function testCheckForNamespacedItems()
