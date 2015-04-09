@@ -5,6 +5,8 @@ use Michaels\Manager\DataManager as Manager;
 
 class DataManagerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $item = [];
+
     public function testAddSingleItem()
     {
         $manager = new Manager();
