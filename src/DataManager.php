@@ -9,7 +9,7 @@ use Interop\Container\ContainerInterface;
  *
  * @package Michaels\Midas
  */
-class DataManager implements ArrayAccess, ContainerInterface
+class DataManager implements ArrayAccess, ContainerInterface, DataManagerInterface
 {
     /**
      * Arrayable items
@@ -29,12 +29,12 @@ class DataManager implements ArrayAccess, ContainerInterface
 
     /**
      * Add an item to the manager
-     *
      * @param string $alias
-     * @param mixed $algorithm
+     * @param mixed $item
+     *
      * @return $this
      */
-    public function add($alias, $algorithm = null)
+    public function add($alias, $item = null)
     {
         // Are we adding multiple algorithms?
         if (is_array($alias)) {
@@ -46,10 +46,10 @@ class DataManager implements ArrayAccess, ContainerInterface
 
         // No, we are adding a single algorithm
         if ($this->isNamespaced($alias)) {
-            $this->addToNamespace($alias, $algorithm);
+            $this->addToNamespace($alias, $item);
 
         } else {
-            $this->items[$alias] = $algorithm;
+            $this->items[$alias] = $item;
         }
 
         return $this;
@@ -80,6 +80,15 @@ class DataManager implements ArrayAccess, ContainerInterface
      * @return array
      */
     public function getAll()
+    {
+        return $this->getAll();
+    }
+
+    /**
+     * Get raw collection from manager
+     * @return mixed
+     */
+    public function getRaw()
     {
         return $this->items;
     }
