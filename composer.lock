@@ -4,8 +4,96 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fa27dfbe41638c5fb29d7209f1bc3568",
-    "packages": [],
+    "hash": "da22e33dc84ebe40ca08c2b24d7f5903",
+    "packages": [
+        {
+            "name": "0k/php-oe-json",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/0k/php-oe-json.git",
+                "reference": "8dae0e724acc9fdbc57513b434a186299acdcf66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/0k/php-oe-json/zipball/8dae0e724acc9fdbc57513b434a186299acdcf66",
+                "reference": "8dae0e724acc9fdbc57513b434a186299acdcf66",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "tivoka/tivoka": "3.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpOeJson\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Valentin Lab",
+                    "email": "valentin.lab@kalysto.org",
+                    "homepage": "http://vaab.blog.kal.fr/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "OpenERP Json query",
+            "homepage": "https://github.com/0k/php-oe-json",
+            "keywords": [
+                "OpenERP"
+            ],
+            "time": "2014-01-28 08:44:39"
+        },
+        {
+            "name": "tivoka/tivoka",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marcelklehr/tivoka.git",
+                "reference": "3d4525bed0abe2e8c59be4d8e11382d671b5bedd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marcelklehr/tivoka/zipball/3d4525bed0abe2e8c59be4d8e11382d671b5bedd",
+                "reference": "3d4525bed0abe2e8c59be4d8e11382d671b5bedd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Tivoka": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Klehr",
+                    "email": "mklehr@gmx.net"
+                }
+            ],
+            "description": "The universal JSON-RPC client/server library. JSON-RPC done right!",
+            "homepage": "http://marcelklehr.github.com/tivoka",
+            "keywords": [
+                "api",
+                "json",
+                "json-rpc",
+                "rpc",
+                "xml-rpc"
+            ],
+            "time": "2014-01-08 21:08:38"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",

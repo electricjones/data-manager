@@ -1,10 +1,10 @@
 {
-  "name": "michaels/manager",
-  "description": "",
+  "name": "michaels/building-a-data-manager",
+  "description": "Source code for building a simple data manager tutorial. Part 1",
   "keywords": [
-    "data", "midas", "algorithms", "algorithm"
+    "data", "collection", "container", "manager"
   ],
-  "homepage": "https://github.com/chrismichaels84/midas",
+  "homepage": "http://phoenixlabstech.org/2015/04/17/building-a-data-manager/",
   "license": "MIT",
   "authors": [
     {
@@ -15,7 +15,8 @@
     }
   ],
   "require": {
-    "php" : ">=5.4.0"
+    "php" : ">=5.4.0",
+    "0k/php-oe-json": "0.0.2"
   },
   "require-dev": {
     "phpunit/phpunit" : "4.*",
@@ -29,12 +30,6 @@
   "autoload-dev": {
     "psr-4": {
       "Michaels\\Manager\\Test\\": "tests"
-    }
-  },
-
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0-dev"
     }
   }
 }
