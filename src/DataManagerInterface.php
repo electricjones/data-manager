@@ -9,12 +9,10 @@ interface DataManagerInterface
 {
     /**
      * Add an item to the manager
-
-     *
-*@param string $alias
+     * @param string $alias
      * @param mixed $item
      *
-*@return $this
+     * @return $this
      */
     public function add($alias, $item = null);
 

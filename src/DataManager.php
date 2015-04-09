@@ -9,7 +9,7 @@ use Interop\Container\ContainerInterface;
  *
  * @package Michaels\Midas
  */
-class DataManager implements ArrayAccess, ContainerInterface, DataManagerInterface
+class DataManager implements DataManagerInterface, ContainerInterface, ArrayAccess
 {
     /**
      * Arrayable items
