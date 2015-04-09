@@ -2,90 +2,77 @@
 namespace Michaels\Manager;
 
 /**
- * Manages Basic Items
+ * Manages Data Items
  * @package Michaels\Midas
  */
 interface DataManagerInterface
 {
     /**
-     * Add an item to the manager
+     * Adds a single item
+     *
      * @param string $alias
-     * @param mixed $item
+     * @param mixed  $item
      *
      * @return $this
      */
     public function add($alias, $item = null);
 
     /**
-     * Get an item from the manager
+     * Get a single item
      *
-     * @param string $alias
+     * @param      $alias
+     * @param null $fallback
      *
-     * @return array|bool
+     * @return mixed
      */
-    public function get($alias);
+    public function get($alias, $fallback = null);
 
     /**
-     * Get all the items from the manager
+     * Return all items as array
      * @return array
      */
     public function getAll();
 
     /**
-     * Get raw collection from manager
-     * @return mixed
-     */
-    public function getRaw();
-
-    /**
-     * Create or overwrite an item
+     * Confirm or deny that an item exists
      *
-     * @param string $alias
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function set($alias, $value);
-
-    /**
-     * Overwrite all items with an array
-     *
-     * @param array $items
-     *
-     * @return $this
-     */
-    public function reset(array $items = []);
-
-    /**
-     * Clear all items from the manager
-     * @return $this
-     */
-    public function clear();
-
-    /**
-     * Delete an individual item
-     *
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function remove($alias);
-
-    /**
-     * Check if an item exists in the manager
-     *
-     * @param string $alias
+     * @param $alias
      *
      * @return bool
      */
     public function exists($alias);
 
     /**
-     * Check if an item exists in the manager
+     * Confirm or deny that an item exists
      *
-     * @param string $alias
+     * @param $alias
      *
      * @return bool
      */
     public function has($alias);
+
+    /**
+     * Update an item
+     *
+     * @param      $alias
+     * @param null $item
+     *
+     * @return DataManager
+     */
+    public function set($alias, $item = null);
+
+    /**
+     * Delete an item
+     *
+     * @param $alias
+     *
+     * @return bool
+     */
+    public function remove($alias);
+
+    /**
+     * Clear the manager
+     * @return $this
+     */
+    public function clear();
 }
