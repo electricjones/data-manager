@@ -2,7 +2,7 @@
 namespace Michaels\Manager;
 
 /**
-* Manages Basic Items
+* Manages Data Items
 *
 * @package Michaels\Midas
 */
