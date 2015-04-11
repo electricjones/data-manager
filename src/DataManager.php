@@ -104,16 +104,13 @@ class DataManager implements DataManagerInterface
      * Delete an item
      * @param $alias
      *
-     * @return bool
+     * @return void
      */
     public function remove($alias)
     {
         if ($this->exists($alias)) {
-            $removed = $this->items[$alias];
             unset($this->items[$alias]);
         }
-
-        return (isset($removed)) ? $removed : false;
     }
 
     /**
