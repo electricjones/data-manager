@@ -43,11 +43,15 @@ class DataManager implements DataManagerInterface
      * @param null $fallback
      *
      * @return mixed
+     * @throws ItemNotFoundException
      */
     public function get($alias, $fallback = null)
     {
-        if (!$this->exists($alias) && !is_null($fallback)) {
+        $exists = $this->exists($alias);
+        if (!$exists && !is_null($fallback)) {
             return $fallback;
+        } elseif (!$exists) {
+            throw new ItemNotFoundException();
         }
 
         return $this->items[$alias];
