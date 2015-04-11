@@ -13,6 +13,13 @@ class DataManager implements DataManagerInterface
      */
     protected $items;
 
+    protected $silent = false;
+
+    public function __construct(array $items = [])
+    {
+        $this->items = $items;
+    }
+
     /**
      * Adds a single item
      *
@@ -31,7 +38,11 @@ class DataManager implements DataManagerInterface
         }
 
         // No, we are adding a single item
-        $this->items[$alias] = $item;
+        $loc = &$this->items;
+        foreach (explode('.', $alias) as $step) {
+            $loc = &$loc[$step];
+        }
+        $loc = $item;
 
         return $this;
     }
@@ -46,11 +57,25 @@ class DataManager implements DataManagerInterface
      */
     public function get($alias, $fallback = null)
     {
-        if (!$this->exists($alias) && !is_null($fallback)) {
-            return $fallback;
-        }
+        // Check for existence
+        $exists = $this->exists($alias);
 
-        return $this->items[$alias];
+        // The item does exist, return the value
+        if ($exists) {
+            $loc = &$this->items;
+            foreach (explode('.', $alias) as $step) {
+                $loc = &$loc[$step];
+            }
+            return $loc;
+
+        // The item does not exist, but we have a fallback
+        } elseif ($fallback !== null) {
+            return $fallback;
+
+        // The item does not exist, and there is no fallback
+        } else {
+            throw new ItemNotFoundException();
+        }
     }
 
     /**
@@ -64,13 +89,21 @@ class DataManager implements DataManagerInterface
 
     /**
      * Confirm or deny that an item exists
-     * @param $alias
      *
-     * @return bool
+     * @param      $alias
+     * @return mixed|bool
      */
     public function exists($alias)
     {
-        return (isset($this->items[$alias]));
+        $loc = &$this->items;
+        foreach (explode('.', $alias) as $step) {
+            if (!isset($loc[$step])) {
+                return false;
+            } else {
+                $loc = &$loc[$step];
+            }
+        }
+        return true;
     }
 
     /**
@@ -98,18 +131,24 @@ class DataManager implements DataManagerInterface
 
     /**
      * Delete an item
+     *
      * @param $alias
      *
-     * @return bool
+     * @return void
      */
     public function remove($alias)
     {
-        if ($this->exists($alias)) {
-            $removed = $this->items[$alias];
-            unset($this->items[$alias]);
+        $loc = &$this->items;
+        $parts = explode('.', $alias);
+
+        while (count($parts) > 1) {
+            $step = array_shift($parts);
+            if (isset($loc[$step]) && is_array($loc[$step])) {
+                $loc =& $loc[$step];
+            }
         }
 
-        return (isset($removed)) ? $removed : false;
+        unset($loc[array_shift($parts)]);
     }
 
     /**
