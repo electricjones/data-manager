@@ -59,6 +59,15 @@ class DataManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('default-value', $actual, 'failed to return a fallback value');
     }
 
+    /**
+     * @expectedException \Michaels\Manager\ItemNotFoundException
+     */
+    public function testThrowsExceptionIfItemNotFound()
+    {
+        $manager = new Manager();
+        $manager->get('doesntexist');
+    }
+
     public function testUpdateSingleItem()
     {
         $manager = new Manager();

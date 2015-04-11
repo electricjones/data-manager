@@ -54,6 +54,7 @@ class DataManager implements DataManagerInterface
      * @param null $fallback
      *
      * @return mixed
+     * @throws ItemNotFoundException
      */
     public function get($alias, $fallback = null)
     {
