@@ -1,10 +1,33 @@
 <?php
 namespace Michaels\Manager\Test;
 
-use Michaels\Manager\DataManager as Manager;
+use Michaels\Manager\Manager;
 
 class DataManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testInitializeWithData()
+    {
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => 'three-value',
+                    'four' => [
+                        'five' => 'five-value'
+                    ],
+                ],
+                'six' => [
+                    'seven' => 'seven-value',
+                    'eight' => 'eight-value'
+                ]
+            ],
+            'top' => 'top-value',
+        ];
+
+        $manager = new Manager($expected);
+
+        $this->assertEquals($expected, $manager->getAll(), "failed to return identical values set at instantiation");
+    }
+
     public function testAddAndGetSingleItem()
     {
         $manager = new Manager();
@@ -88,7 +111,7 @@ class DataManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('other-new-value', $manager->get('item2'), 'failed to update second item');
     }
 
-    public function testRemoveItem()
+    public function testRemoveSingleItem()
     {
         $manager = new Manager();
         $manager->add([
