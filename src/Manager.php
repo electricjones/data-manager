@@ -6,7 +6,8 @@ use Interop\Container\ContainerInterface;
 use ArrayAccess;
 use IteratorAggregate;
 use JsonSerializable;
-use Michaels\Manager\Traits\ManagesItemsInterface;
+use Michaels\Manager\Contracts\ManagesItemsInterface;
+use Michaels\Manager\Traits\ManagesItemsTrait;
 use Traversable;
 
 /**
@@ -19,9 +20,10 @@ class Manager implements
     ArrayAccess,
     Countable,
     IteratorAggregate,
-    JsonSerializable
+    JsonSerializable,
+    Traversable
 {
-    use Traits\ManagesItemsTrait;
+    use ManagesItemsTrait;
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
@@ -94,7 +96,7 @@ class Manager implements
      */
     public function getIterator()
     {
-        // TODO: Implement getIterator() method.
+        return $this->items;
     }
 
     /**
@@ -108,7 +110,7 @@ class Manager implements
      */
     public function count()
     {
-        // TODO: Implement count() method.
+        return count($this->items);
     }
 
     /**
@@ -120,6 +122,6 @@ class Manager implements
      */
     public function jsonSerialize()
     {
-        // TODO: Implement jsonSerialize() method.
+        return $this->items;
     }
 }

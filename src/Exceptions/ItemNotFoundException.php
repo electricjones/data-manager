@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager;
+namespace Michaels\Manager\Exceptions;
 
 use Exception;
 use Interop\Container\Exception\ContainerException;
