@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager;
 
+use ArrayIterator;
 use Countable;
 use Interop\Container\ContainerInterface;
 use ArrayAccess;
@@ -20,8 +21,7 @@ class Manager implements
     ArrayAccess,
     Countable,
     IteratorAggregate,
-    JsonSerializable,
-    Traversable
+    JsonSerializable
 {
     use ManagesItemsTrait;
 
@@ -96,7 +96,7 @@ class Manager implements
      */
     public function getIterator()
     {
-        return $this->items;
+        return new ArrayIterator($this->getAll());
     }
 
     /**
