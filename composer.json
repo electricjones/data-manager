@@ -2,7 +2,9 @@
   "name": "michaels/data-manager",
   "description": "Simple data manager for deep data structures, access via dot notation access, and raw or prepared retrieval",
   "keywords": [
-    "data", "collection", "container", "manager"
+    "data", "collection", "container", "manager",
+    "nest", "nested", "array", "dot notation",
+    "access", "deep data"
   ],
   "homepage": "https://github.com/chrismichaels84/data-manager",
   "license": "MIT",
