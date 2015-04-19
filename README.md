@@ -10,7 +10,7 @@
 
 Simple data manager for nested data, dot notation access, extendability, and container interoperability.
 
-This is the source code for part of on a tutorial that can be found at http://phoenixlabstech.org/2015/04/17/building-a-data-manager/
+This project began as a three part tutorial series which can be found at http://phoenixlabstech.org/2015/04/17/building-a-data-manager/
 
 ## Goals
   * Light weight
