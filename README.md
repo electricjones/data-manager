@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/chrismichaels84/data-manager/badge.svg?branch=master)](https://coveralls.io/r/chrismichaels84/data-manager?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/michaels/data-manager.svg?style=flat-square)](https://packagist.org/packages/michaels/data-manager)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/74752ec3-3676-4167-a0f0-b17affea9928/big.png)](https://insight.sensiolabs.com/projects/74752ec3-3676-4167-a0f0-b17affea9928)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/3ef3b9a4-6078-4ddf-bf0d-c84dac87f37a/big.png)](https://insight.sensiolabs.com/projects/3ef3b9a4-6078-4ddf-bf0d-c84dac87f37a)
 
 Simple data manager for nested data, dot notation access, extendability, and container interoperability.
 
