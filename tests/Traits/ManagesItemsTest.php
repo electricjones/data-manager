@@ -89,6 +89,21 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->exists('test'));
     }
 
+    /* has() is an alias of exists(), tested here for coverage */
+    public function testReturnTrueIfHasItem()
+    {
+        $this->manager->add('test', 'test-item');
+        $this->manager->add('booleantest', false);
+
+        $this->assertTrue($this->manager->has('test'), "Failed to confirm that `test` exists");
+        $this->assertTrue($this->manager->has('booleantest'), "Failed to confirm that boolean false value exists");
+    }
+
+    public function testReturnFalseIfDoesNotHaveItem()
+    {
+        $this->assertFalse($this->manager->has('test'));
+    }
+
     public function testProvidesFallbackValue()
     {
         $this->manager->add('one', 'one-value');
@@ -191,5 +206,42 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertFullManifest(['one' => ['two' => ['four' => 'four-value']]]);
         $this->assertTrue($this->manager->exists('one.two.four'), 'failed to leave nested item in tact');
         $this->assertFalse($this->manager->exists('one.two.three'), 'failed to remove nested item');
+    }
+
+    public function testResetItems()
+    {
+        $this->manager->add($this->testData);
+
+        $expected = ['reset' => ['me' => ['now']]];
+
+        $this->manager->reset($expected);
+
+        $this->assertEquals($expected, $this->manager->getAll(), "failed to reset manager");
+    }
+
+    public function testToJson()
+    {
+        $this->manager->add($this->testData);
+
+        $expected = json_encode($this->testData);
+
+        $this->assertEquals($expected, $this->manager->toJson(), "failed to serialize json");
+    }
+
+    public function testToString()
+    {
+        $this->manager->add($this->testData);
+
+        $expected = json_encode($this->testData);
+
+        $this->assertEquals($expected, "$this->manager", "failed to return json when called as a string");
+    }
+
+    public function testIsEmpty()
+    {
+        $this->assertTrue($this->manager->isEmpty(), "failed to confirm an empty manager");
+
+        $this->manager->add($this->testData);
+        $this->assertFalse($this->manager->isEmpty(), "failed to deny an empty manager");
     }
 }

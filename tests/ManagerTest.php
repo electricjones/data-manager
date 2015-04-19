@@ -44,6 +44,15 @@ class ManagerTest extends \PHPUnit_Framework_TestCase {
         $this->assertArrayNotHasKey('alias', $manager->getAll(), 'failed to remove item');
     }
 
+    public function testArrayAccessIsSet()
+    {
+        $manager = new Manager();
+        $manager->add('alias', 'value');
+
+        $this->assertTrue(isset($manager['alias']), "failed to confirm an existent item");
+        $this->assertFalse(isset($manager['notexist']), "failed to deny a non-existent item");
+    }
+
     public function testIteratorUseForEach()
     {
         $expected = [
