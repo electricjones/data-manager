@@ -2,20 +2,22 @@
 namespace Michaels\Manager;
 
 use ArrayIterator;
-use Countable;
-use Interop\Container\ContainerInterface;
 use ArrayAccess;
+use Countable;
 use IteratorAggregate;
 use JsonSerializable;
+use Interop\Container\ContainerInterface;
 use Michaels\Manager\Contracts\ChainsNestedItemsInterface;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
-use Michaels\Manager\Test\ChainsNestedItems;
 use Michaels\Manager\Traits\ChainsNestedItemsTrait;
 use Michaels\Manager\Traits\ManagesItemsTrait;
-use Traversable;
 
 /**
- * Class Manager
+ * Manages deeply nested, complex data.
+ *
+ * This concrete class implements ManagesItems and ChainsNestedItems as well as
+ * Container interoperability and various array functionality.
+ *
  * @package Michaels\Manager
  */
 class Manager implements
@@ -30,16 +32,7 @@ class Manager implements
     use ManagesItemsTrait, ChainsNestedItemsTrait;
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Whether a offset exists
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset <p>
-     * An offset to check for.
-     * </p>
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
+     * @implements ArrayAccess
      */
     public function offsetExists($offset)
     {
@@ -47,13 +40,7 @@ class Manager implements
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Offset to retrieve
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     * The offset to retrieve.
-     * </p>
-     * @return mixed Can return all value types.
+     * @implements ArrayAccess
      */
     public function offsetGet($offset)
     {
@@ -61,16 +48,7 @@ class Manager implements
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Offset to set
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     * The offset to assign the value to.
-     * </p>
-     * @param mixed $value <p>
-     * The value to set.
-     * </p>
-     * @return void
+     * @implements ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
@@ -78,13 +56,7 @@ class Manager implements
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Offset to unset
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     * The offset to unset.
-     * </p>
-     * @return void
+     * @implements ArrayAccess
      */
     public function offsetUnset($offset)
     {
@@ -92,11 +64,7 @@ class Manager implements
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Retrieve an external iterator
-     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or
-     * <b>Traversable</b>
+     * @implements IteratorAggregate
      */
     public function getIterator()
     {
@@ -104,13 +72,7 @@ class Manager implements
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Count elements of an object
-     * @link http://php.net/manual/en/countable.count.php
-     * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
+     * @implements Countable
      */
     public function count()
     {
@@ -118,11 +80,7 @@ class Manager implements
     }
 
     /**
-     * (PHP 5 &gt;= 5.4.0)<br/>
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
+     * @implements JSONSerializable
      */
     public function jsonSerialize()
     {

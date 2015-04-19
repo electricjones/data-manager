@@ -1,6 +1,10 @@
 <?php
 namespace Michaels\Manager\Contracts;
 
+/**
+ * Contract for Manager instances that return prepared data
+ * @package Michaels\Manager
+ */
 interface PreparedItemManagerInterface
 {
     /**
@@ -10,7 +14,6 @@ interface PreparedItemManagerInterface
      * and throwing InvalidItem or ItemNotFound exceptions when needed.
      *
      * @param $alias
-     *
      * @return mixed
      */
     public function fetch($alias);
