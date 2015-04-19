@@ -7,7 +7,10 @@ use Interop\Container\ContainerInterface;
 use ArrayAccess;
 use IteratorAggregate;
 use JsonSerializable;
+use Michaels\Manager\Contracts\ChainsNestedItemsInterface;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
+use Michaels\Manager\Test\ChainsNestedItems;
+use Michaels\Manager\Traits\ChainsNestedItemsTrait;
 use Michaels\Manager\Traits\ManagesItemsTrait;
 use Traversable;
 
@@ -17,13 +20,14 @@ use Traversable;
  */
 class Manager implements
     ManagesItemsInterface,
+    ChainsNestedItemsInterface,
     ContainerInterface,
     ArrayAccess,
     Countable,
     IteratorAggregate,
     JsonSerializable
 {
-    use ManagesItemsTrait;
+    use ManagesItemsTrait, ChainsNestedItemsTrait;
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
