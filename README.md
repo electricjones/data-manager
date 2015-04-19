@@ -80,7 +80,7 @@ class MyContainer {
     // Your stuff here. And you may override anything you like
 }
 ```
-Please note that the traits do NOT allow array access to your manager. See `src/Contracts for interfaces.
+Please note that the traits do NOT allow array access to your manager. See `src/Contracts` for interfaces.
 
 You may also use the tests under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
 
@@ -100,7 +100,7 @@ $ phpunit
 Contributions are welcome and will be fully credited. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
-If you discover any security related issues, please email chrismichaels84@users.noreply.github.com instead of using the issue tracker.
+If you discover any security related issues, please email phoenixlabsdev@gmail.com instead of using the issue tracker.
 
 ## Credits
 - [Michael Wilson](https://github.com/chrismichaels84)
