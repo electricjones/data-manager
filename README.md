@@ -1,4 +1,5 @@
 # Data Manager
+
 [![Latest Version](https://img.shields.io/github/release/chrismichaels84/data-manager.svg?style=flat-square)](https://github.com/chrismichaels84/data-manager/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/chrismichaels84/data-manager/master.svg?style=flat-square)](https://travis-ci.org/chrismichaels84/data-manager)
@@ -81,9 +82,25 @@ class MyContainer {
     // Your stuff here. And you may override anything you like
 }
 ```
-Please note that the traits do NOT allow array access to your manager. See `src/Contracts` for interfaces.
 
-You may also use the tests under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
+If you do use a trait, and want to initialize your class at construction, you cannot declare $items in your class (this will throw a fatal error). So, you can assign an array in your constructor like ```$this->items = $items```. I suggest, however, that you use the `initManager()` method. In the future initialization may be more complex than just assigning an array.
+
+```php
+class MyClass
+{
+    use ManagesItemsTrait;
+    
+    public function __construct(array $beginningItems)
+    {
+        $this->initManager($beginningItems); // or $this->items = $beginningItems;
+    }
+}
+
+```
+
+initManager() is used so it doesn't conflict with user-defined init() methods. Please note that the traits do NOT allow array access to your manager. See `src/Contracts` for interfaces.
+
+You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
 
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
