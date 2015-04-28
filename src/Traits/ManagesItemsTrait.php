@@ -27,6 +27,19 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Initializes a new manager instance.
+     *
+     * This is useful for implementations that have their own __construct method
+     * This is an alias for reset()
+     *
+     * @param array $items
+     */
+    public function init(array $items = [])
+    {
+        $this->items = $items;
+    }
+
+    /**
      * Adds a single item.
      *
      * Allow for dot notation (one.two.three) and item nesting.
