@@ -16,7 +16,7 @@ interface ManagesItemsInterface
      *
      * @param array $items
      */
-    public function init(array $items = []);
+    public function initManager(array $items = []);
 
     /**
      * Adds a single item.

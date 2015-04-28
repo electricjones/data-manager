@@ -34,7 +34,7 @@ trait ManagesItemsTrait
      *
      * @param array $items
      */
-    public function init(array $items = [])
+    public function initManager(array $items = [])
     {
         $this->items = $items;
     }
