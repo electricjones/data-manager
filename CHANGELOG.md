@@ -1,6 +1,11 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
+# V0.8.1 - 2015-6-3
+ - Allow for Traversables and Arrays in manager initialization
+ - Throw exception if trying to initialize Manager with a non-array or traversable
+ - Throw exception if nesting under an existing value that is not an array
+
 # v0.8 - 2015-4-19
 This was the first public release version
 
