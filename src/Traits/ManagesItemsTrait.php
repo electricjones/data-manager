@@ -4,6 +4,8 @@ namespace Michaels\Manager\Traits;
 use InvalidArgumentException;
 use Michaels\Manager\Exceptions\InvalidItemsObjectException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
+use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Traversable;
 
 /**
@@ -81,12 +83,37 @@ trait ManagesItemsTrait
             return $this;
         }
 
-        // No, we are adding a single item
         $loc = &$this->items;
-        foreach (explode('.', $alias) as $step) {
+
+        $pieces = explode('.', $alias);
+        $currentLevel = 1;
+        $nestLevels = count($pieces) - 1;
+
+        foreach ($pieces as $step) {
+            // Make sure we are not trying to nest under a non-array. This is gross
+            // https://github.com/chrismichaels84/data-manager/issues/6
+
+            // 1. Not at the last (value set) level, 2. The nest level is already set, 3. and is not an array
+            if ($nestLevels > $currentLevel && isset($loc[$step]) && !is_array($loc[$step])) {
+                throw new NestingUnderNonArrayException();
+            }
+
             $loc = &$loc[$step];
+            $currentLevel++;
         }
         $loc = $item;
+
+        // No, we are adding a single item
+//        try {
+//            $loc = &$this->items;
+//            foreach (explode('.', $alias) as $step) {
+//                $loc = &$loc[$step];
+//            }
+//            $loc = $item;
+//        } catch (\Exception $e) {
+//            die(print_r($e->getCode()));
+//            throw new NestingUnderNonArrayException($e->getMessage());
+//        }
 
         return $this;
     }
