@@ -41,6 +41,7 @@ $manager = new Michaels\Manager\Manager([
         ]
     ]
 ]);
+// Note, you may initialze Manager with an array or any instance of Traversable (like Manager itself)
 
 /* Basic Usage. All works with dot notation as well */
 $manager->add('name', 'value');
@@ -84,16 +85,16 @@ class MyContainer {
 }
 ```
 
-If you do use a trait, and want to initialize your class at construction, you cannot declare $items in your class (this will throw a fatal error). So, you can assign an array in your constructor like ```$this->items = $items```. I suggest, however, that you use the `initManager()` method. In the future initialization may be more complex than just assigning an array.
+If you do use a trait, and want to initialize your class at construction, you cannot declare $items in your class (this will throw a fatal error). Use the `initManager()` method instead.
 
 ```php
 class MyClass
 {
     use ManagesItemsTrait;
     
-    public function __construct(array $beginningItems)
+    public function __construct($beginningItems)
     {
-        $this->initManager($beginningItems); // or $this->items = $beginningItems;
+        $this->initManager($beginningItems);
     }
 }
 
@@ -106,6 +107,13 @@ You may also use the **tests** under `tests/traits` to test your integrated func
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
 
+If you try to initialize Manager with anything except an array or \Traversable, an `InvalidItemsObjectException` will be thrown.
+ 
+If you try to nest under an existing value that is not an array, an `NestingUnderNonArrayException` will be thrown.
+```php
+$manager = new Manager(['one' => 1]);
+$manager->add("one.two", "two-value"); // exception
+```
 ## Interoperability
 Data Manager is [PSR compliant](http://www.php-fig.org/) and [Container Interoperability](https://github.com/container-interop/container-interop) compliant. Any oversights, please let me know.
 
