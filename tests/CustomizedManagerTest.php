@@ -31,13 +31,15 @@ class CustomizedManagerTest extends \PHPUnit_Framework_TestCase {
         $arrayLikeObject = new Manager($expectedItems);
         $manager = new CustomizedManagerStub($arrayLikeObject, $expectedOther);
 
+        $this->assertTrue(is_array($manager->getAll()));
         $this->assertEquals($expectedItems, $manager->getAll(), "failed to return the items as an array");
 
-        $manager->add('one.two.three', 'three-value');
+        $manager->add('three.four.five', 'five-value');
 
-        $this->assertTrue($manager->has('one.two.three'), "failed to confirm existence of added nested value");
-        $this->assertEquals("three-value", $manager->get("one.two.three"), "failed to return new nested value");
+        $this->assertTrue($manager->has('three.four.five'), "failed to confirm existence of added nested value");
+        $this->assertEquals("five-value", $manager->get("three.four.five"), "failed to return new nested value");
 
+        $this->assertEquals($expectedOther, $manager->getOther(), "failed to return other value");
         // If this works, then everything should work
     }
 }
