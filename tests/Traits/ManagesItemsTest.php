@@ -244,4 +244,23 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->manager->add($this->testData);
         $this->assertFalse($this->manager->isEmpty(), "failed to deny an empty manager");
     }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
+     */
+    public function testThrowExceptionIfTryingToNestUnderANonArray()
+    {
+        $manager = new Manager(['one' => 1, 'two' => 2]);
+
+        $manager->add("one.two.three", "three-value");
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\InvalidItemsObjectException
+     */
+    public function testThrowExceptionIfInitializingWithInvalidItems()
+    {
+        // The Manager can only be initialized with an array or \Traversable (which is turned into an array)
+        $manager = new Manager(3);
+    }
 }
