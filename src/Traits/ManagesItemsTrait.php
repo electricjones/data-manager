@@ -1,7 +1,9 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use InvalidArgumentException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
+use Traversable;
 
 /**
  * Manages complex, nested data
@@ -21,9 +23,9 @@ trait ManagesItemsTrait
      * Build a new manager instance
      * @param array $items
      */
-    public function __construct(array $items = [])
+    public function __construct($items = [])
     {
-        $this->items = $items;
+        $this->initManager($items);
     }
 
     /**
@@ -34,9 +36,27 @@ trait ManagesItemsTrait
      *
      * @param array $items
      */
-    public function initManager(array $items = [])
+    public function initManager($items)
     {
-        $this->items = $items;
+        $this->items = $this->forceToArray($items);
+    }
+
+    /**
+     * @param $items
+     *
+     * @return mixed
+     */
+    protected function forceToArray($items)
+    {
+        if (is_array($items)) {
+            return $items;
+
+        } elseif ($items instanceof Traversable) {
+            return iterator_to_array($items);
+
+        } else {
+            throw new InvalidArgumentException("The items must be either an array or implement Traversable");
+        }
     }
 
     /**
@@ -189,9 +209,9 @@ trait ManagesItemsTrait
      * @param array $items
      * @return mixed
      */
-    public function reset(array $items)
+    public function reset($items)
     {
-        $this->items = $items;
+        $this->initManager($items);
     }
 
     /**

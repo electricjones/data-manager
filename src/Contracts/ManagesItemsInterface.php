@@ -16,7 +16,7 @@ interface ManagesItemsInterface
      *
      * @param array $items
      */
-    public function initManager(array $items = []);
+    public function initManager($items);
 
     /**
      * Adds a single item.
@@ -92,7 +92,7 @@ interface ManagesItemsInterface
      * @param array $items
      * @return mixed
      */
-    public function reset(array $items);
+    public function reset($items);
 
     /**
      * Returns json serialized representation of array of items
