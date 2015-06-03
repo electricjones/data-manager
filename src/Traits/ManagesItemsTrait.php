@@ -21,9 +21,9 @@ trait ManagesItemsTrait
      * Build a new manager instance
      * @param array $items
      */
-    public function __construct(array $items = [])
+    public function __construct($items = [])
     {
-        $this->items = $items;
+        $this->initManager($items);
     }
 
     /**
@@ -34,7 +34,7 @@ trait ManagesItemsTrait
      *
      * @param array $items
      */
-    public function initManager(array $items = [])
+    public function initManager($items)
     {
         $this->items = $items;
     }
