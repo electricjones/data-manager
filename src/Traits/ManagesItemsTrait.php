@@ -2,6 +2,7 @@
 namespace Michaels\Manager\Traits;
 
 use InvalidArgumentException;
+use Michaels\Manager\Exceptions\InvalidItemsObjectException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Traversable;
 
@@ -55,7 +56,9 @@ trait ManagesItemsTrait
             return iterator_to_array($items);
 
         } else {
-            throw new InvalidArgumentException("The items must be either an array or implement Traversable");
+            throw new InvalidItemsObjectException(
+                "Initializing manager only accepts items of type `array` or `\\Traversable`"
+            );
         }
     }
 
