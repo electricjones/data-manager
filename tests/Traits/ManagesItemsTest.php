@@ -43,11 +43,64 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     }
 
     /** Begin Tests **/
-    public function testInitializeWithData()
+    public function testInitManagerFromArray()
     {
         $manager = new Manager($this->testData);
 
         $this->assertEquals($this->testData, $manager->getAll(), "Failed to return identical values set at instantiation");
+    }
+
+    public function testInitManagerFromSingle()
+    {
+        $manager = new Manager('foo');
+        $this->assertEquals(['foo'], $manager->getAll());
+    }
+
+    public function testInitManagerFromNull()
+    {
+        $manager = new Manager(null);
+        $this->assertEquals([], $manager->getAll());
+        $manager = new Manager();
+        $this->assertEquals([], $manager->getAll());
+    }
+
+    public function testInitManagerFromManager()
+    {
+        $firstManager = new Manager(['foo' => 'bar']);
+        $secondManager = new Manager($firstManager);
+        $this->assertEquals(['foo' => 'bar'], $secondManager->getAll());
+    }
+
+    public function testInitManagerWithNestedManagers()
+    {
+        $firstManager = new Manager(['five' => 5]);
+        $secondManager = new Manager(['four' => $firstManager]);
+        $thirdManager = new Manager(['three' => $secondManager]);
+        $fourthManager = new Manager(['two' => $thirdManager]);
+        $topManager = new Manager(['one' => $fourthManager]);
+
+//        $expected = [
+//            'one' => [
+//                'two' => [
+//                    'three' => [
+//                        'four' => [
+//                            'five' => 5
+//                        ]
+//                    ]
+//                ]
+//            ]
+//        ];
+
+//        $this->assertEquals($expected, $topManager->getAll());
+        $this->assertEquals(5, $topManager->get("one.two.three.four.five"));
+    }
+
+    public function testInitManagerFromObject()
+    {
+        $object = new stdClass();
+        $object->foo = 'bar';
+        $manager = new Manager($object);
+        $this->assertEquals(['foo' => 'bar'], $manager->getAll());
     }
 
     public function testAddAndGetSingleItem()
@@ -253,14 +306,5 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager = new Manager(['one' => 1, 'two' => 2]);
 
         $manager->add("one.two.three", "three-value");
-    }
-
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\InvalidItemsObjectException
-     */
-    public function testThrowExceptionIfInitializingWithInvalidItems()
-    {
-        // The Manager can only be initialized with an array or \Traversable (which is turned into an array)
-        $manager = new Manager(3);
     }
 }

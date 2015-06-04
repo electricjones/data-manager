@@ -2,8 +2,7 @@
 All Notable changes to `Manager` will be documented in this file
 
 # V0.8.2 - 2015-6-3
- - Allow for Traversables and Arrays in manager initialization
- - Throw exception if trying to initialize Manager with a non-array or traversable
+ - Allow any value in manager initialization, will be cast to array
  - Throw exception if nesting under an existing value that is not an array
  - Added CustomizedManager test suite and tests for the above
  - ManagesItemsTrait::__toJson() accepts options

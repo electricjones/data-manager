@@ -2,9 +2,12 @@
 namespace Michaels\Manager\Traits;
 
 use InvalidArgumentException;
+use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\InvalidItemsObjectException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
+use Michaels\Manager\Manager;
+use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Traversable;
 
@@ -24,9 +27,27 @@ trait ManagesItemsTrait
      *
      * @param array $items
      */
-    public function initManager($items)
+    public function initManager($items = [])
     {
-        $this->items = $this->forceToArray($items);
+        $this->items = is_array($items) ? $items : $this->getArrayableItems($items);
+    }
+
+    /**
+     * Results array of items from Collection or Arrayable.
+     *
+     * @param  mixed  $items
+     * @return array
+     */
+    protected function getArrayableItems($items)
+    {
+        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
+            return $items->getAll();
+
+        } elseif ($items instanceof Traversable) {
+            return iterator_to_array($items);
+        }
+
+        return (array) $items;
     }
 
     /**
@@ -34,20 +55,31 @@ trait ManagesItemsTrait
      *
      * @return mixed
      */
-    protected function forceToArray($items)
-    {
-        if (is_array($items)) {
-            return $items;
-
-        } elseif ($items instanceof Traversable) {
-            return iterator_to_array($items);
-
-        } else {
-            throw new InvalidItemsObjectException(
-                "Initializing manager only accepts items of type `array` or `\\Traversable`"
-            );
-        }
-    }
+//    protected function forceToArray($items)
+//    {
+//        if (is_array($items)) {
+//            return $items;
+//
+//        } elseif ($items instanceof Traversable) {
+//            if ($this instanceof CustomizedManagerStub) {
+//                die(print_r($items));
+//            }
+//            foreach ($items as $item) {
+//                if (is_array($item) || $item instanceof Traversable) {
+//                    return $this->forceToArray($item);
+//                }
+//
+//                return $item;
+//            }
+//
+////            return iterator_to_array($items);
+//
+//        } else {
+//            throw new InvalidItemsObjectException(
+//                "Initializing manager only accepts items of type `array` or `\\Traversable`"
+//            );
+//        }
+//    }
 
     /**
      * Adds a single item.

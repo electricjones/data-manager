@@ -106,8 +106,6 @@ You may also use the **tests** under `tests/traits` to test your integrated func
 
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
-
-If you try to initialize Manager with anything except an array or \Traversable, an `InvalidItemsObjectException` will be thrown.
  
 If you try to nest under an existing value that is not an array, an `NestingUnderNonArrayException` will be thrown.
 ```php
