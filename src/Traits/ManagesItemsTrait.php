@@ -16,22 +16,7 @@ use Traversable;
  */
 trait ManagesItemsTrait
 {
-    /**
-     * The items stored in the manager
-     * @var array $items Items governed by manager
-     */
-    protected $items;
-
-    /**
-     * Build a new manager instance
-     * @param array $items
-     */
-    public function __construct($items = [])
-    {
-        $this->initManager($items);
-    }
-
-    /**
+        /**
      * Initializes a new manager instance.
      *
      * This is useful for implementations that have their own __construct method
