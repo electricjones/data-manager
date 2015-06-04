@@ -47,6 +47,13 @@ interface ManagesItemsInterface
     public function getAll();
 
     /**
+     * Return all items as array
+     *
+     * @return array
+     */
+    public function all();
+
+    /**
      * Confirm or deny that an item exists
      *
      * @param $alias

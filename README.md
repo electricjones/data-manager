@@ -1,5 +1,4 @@
 # Data Manager
-
 [![Latest Version](https://img.shields.io/github/release/chrismichaels84/data-manager.svg?style=flat-square)](https://github.com/chrismichaels84/data-manager/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/chrismichaels84/data-manager/master.svg?style=flat-square)](https://travis-ci.org/chrismichaels84/data-manager)
@@ -49,6 +48,7 @@ $manager->add('some.nested.data', 3); // Use dot notation for namespacing or nes
 $manager->get('name'); // 'value'
 $manager->get('doesntexist', 'fallback'); // 'fallback'
 $manager->getAll(); // returns array of all items
+$manager->all(); // returns array of all items
 $manager->exists('name'); // true
 $manager->exists('some.starting.data'); // true
 $manager->exists('nope'); // false

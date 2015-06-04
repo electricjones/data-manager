@@ -1,14 +1,8 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use InvalidArgumentException;
-use Michaels\Manager\Contracts\ManagesItemsInterface;
-use Michaels\Manager\Exceptions\InvalidItemsObjectException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
-use Michaels\Manager\Manager;
-use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Traversable;
 
 /**
@@ -19,7 +13,7 @@ use Traversable;
  */
 trait ManagesItemsTrait
 {
-        /**
+    /**
      * Initializes a new manager instance.
      *
      * This is useful for implementations that have their own __construct method
@@ -31,55 +25,6 @@ trait ManagesItemsTrait
     {
         $this->items = is_array($items) ? $items : $this->getArrayableItems($items);
     }
-
-    /**
-     * Results array of items from Collection or Arrayable.
-     *
-     * @param  mixed  $items
-     * @return array
-     */
-    protected function getArrayableItems($items)
-    {
-        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
-            return $items->getAll();
-
-        } elseif ($items instanceof Traversable) {
-            return iterator_to_array($items);
-        }
-
-        return (array) $items;
-    }
-
-    /**
-     * @param $items
-     *
-     * @return mixed
-     */
-//    protected function forceToArray($items)
-//    {
-//        if (is_array($items)) {
-//            return $items;
-//
-//        } elseif ($items instanceof Traversable) {
-//            if ($this instanceof CustomizedManagerStub) {
-//                die(print_r($items));
-//            }
-//            foreach ($items as $item) {
-//                if (is_array($item) || $item instanceof Traversable) {
-//                    return $this->forceToArray($item);
-//                }
-//
-//                return $item;
-//            }
-//
-////            return iterator_to_array($items);
-//
-//        } else {
-//            throw new InvalidItemsObjectException(
-//                "Initializing manager only accepts items of type `array` or `\\Traversable`"
-//            );
-//        }
-//    }
 
     /**
      * Adds a single item.
@@ -100,6 +45,7 @@ trait ManagesItemsTrait
             return $this;
         }
 
+        // No, we are adding a single item
         $loc = &$this->items;
 
         $pieces = explode('.', $alias);
@@ -119,18 +65,6 @@ trait ManagesItemsTrait
             $currentLevel++;
         }
         $loc = $item;
-
-        // No, we are adding a single item
-//        try {
-//            $loc = &$this->items;
-//            foreach (explode('.', $alias) as $step) {
-//                $loc = &$loc[$step];
-//            }
-//            $loc = $item;
-//        } catch (\Exception $e) {
-//            die(print_r($e->getCode()));
-//            throw new NestingUnderNonArrayException($e->getMessage());
-//        }
 
         return $this;
     }
@@ -174,6 +108,11 @@ trait ManagesItemsTrait
     public function getAll()
     {
         return $this->items;
+    }
+
+    public function all()
+    {
+        return $this->getAll();
     }
 
     /**
@@ -288,5 +227,23 @@ trait ManagesItemsTrait
     public function __toString()
     {
         return $this->toJson();
+    }
+
+    /**
+     * Results array of items from Collection or Arrayable.
+     *
+     * @param  mixed  $items
+     * @return array
+     */
+    protected function getArrayableItems($items)
+    {
+        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
+            return $items->getAll();
+
+        } elseif ($items instanceof Traversable) {
+            return iterator_to_array($items);
+        }
+
+        return (array) $items;
     }
 }

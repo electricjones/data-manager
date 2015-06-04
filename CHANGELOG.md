@@ -6,6 +6,7 @@ All Notable changes to `Manager` will be documented in this file
  - Throw exception if nesting under an existing value that is not an array
  - Added CustomizedManager test suite and tests for the above
  - ManagesItemsTrait::__toJson() accepts options
+ - alias all() to getAll()
 
 # V0.8.1 - 2015-5-12
  - Use initManager() to initialize Manager when extending the base class or using traits
