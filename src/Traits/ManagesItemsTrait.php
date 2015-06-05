@@ -125,6 +125,11 @@ trait ManagesItemsTrait
         return $this->items;
     }
 
+    /**
+     * Return all items as array
+     *
+     * @return array
+     */
     public function all()
     {
         return $this->getAll();
