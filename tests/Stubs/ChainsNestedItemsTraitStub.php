@@ -7,4 +7,5 @@ use Michaels\Manager\Traits\ManagesItemsTrait;
 class ChainsNestedItemsTraitStub
 {
     use ManagesItemsTrait, ChainsNestedItemsTrait;
+
 }

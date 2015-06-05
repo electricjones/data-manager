@@ -6,4 +6,5 @@ use Michaels\Manager\Traits\ManagesItemsTrait;
 class ManagesItemsTraitStub
 {
     use ManagesItemsTrait;
+
 }

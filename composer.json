@@ -1,6 +1,6 @@
 {
   "name": "michaels/data-manager",
-  "description": "Simple data manager for nested data, dot notation access, extendability, and container interoperability.",
+  "description": "Simple data manager for nested data, dot notation array access, extendability, and container interoperability.",
   "keywords": [
     "data", "collection", "container", "manager",
     "nest", "nested", "array", "dot notation",

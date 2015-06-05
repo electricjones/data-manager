@@ -16,7 +16,7 @@ interface ManagesItemsInterface
      *
      * @param array $items
      */
-    public function initManager(array $items = []);
+    public function initManager($items);
 
     /**
      * Adds a single item.
@@ -45,6 +45,13 @@ interface ManagesItemsInterface
      * @return array
      */
     public function getAll();
+
+    /**
+     * Return all items as array
+     *
+     * @return array
+     */
+    public function all();
 
     /**
      * Confirm or deny that an item exists
@@ -92,7 +99,7 @@ interface ManagesItemsInterface
      * @param array $items
      * @return mixed
      */
-    public function reset(array $items);
+    public function reset($items);
 
     /**
      * Returns json serialized representation of array of items

@@ -2,6 +2,8 @@
 namespace Michaels\Manager\Traits;
 
 use Michaels\Manager\Exceptions\ItemNotFoundException;
+use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
+use Traversable;
 
 /**
  * Manages complex, nested data
@@ -21,9 +23,9 @@ trait ManagesItemsTrait
      * Build a new manager instance
      * @param array $items
      */
-    public function __construct(array $items = [])
+    public function __construct($items = [])
     {
-        $this->items = $items;
+        $this->initManager($items);
     }
 
     /**
@@ -34,9 +36,9 @@ trait ManagesItemsTrait
      *
      * @param array $items
      */
-    public function initManager(array $items = [])
+    public function initManager($items = [])
     {
-        $this->items = $items;
+        $this->items = is_array($items) ? $items : $this->getArrayableItems($items);
     }
 
     /**
@@ -60,8 +62,22 @@ trait ManagesItemsTrait
 
         // No, we are adding a single item
         $loc = &$this->items;
-        foreach (explode('.', $alias) as $step) {
+
+        $pieces = explode('.', $alias);
+        $currentLevel = 1;
+        $nestLevels = count($pieces) - 1;
+
+        foreach ($pieces as $step) {
+            // Make sure we are not trying to nest under a non-array. This is gross
+            // https://github.com/chrismichaels84/data-manager/issues/6
+
+            // 1. Not at the last (value set) level, 2. The nest level is already set, 3. and is not an array
+            if ($nestLevels > $currentLevel && isset($loc[$step]) && !is_array($loc[$step])) {
+                throw new NestingUnderNonArrayException();
+            }
+
             $loc = &$loc[$step];
+            $currentLevel++;
         }
         $loc = $item;
 
@@ -107,6 +123,11 @@ trait ManagesItemsTrait
     public function getAll()
     {
         return $this->items;
+    }
+
+    public function all()
+    {
+        return $this->getAll();
     }
 
     /**
@@ -189,18 +210,20 @@ trait ManagesItemsTrait
      * @param array $items
      * @return mixed
      */
-    public function reset(array $items)
+    public function reset($items)
     {
-        $this->items = $items;
+        $this->initManager($items);
     }
 
     /**
-     * Returns json serialized representation of array of items
+     * Get the collection of items as JSON.
+     *
+     * @param  int  $options
      * @return string
      */
-    public function toJson()
+    public function toJson($options = 0)
     {
-        return json_encode($this->getAll());
+        return json_encode($this->getAll(), $options);
     }
 
     /**
@@ -219,5 +242,23 @@ trait ManagesItemsTrait
     public function __toString()
     {
         return $this->toJson();
+    }
+
+    /**
+     * Results array of items from Collection or Arrayable.
+     *
+     * @param  mixed  $items
+     * @return array
+     */
+    protected function getArrayableItems($items)
+    {
+        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
+            return $items->getAll();
+
+        } elseif ($items instanceof Traversable) {
+            return iterator_to_array($items);
+        }
+
+        return (array) $items;
     }
 }
