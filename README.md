@@ -100,7 +100,19 @@ class MyClass
 
 ```
 
-initManager() is used so it doesn't conflict with user-defined init() methods. Please note that the traits do NOT allow array access to your manager. See `src/Contracts` for interfaces.
+initManager() is used so it doesn't conflict with user-defined init() methods.
+
+#### Two important notes
+  1. Using `ManagesItemsTrait` does not implement ArrayAccess, so you can't use your manager as an array (`$manager['one']`). `Extend Manager` or take a look at it to do this.
+  2. Right now `ManagesItemsTrait` includes a constructor so you don't have to include on in your class. At the moment, if you use this trait, you will automatically be able to do `$manager = new Manager(['one' => `)`. THIS WILL CHANGE IN THE NEXT RELSEASE. It is just best not to include constructors in traits. Instead, you will simply have to:
+
+```php
+public function __construct($items = [])
+{
+    $this->initManager($items);
+}
+```
+In your class. I'd do it now, so you won't have to make the change later.
 
 You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
 
