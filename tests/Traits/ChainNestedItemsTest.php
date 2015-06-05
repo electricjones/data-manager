@@ -19,7 +19,8 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
             ]
         ];
 
-        $this->manager = new ChainsNestedItemsTraitStub($this->testData);
+        $this->manager = new ChainsNestedItemsTraitStub();
+        $this->manager->initManager($this->testData);
     }
 
     public function testGetThroughNestedMagicMethods()

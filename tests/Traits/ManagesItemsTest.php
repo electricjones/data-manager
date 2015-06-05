@@ -45,29 +45,41 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /** Begin Tests **/
     public function testInitManagerFromArray()
     {
-        $manager = new Manager($this->testData);
+        $manager = new Manager();
+        $manager->initManager($this->testData);
 
         $this->assertEquals($this->testData, $manager->getAll(), "Failed to return identical values set at instantiation");
     }
 
     public function testInitManagerFromSingle()
     {
-        $manager = new Manager('foo');
+        $manager = new Manager();
+        $manager->initManager('foo');
+
         $this->assertEquals(['foo'], $manager->getAll());
     }
 
     public function testInitManagerFromNull()
     {
-        $manager = new Manager(null);
-        $this->assertEquals([], $manager->getAll());
         $manager = new Manager();
+        $manager->initManager(null);
+
+        $this->assertEquals([], $manager->getAll());
+
+        $manager = new Manager();
+        $manager->initManager();
+
         $this->assertEquals([], $manager->getAll());
     }
 
     public function testInitManagerFromManager()
     {
-        $firstManager = new Manager(['foo' => 'bar']);
-        $secondManager = new Manager($firstManager);
+        $firstManager = new Manager();
+        $firstManager->initManager(['foo' => 'bar']);
+
+        $secondManager = new Manager();
+        $secondManager->initManager($firstManager);
+
         $this->assertEquals(['foo' => 'bar'], $secondManager->getAll());
     }
 
@@ -101,10 +113,13 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     {
         $object = new stdClass();
         $object->foo = 'bar';
-        $manager = new Manager($object);
+        $manager = new Manager();
+        $manager->initManager($object);
+
         $this->assertEquals(['foo' => 'bar'], $manager->getAll());
     }
 
+    /* Now, to save time, we use $this->manager */
     public function testAddAndGetSingleItem()
     {
         $this->manager->add('alias', 'value');
@@ -305,7 +320,8 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowExceptionIfTryingToNestUnderANonArray()
     {
-        $manager = new Manager(['one' => 1, 'two' => 2]);
+        $manager = new Manager();
+        $manager->initManager(['one' => 1, 'two' => 2]);
 
         $manager->add("one.two.three", "three-value");
     }

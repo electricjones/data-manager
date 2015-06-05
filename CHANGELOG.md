@@ -1,6 +1,9 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
+#v0.8.3 - NEXT
+ - Move constructor out of `ManagesItemsTrait`
+
 # V0.8.2 - 2015-6-3
  - Allow any value in manager initialization, will be cast to array
  - Throw exception if nesting under an existing value that is not an array
