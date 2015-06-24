@@ -14,6 +14,8 @@ use Traversable;
  */
 trait ManagesItemsTrait
 {
+    public $itemsName;
+
     /**
      * Initializes a new manager instance.
      *
@@ -24,7 +26,8 @@ trait ManagesItemsTrait
      */
     public function initManager($items = [])
     {
-        $this->items = is_array($items) ? $items : $this->getArrayableItems($items);
+        $repo = $this->getItemsName();
+        $this->$repo = is_array($items) ? $items : $this->getArrayableItems($items);
     }
 
     /**
@@ -237,6 +240,16 @@ trait ManagesItemsTrait
     public function isEmpty()
     {
         return empty($this->items);
+    }
+
+    public function getItemsName()
+    {
+        return $this->itemsName;
+    }
+
+    public function setItemsName($itemsName)
+    {
+        $this->itemsName = $itemsName;
     }
 
     /**
