@@ -57,7 +57,9 @@ trait ManagesItemsTrait
             // Make sure we are not trying to nest under a non-array. This is gross
             // https://github.com/chrismichaels84/data-manager/issues/6
 
-            // 1. Not at the last (value set) level, 2. The nest level is already set, 3. and is not an array
+            // 1. Not at the last level (the one with the desired value),
+            // 2. The nest level is already set,
+            // 3. and is not an array
             if ($nestLevels > $currentLevel && isset($loc[$step]) && !is_array($loc[$step])) {
                 throw new NestingUnderNonArrayException();
             }
@@ -74,31 +76,24 @@ trait ManagesItemsTrait
      * Get a single item
      *
      * @param string $alias
-     * @param null $fallback
+     * @param string $fallback Defaults to '_michaels_no_fallback' so null can be a fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
      * @return mixed
      */
-    public function get($alias, $fallback = null)
+    public function get($alias, $fallback = '_michaels_no_fallback')
     {
-        // Check for existence
-        $exists = $this->exists($alias);
+        $item = $this->getIfExists($alias);
 
-        // The item does exist, return the value
-        if ($exists) {
-            $loc = &$this->items;
-            foreach (explode('.', $alias) as $step) {
-                $loc = &$loc[$step];
+        // The item was not found
+        if ($item instanceof NoItemFoundMessage) {
+            if ($fallback !== '_michaels_no_fallback') {
+                return $fallback;
+            } else {
+                throw new ItemNotFoundException("$alias not found");
             }
-            return $loc;
-
-        // The item does not exist, but we have a fallback
-        } elseif ($fallback !== null) {
-            return $fallback;
-
-        // The item does not exist, and there is no fallback
-        } else {
-            throw new ItemNotFoundException("$alias not found");
         }
+
+        return $item;
     }
 
     public function getIfExists($alias)
