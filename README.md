@@ -29,7 +29,9 @@ $ composer require michaels/data-manager
 ```
 
 ## Upgrading
-Note that between 0.8.2 and 0.8.3, the `__constuct()` method was removed from `ManagesItemsTrait`. If you are using that trait directly, you should implement your own. See `Michaels\Manager\Manager` for an example.
+Note that between 0.8.2 and 0.8.3, the `__constuct()` method was removed from `ManagesItemsTrait`. If you are using that trait directly, you should implement your own. 
+
+See `Michaels\Manager\Manager` for an example.
 
 ## Getting Started
 Manager does exactly what you would expect: it *manages* complex items such as config data, arrays, and closures.
@@ -108,21 +110,20 @@ class MyClass
 initManager() is used so it doesn't conflict with user-defined init() methods.
 
 #### Two important notes
-  1. Using `ManagesItemsTrait` does not implement ArrayAccess, so you can't use your manager as an array (`$manager['one']`). `Extend Manager` or take a look at it to do this.
-  2. Right now `ManagesItemsTrait` includes a constructor so you don't have to include on in your class. At the moment, if you use this trait, you will automatically be able to do `$manager = new Manager(['one' => `)`. THIS WILL CHANGE IN THE NEXT RELSEASE. It is just best not to include constructors in traits. Instead, you will simply have to:
-
+  1. Using `ManagesItemsTrait` does not implement ArrayAccess, so you can't use your manager as an array (`$manager['one']`). Extend Manager or take a look at it to do this.
+  2. `ManagesItemsTrait` no longer includes a constructor. It is just best not to include constructors in traits. It is reccommended (though not neccessary) to use a constructor in your class:
 ```php
 public function __construct($items = [])
 {
     $this->initManager($items);
 }
 ```
-In your class. I'd do it now, so you won't have to make the change later.
 
 You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
 
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
+
 If you do not want an exception, use `getIfHas($alias)` which will return a `NoItemFoundMessage` object, or use a fallback value `get($item, $fallback)`.
 
 If you try to nest under an existing value that is not an array, an `NestingUnderNonArrayException` will be thrown.
@@ -138,6 +139,8 @@ We try for at least 80% test coverage.
 ``` bash
 $ phpunit
 ```
+
+You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
 
 ## Contributing
 Contributions are welcome and will be fully credited. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
