@@ -26,13 +26,13 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
     public function testGetThroughNestedMagicMethods()
     {
         $expectedA = $this->testData['one']['two']['three'];
-        $actualA = $this->manager->one->two->three();
+        $actualA = $this->manager->one()->two()->three;
 
         $expectedB = $this->testData['one']['two_b'];
-        $actualB = $this->manager->one->two_b();
+        $actualB = $this->manager->one()->two_b;
 
         $expectedC = $this->testData['one'];
-        $actualC = $this->manager->one();
+        $actualC = $this->manager->one;
 
         $this->assertEquals($expectedA, $actualA, 'failed to retrieve first nested value');
         $this->assertEquals($expectedB, $actualB, 'failed to retrieve second nested value');

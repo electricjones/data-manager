@@ -26,10 +26,17 @@ trait ChainsNestedItemsTrait
      */
     public function __get($name)
     {
-        $dot = ($this->currentLevel === false) ? '' : '.';
-        $this->currentLevel .= $dot . $name;
+        if ($this->currentLevel === false) {
+            $prefix = "";
+            $dot = "";
+        } else {
+            $prefix = $this->currentLevel;
+            $dot = ".";
+        }
 
-        return $this;
+        $this->currentLevel = false;
+
+        return $this->get($prefix . $dot . $name);
     }
 
     /**
@@ -43,16 +50,9 @@ trait ChainsNestedItemsTrait
      */
     public function __call($name, $arguments)
     {
-        if ($this->currentLevel === false) {
-            $prefix = "";
-            $dot = "";
-        } else {
-            $prefix = $this->currentLevel;
-            $dot = ".";
-        }
+        $dot = ($this->currentLevel === false) ? '' : '.';
+        $this->currentLevel .= $dot . $name;
 
-        $this->currentLevel = false;
-
-        return $this->get($prefix . $dot . $name);
+        return $this;
     }
 }

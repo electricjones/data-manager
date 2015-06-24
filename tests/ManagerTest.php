@@ -99,5 +99,15 @@ class ManagerTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($expected, $json = json_encode($manager), 'failed to encode json');
     }
+
+    public function testGetSingleItem()
+    {
+        $manager = new Manager();
+
+        $manager->add('key', 'value');
+
+        $this->assertEquals('value', $manager->key, 'failed to return a single item through magic method');
+
+    }
 }
 

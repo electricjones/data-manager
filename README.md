@@ -77,8 +77,8 @@ foreach ($manager as $item => $value) {
 }
 
 /* Finally, you may access values using magic methods */
-$manager->some->starting->data(); // 'here (optional)'
-// Note that the one you want to fetch should be called as a method
+$manager->some()->starting()->data; // 'here (optional)'
+// Note that levels are called as a method with no params. The data is called as a property
 ```
 
 ## Using Manager Traits

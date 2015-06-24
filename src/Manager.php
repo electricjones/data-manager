@@ -101,9 +101,4 @@ class Manager implements
     {
         return $this->items;
     }
-
-    public function __get($name)
-    {
-        return $this->get($name);
-    }
 }
