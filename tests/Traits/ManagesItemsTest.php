@@ -2,6 +2,8 @@
 namespace Michaels\Manager\Test\Traits;
 
 use Michaels\Manager\Messages\NoItemFoundMessage;
+use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
+use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
 use StdClass;
 
@@ -317,5 +319,44 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->initManager(['one' => 1, 'two' => 2]);
 
         $manager->add("one.two.three", "three-value");
+    }
+
+    public function testCustomizeItemsRepoName()
+    {
+        $manager = new Manager();
+        $manager->setItemsName('thisIsJustATest');
+        $manager->add('one.two.three', 'three-value');
+        $manager->add('one.four', 'four-value');
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => 'three-value',
+                ],
+                'four' => 'four-value'
+            ]
+        ];
+
+        $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
+    }
+
+    public function testCustomizeItemsRepoNameInClass()
+    {
+        $manager = new CustomizedItemsNameStub();
+        $manager->add('one.two.three', 'three-value');
+        $manager->add('one.four', 'four-value');
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => 'three-value',
+                ],
+                'four' => 'four-value'
+            ]
+        ];
+
+        $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
+        $this->assertEquals($expected, $manager->getItemsDirectly(), 'failed to set the new item repo');
+        $this->assertFalse(property_exists($manager, 'items'), 'still set items');
     }
 }

@@ -14,7 +14,7 @@ use Traversable;
  */
 trait ManagesItemsTrait
 {
-    public $itemsName;
+    protected $nameOfItemsRepository = 'items';
 
     /**
      * Initializes a new manager instance.
@@ -26,6 +26,10 @@ trait ManagesItemsTrait
      */
     public function initManager($items = [])
     {
+        if (property_exists($this, 'dataItemsName')) {
+            $this->setItemsName($this->dataItemsName);
+        }
+
         $repo = $this->getItemsName();
         $this->$repo = is_array($items) ? $items : $this->getArrayableItems($items);
     }
@@ -50,7 +54,8 @@ trait ManagesItemsTrait
         }
 
         // No, we are adding a single item
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
 
         $pieces = explode('.', $alias);
         $currentLevel = 1;
@@ -101,7 +106,8 @@ trait ManagesItemsTrait
 
     public function getIfExists($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
             if (!isset($loc[$step])) {
                 return new NoItemFoundMessage($alias);
@@ -124,7 +130,8 @@ trait ManagesItemsTrait
      */
     public function getAll()
     {
-        return $this->items;
+        $repo = $this->getItemsName();
+        return $this->$repo;
     }
 
     /**
@@ -145,7 +152,8 @@ trait ManagesItemsTrait
      */
     public function exists($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
             if (!isset($loc[$step])) {
                 return false;
@@ -188,7 +196,8 @@ trait ManagesItemsTrait
      */
     public function remove($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         $parts = explode('.', $alias);
 
         while (count($parts) > 1) {
@@ -207,7 +216,8 @@ trait ManagesItemsTrait
      */
     public function clear()
     {
-        $this->items = [];
+        $repo = $this->getItemsName();
+        $this->$repo = [];
         return $this;
     }
 
@@ -239,17 +249,18 @@ trait ManagesItemsTrait
      */
     public function isEmpty()
     {
-        return empty($this->items);
+        $repo = $this->getItemsName();
+        return empty($this->$repo);
     }
 
     public function getItemsName()
     {
-        return $this->itemsName;
+        return $this->nameOfItemsRepository;
     }
 
-    public function setItemsName($itemsName)
+    public function setItemsName($nameOfItemsRepository)
     {
-        $this->itemsName = $itemsName;
+        $this->nameOfItemsRepository = $nameOfItemsRepository;
     }
 
     /**

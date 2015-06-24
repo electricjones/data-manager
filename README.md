@@ -121,6 +121,13 @@ In your class. I'd do it now, so you won't have to make the change later.
 
 You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
 
+## Some Advanced Features
+By default, Manager stores all the items in an `$items` property. 
+If you are using the `ManagesItemsTrait` and want to use an internal property besides `$items` to avoid collisions, you have two options:
+
+  1. Use `$manager->setItemsName($nameOfProperty)` either in your constructor or before you add anything
+  2. Set the `$dataItemsName` property to a string of the new property name. Then be sure to call `initManager()` in your constructor.
+
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
 If you do not want an exception, use `getIfHas($alias)` which will return a `NoItemFoundMessage` object, or use a fallback value `get($item, $fallback)`.
