@@ -14,7 +14,13 @@ use Traversable;
  */
 trait ManagesItemsTrait
 {
+    /**
+     * Name of the property to hold the data items. Internal use only
+     * @var string
+     */
     protected $nameOfItemsRepository = 'items';
+
+    /* The user may also set $dataItemsName */
 
     /**
      * Initializes a new manager instance.
@@ -253,14 +259,24 @@ trait ManagesItemsTrait
         return empty($this->$repo);
     }
 
+    /**
+     * Returns the name of the property that holds data items
+     * @return string
+     */
     public function getItemsName()
     {
         return $this->nameOfItemsRepository;
     }
 
+    /**
+     * Sets the name of the property that holds data items
+     * @param $nameOfItemsRepository
+     * @return $this
+     */
     public function setItemsName($nameOfItemsRepository)
     {
         $this->nameOfItemsRepository = $nameOfItemsRepository;
+        return $this;
     }
 
     /**
