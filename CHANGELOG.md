@@ -1,6 +1,14 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
+#v0.8.4 - NEXT
+
+#v0.8.3 - 2015-6-24
+ - Move constructor out of `ManagesItemsTrait`
+ - Added `getIfHas()` which returns the item or a `NoItemFoundMessage`
+ - Refactor internal to use `getIfHas()` for performance
+ - Allows for configurable $items property
+
 # V0.8.2 - 2015-6-3
  - Allow any value in manager initialization, will be cast to array
  - Throw exception if nesting under an existing value that is not an array

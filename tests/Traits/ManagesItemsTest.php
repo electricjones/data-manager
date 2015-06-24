@@ -1,6 +1,9 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
+use Michaels\Manager\Messages\NoItemFoundMessage;
+use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
+use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
 use StdClass;
 
@@ -45,29 +48,41 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /** Begin Tests **/
     public function testInitManagerFromArray()
     {
-        $manager = new Manager($this->testData);
+        $manager = new Manager();
+        $manager->initManager($this->testData);
 
         $this->assertEquals($this->testData, $manager->getAll(), "Failed to return identical values set at instantiation");
     }
 
     public function testInitManagerFromSingle()
     {
-        $manager = new Manager('foo');
+        $manager = new Manager();
+        $manager->initManager('foo');
+
         $this->assertEquals(['foo'], $manager->getAll());
     }
 
     public function testInitManagerFromNull()
     {
-        $manager = new Manager(null);
-        $this->assertEquals([], $manager->getAll());
         $manager = new Manager();
+        $manager->initManager(null);
+
+        $this->assertEquals([], $manager->getAll());
+
+        $manager = new Manager();
+        $manager->initManager();
+
         $this->assertEquals([], $manager->getAll());
     }
 
     public function testInitManagerFromManager()
     {
-        $firstManager = new Manager(['foo' => 'bar']);
-        $secondManager = new Manager($firstManager);
+        $firstManager = new Manager();
+        $firstManager->initManager(['foo' => 'bar']);
+
+        $secondManager = new Manager();
+        $secondManager->initManager($firstManager);
+
         $this->assertEquals(['foo' => 'bar'], $secondManager->getAll());
     }
 
@@ -75,10 +90,13 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     {
         $object = new stdClass();
         $object->foo = 'bar';
-        $manager = new Manager($object);
+        $manager = new Manager();
+        $manager->initManager($object);
+
         $this->assertEquals(['foo' => 'bar'], $manager->getAll());
     }
 
+    /* Now, to save time, we use $this->manager */
     public function testAddAndGetSingleItem()
     {
         $this->manager->add('alias', 'value');
@@ -148,6 +166,24 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionIfItemNotFound()
     {
         $this->manager->get('doesntexist');
+    }
+
+    public function testGetIfExistsReturnsItemIfExists()
+    {
+        $this->manager->add($this->simpleNestData);
+
+        $actual = $this->manager->getIfExists('one.two');
+        $expected = $this->simpleNestData['one']['two'];
+
+        $this->assertEquals($expected, $actual, "failed to return an item that exists");
+    }
+
+    public function testGetIfExistsReturnsMessageIfNoExists()
+    {
+        $actual = $this->manager->getIfExists('nope');
+
+        $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
+        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
     }
 
     public function testUpdateSingleItem()
@@ -279,8 +315,48 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowExceptionIfTryingToNestUnderANonArray()
     {
-        $manager = new Manager(['one' => 1, 'two' => 2]);
+        $manager = new Manager();
+        $manager->initManager(['one' => 1, 'two' => 2]);
 
         $manager->add("one.two.three", "three-value");
+    }
+
+    public function testCustomizeItemsRepoName()
+    {
+        $manager = new Manager();
+        $manager->setItemsName('thisIsJustATest');
+        $manager->add('one.two.three', 'three-value');
+        $manager->add('one.four', 'four-value');
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => 'three-value',
+                ],
+                'four' => 'four-value'
+            ]
+        ];
+
+        $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
+    }
+
+    public function testCustomizeItemsRepoNameInClass()
+    {
+        $manager = new CustomizedItemsNameStub();
+        $manager->add('one.two.three', 'three-value');
+        $manager->add('one.four', 'four-value');
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => 'three-value',
+                ],
+                'four' => 'four-value'
+            ]
+        ];
+
+        $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
+        $this->assertEquals($expected, $manager->getItemsDirectly(), 'failed to set the new item repo');
+        $this->assertFalse(property_exists($manager, 'items'), 'still set items');
     }
 }

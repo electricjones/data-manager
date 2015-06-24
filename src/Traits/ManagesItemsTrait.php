@@ -3,6 +3,7 @@ namespace Michaels\Manager\Traits;
 
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
+use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
 /**
@@ -14,19 +15,12 @@ use Traversable;
 trait ManagesItemsTrait
 {
     /**
-     * The items stored in the manager
-     * @var array $items Items governed by manager
+     * Name of the property to hold the data items. Internal use only
+     * @var string
      */
-    protected $items;
+    protected $nameOfItemsRepository = 'items';
 
-    /**
-     * Build a new manager instance
-     * @param array $items
-     */
-    public function __construct($items = [])
-    {
-        $this->initManager($items);
-    }
+    /* The user may also set $dataItemsName */
 
     /**
      * Initializes a new manager instance.
@@ -38,7 +32,12 @@ trait ManagesItemsTrait
      */
     public function initManager($items = [])
     {
-        $this->items = is_array($items) ? $items : $this->getArrayableItems($items);
+        if (property_exists($this, 'dataItemsName')) {
+            $this->setItemsName($this->dataItemsName);
+        }
+
+        $repo = $this->getItemsName();
+        $this->$repo = is_array($items) ? $items : $this->getArrayableItems($items);
     }
 
     /**
@@ -61,7 +60,8 @@ trait ManagesItemsTrait
         }
 
         // No, we are adding a single item
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
 
         $pieces = explode('.', $alias);
         $currentLevel = 1;
@@ -71,7 +71,9 @@ trait ManagesItemsTrait
             // Make sure we are not trying to nest under a non-array. This is gross
             // https://github.com/chrismichaels84/data-manager/issues/6
 
-            // 1. Not at the last (value set) level, 2. The nest level is already set, 3. and is not an array
+            // 1. Not at the last level (the one with the desired value),
+            // 2. The nest level is already set,
+            // 3. and is not an array
             if ($nestLevels > $currentLevel && isset($loc[$step]) && !is_array($loc[$step])) {
                 throw new NestingUnderNonArrayException();
             }
@@ -88,31 +90,43 @@ trait ManagesItemsTrait
      * Get a single item
      *
      * @param string $alias
-     * @param null $fallback
+     * @param string $fallback Defaults to '_michaels_no_fallback' so null can be a fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
      * @return mixed
      */
-    public function get($alias, $fallback = null)
+    public function get($alias, $fallback = '_michaels_no_fallback')
     {
-        // Check for existence
-        $exists = $this->exists($alias);
+        $item = $this->getIfExists($alias);
 
-        // The item does exist, return the value
-        if ($exists) {
-            $loc = &$this->items;
-            foreach (explode('.', $alias) as $step) {
+        // The item was not found
+        if ($item instanceof NoItemFoundMessage) {
+            if ($fallback !== '_michaels_no_fallback') {
+                return $fallback;
+            } else {
+                throw new ItemNotFoundException("$alias not found");
+            }
+        }
+
+        return $item;
+    }
+
+    public function getIfExists($alias)
+    {
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
+        foreach (explode('.', $alias) as $step) {
+            if (!isset($loc[$step])) {
+                return new NoItemFoundMessage($alias);
+            } else {
                 $loc = &$loc[$step];
             }
-            return $loc;
-
-        // The item does not exist, but we have a fallback
-        } elseif ($fallback !== null) {
-            return $fallback;
-
-        // The item does not exist, and there is no fallback
-        } else {
-            throw new ItemNotFoundException("$alias not found");
         }
+        return $loc;
+    }
+
+    public function getIfHas($alias)
+    {
+        return $this->getIfExists($alias);
     }
 
     /**
@@ -122,7 +136,8 @@ trait ManagesItemsTrait
      */
     public function getAll()
     {
-        return $this->items;
+        $repo = $this->getItemsName();
+        return $this->$repo;
     }
 
     /**
@@ -143,7 +158,8 @@ trait ManagesItemsTrait
      */
     public function exists($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
             if (!isset($loc[$step])) {
                 return false;
@@ -186,7 +202,8 @@ trait ManagesItemsTrait
      */
     public function remove($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         $parts = explode('.', $alias);
 
         while (count($parts) > 1) {
@@ -205,7 +222,8 @@ trait ManagesItemsTrait
      */
     public function clear()
     {
-        $this->items = [];
+        $repo = $this->getItemsName();
+        $this->$repo = [];
         return $this;
     }
 
@@ -237,7 +255,28 @@ trait ManagesItemsTrait
      */
     public function isEmpty()
     {
-        return empty($this->items);
+        $repo = $this->getItemsName();
+        return empty($this->$repo);
+    }
+
+    /**
+     * Returns the name of the property that holds data items
+     * @return string
+     */
+    public function getItemsName()
+    {
+        return $this->nameOfItemsRepository;
+    }
+
+    /**
+     * Sets the name of the property that holds data items
+     * @param $nameOfItemsRepository
+     * @return $this
+     */
+    public function setItemsName($nameOfItemsRepository)
+    {
+        $this->nameOfItemsRepository = $nameOfItemsRepository;
+        return $this;
     }
 
     /**
