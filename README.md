@@ -92,7 +92,7 @@ class MyContainer {
 }
 ```
 
-If you do use a trait, and want to initialize your class at construction, you cannot declare $items in your class (this will throw a fatal error). Use the `initManager()` method instead.
+If you do use a trait, and want to initialize your class at construction, use the `initManager()` method.
 
 ```php
 class MyClass
