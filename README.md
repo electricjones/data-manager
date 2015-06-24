@@ -28,6 +28,9 @@ Via Composer
 $ composer require michaels/data-manager
 ```
 
+## Upgrading
+Note that between 0.8.2 and 0.8.3, the `__constuct()` method was removed from `ManagesItemsTrait`. If you are using that trait directly, you should implement your own. See `Michaels\Manager\Manager` for an example.
+
 ## Getting Started
 Manager does exactly what you would expect: it *manages* complex items such as config data, arrays, and closures.
 The best way to get started is simply instantiate `Michaels\Manager\Mangaer`
