@@ -104,6 +104,6 @@ class Manager implements
 
     public function __get($name)
     {
-        return $this->get('name');
+        return $this->get($name);
     }
 }
