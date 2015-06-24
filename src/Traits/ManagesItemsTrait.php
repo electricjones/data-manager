@@ -15,6 +15,14 @@ use Traversable;
 trait ManagesItemsTrait
 {
     /**
+     * Name of the property to hold the data items. Internal use only
+     * @var string
+     */
+    protected $nameOfItemsRepository = 'items';
+
+    /* The user may also set $dataItemsName */
+
+    /**
      * Initializes a new manager instance.
      *
      * This is useful for implementations that have their own __construct method
@@ -24,7 +32,12 @@ trait ManagesItemsTrait
      */
     public function initManager($items = [])
     {
-        $this->items = is_array($items) ? $items : $this->getArrayableItems($items);
+        if (property_exists($this, 'dataItemsName')) {
+            $this->setItemsName($this->dataItemsName);
+        }
+
+        $repo = $this->getItemsName();
+        $this->$repo = is_array($items) ? $items : $this->getArrayableItems($items);
     }
 
     /**
@@ -47,7 +60,8 @@ trait ManagesItemsTrait
         }
 
         // No, we are adding a single item
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
 
         $pieces = explode('.', $alias);
         $currentLevel = 1;
@@ -98,7 +112,8 @@ trait ManagesItemsTrait
 
     public function getIfExists($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
             if (!isset($loc[$step])) {
                 return new NoItemFoundMessage($alias);
@@ -121,7 +136,8 @@ trait ManagesItemsTrait
      */
     public function getAll()
     {
-        return $this->items;
+        $repo = $this->getItemsName();
+        return $this->$repo;
     }
 
     /**
@@ -142,7 +158,8 @@ trait ManagesItemsTrait
      */
     public function exists($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
             if (!isset($loc[$step])) {
                 return false;
@@ -185,7 +202,8 @@ trait ManagesItemsTrait
      */
     public function remove($alias)
     {
-        $loc = &$this->items;
+        $repo = $this->getItemsName();
+        $loc = &$this->$repo;
         $parts = explode('.', $alias);
 
         while (count($parts) > 1) {
@@ -204,7 +222,8 @@ trait ManagesItemsTrait
      */
     public function clear()
     {
-        $this->items = [];
+        $repo = $this->getItemsName();
+        $this->$repo = [];
         return $this;
     }
 
@@ -236,7 +255,28 @@ trait ManagesItemsTrait
      */
     public function isEmpty()
     {
-        return empty($this->items);
+        $repo = $this->getItemsName();
+        return empty($this->$repo);
+    }
+
+    /**
+     * Returns the name of the property that holds data items
+     * @return string
+     */
+    public function getItemsName()
+    {
+        return $this->nameOfItemsRepository;
+    }
+
+    /**
+     * Sets the name of the property that holds data items
+     * @param $nameOfItemsRepository
+     * @return $this
+     */
+    public function setItemsName($nameOfItemsRepository)
+    {
+        $this->nameOfItemsRepository = $nameOfItemsRepository;
+        return $this;
     }
 
     /**
