@@ -3,6 +3,7 @@ All Notable changes to `Manager` will be documented in this file
 
 #v0.8.3 - NEXT
  - Move constructor out of `ManagesItemsTrait`
+ - Added `getIfHas()` which returns the item or a `NoItemFoundMessage`
 
 # V0.8.2 - 2015-6-3
  - Allow any value in manager initialization, will be cast to array

@@ -47,6 +47,8 @@ $manager->add('name', 'value');
 $manager->add('some.nested.data', 3); // Use dot notation for namespacing or nesting
 $manager->get('name'); // 'value'
 $manager->get('doesntexist', 'fallback'); // 'fallback'
+$manager->get('doesntexist') // throws an ItemNotFoundException with no fallback
+$manager->getIfHas('doesntexist') // returns a NoItemFoundMessage instead of a script-stopping exception
 $manager->getAll(); // returns array of all items
 $manager->all(); // returns array of all items
 $manager->exists('name'); // true
@@ -118,7 +120,8 @@ You may also use the **tests** under `tests/traits` to test your integrated func
 
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
- 
+If you do not want an exception, use `getIfHas($alias)` which will return a `NoItemFoundMessage` object, or use a fallback value `get($item, $fallback)`.
+
 If you try to nest under an existing value that is not an array, an `NestingUnderNonArrayException` will be thrown.
 ```php
 $manager = new Manager(['one' => 1]);
