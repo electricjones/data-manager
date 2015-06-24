@@ -3,6 +3,7 @@ namespace Michaels\Manager\Traits;
 
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
+use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
 /**
@@ -98,6 +99,24 @@ trait ManagesItemsTrait
         } else {
             throw new ItemNotFoundException("$alias not found");
         }
+    }
+
+    public function getIfExists($alias)
+    {
+        $loc = &$this->items;
+        foreach (explode('.', $alias) as $step) {
+            if (!isset($loc[$step])) {
+                return new NoItemFoundMessage($alias);
+            } else {
+                $loc = &$loc[$step];
+            }
+        }
+        return $loc;
+    }
+
+    public function getIfHas($alias)
+    {
+        return $this->getIfExists($alias);
     }
 
     /**

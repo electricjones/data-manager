@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
+use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
 use StdClass;
 
@@ -163,6 +164,24 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionIfItemNotFound()
     {
         $this->manager->get('doesntexist');
+    }
+
+    public function testGetIfExistsReturnsItemIfExists()
+    {
+        $this->manager->add($this->simpleNestData);
+
+        $actual = $this->manager->getIfExists('one.two');
+        $expected = $this->simpleNestData['one']['two'];
+
+        $this->assertEquals($expected, $actual, "failed to return an item that exists");
+    }
+
+    public function testGetIfExistsReturnsMessageIfNoExists()
+    {
+        $actual = $this->manager->getIfExists('nope');
+
+        $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
+        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
     }
 
     public function testUpdateSingleItem()
