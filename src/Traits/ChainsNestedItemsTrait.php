@@ -45,7 +45,6 @@ trait ChainsNestedItemsTrait
      * @see Michaels\Manager\Contracts\ChainsNestedItemsInterface
      * @param string $name The alias to be retrieved
      * @param array $arguments Not used at present
-     * @throws \Michaels\Manager\Exceptions\ItemNotFoundException
      * @return mixed item value
      */
     public function __call($name, $arguments)
@@ -54,5 +53,28 @@ trait ChainsNestedItemsTrait
         $this->currentLevel .= $dot . $name;
 
         return $this;
+    }
+
+    /**
+     * Sets an item at the current nest level.
+     *
+     * @see Michaels\Manager\Contracts\ChainsNestedItemsInterface
+     * @param string $key The alias to be retrieved
+     * @param mixed $value Value to be set
+     * @return $this
+     */
+    public function __set($key, $value)
+    {
+        if ($this->currentLevel === false) {
+            $prefix = "";
+            $dot = "";
+        } else {
+            $prefix = $this->currentLevel;
+            $dot = ".";
+        }
+
+        $this->currentLevel = false;
+
+        return $this->add($prefix . $dot . $key, $value);
     }
 }
