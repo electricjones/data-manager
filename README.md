@@ -78,6 +78,9 @@ foreach ($manager as $item => $value) {
 
 /* Finally, you may access values using magic methods */
 $manager->some()->starting()->data; // 'here (optional)'
+$manager->some()->item = 'item'; // sets some.item = 'item'
+$manager->some()->item()->drop(); // deletes some.item
+
 // Note that levels are called as a method with no params. The data is called as a property
 ```
 

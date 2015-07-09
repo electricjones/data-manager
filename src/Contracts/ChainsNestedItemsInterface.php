@@ -8,6 +8,13 @@ namespace Michaels\Manager\Contracts;
  */
 interface ChainsNestedItemsInterface
 {
+
+    /**
+     * Deletes item at the current level of nesting (and below)
+     * @return mixed
+     */
+    public function drop();
+
     /**
      * Sets the current level of nesting.
      *

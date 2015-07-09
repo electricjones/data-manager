@@ -3,6 +3,7 @@ All Notable changes to `Manager` will be documented in this file
 
 #v0.8.4 - NEXT
  - Bug: reversed nestable items so you can get a single item without calling it as method
+ - Added: CRUD through nested items magic methods (ChainsNEstedItemsTrait) Issue #3
 
 #v0.8.3 - 2015-6-24
  - Move constructor out of `ManagesItemsTrait`

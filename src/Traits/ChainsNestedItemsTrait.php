@@ -18,6 +18,15 @@ trait ChainsNestedItemsTrait
     protected $currentLevel = false;
 
     /**
+     * Deletes item at the current level of nesting (and below)
+     * @return mixed
+     */
+    public function drop()
+    {
+        return $this->remove($this->currentLevel);
+    }
+
+    /**
      * Sets the current level of nesting.
      *
      * @see Michaels\Manager\Contracts\ChainsNestedItemsInterface
@@ -26,17 +35,9 @@ trait ChainsNestedItemsTrait
      */
     public function __get($name)
     {
-        if ($this->currentLevel === false) {
-            $prefix = "";
-            $dot = "";
-        } else {
-            $prefix = $this->currentLevel;
-            $dot = ".";
-        }
+        $prefix = $this->buildPrefix();
 
-        $this->currentLevel = false;
-
-        return $this->get($prefix . $dot . $name);
+        return $this->get($prefix . $name);
     }
 
     /**
@@ -66,16 +67,23 @@ trait ChainsNestedItemsTrait
      */
     public function __set($key, $value)
     {
+        $prefix = $this->buildPrefix();
+
+        return $this->add($prefix . $key, $value);
+    }
+
+    /**
+     * @return array
+     */
+    protected function buildPrefix()
+    {
         if ($this->currentLevel === false) {
-            $prefix = "";
-            $dot = "";
+            return "";
         } else {
             $prefix = $this->currentLevel;
-            $dot = ".";
+            $this->currentLevel = false;
+
+            return $prefix . ".";
         }
-
-        $this->currentLevel = false;
-
-        return $this->add($prefix . $dot . $key, $value);
     }
 }

@@ -68,5 +68,23 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("eight", $this->manager->get('five.six.seven.eight'));
         $this->assertEquals("nine", $this->manager->five()->six()->seven()->nine);
     }
+
+    public function testUpdateNestedItemThroughMagicMethod() {
+        $this->manager->one()->two = [];
+        $this->manager->one()->two()->three()->four = "four";
+
+        $this->manager->one()->two()->three()->four = "new-four";
+
+        $this->assertEquals("new-four", $this->manager->get('one.two.three.four'), "failed to update property");
+    }
+
+    public function testDeleteNestedItemThroughMagicMethod() {
+        $this->manager->one()->two = 'two';
+        $this->manager->one()->three = 'three';
+
+        $this->manager->one()->three()->drop();
+        $this->assertFalse($this->manager->has('one.three'), 'failed to remove property');
+        $this->assertTrue($this->manager->has('one.two'), 'removed wrong property');
+    }
 }
 
