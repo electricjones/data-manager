@@ -45,6 +45,7 @@ trait ChainsNestedItemsTrait
      * @see Michaels\Manager\Contracts\ChainsNestedItemsInterface
      * @param string $name The alias to be retrieved
      * @param array $arguments Not used at present
+     * @throws \Michaels\Manager\Exceptions\ItemNotFoundException
      * @return mixed item value
      */
     public function __call($name, $arguments)
