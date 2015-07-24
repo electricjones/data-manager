@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
