@@ -21,6 +21,8 @@ trait ManagesItemsTrait
      * @var string
      */
     protected $nameOfItemsRepository = 'items';
+
+    /** @var array Array of protected aliases */
     protected $protectedItems = [];
 
     /* The user may also set $dataItemsName */
@@ -115,6 +117,11 @@ trait ManagesItemsTrait
         return $item;
     }
 
+    /**
+     * Return an item if it exists
+     * @param $alias
+     * @return NoItemFoundMessage
+     */
     public function getIfExists($alias)
     {
         $repo = $this->getItemsName();
@@ -243,31 +250,15 @@ trait ManagesItemsTrait
         $this->initManager($items);
     }
 
+    /**
+     * Guard an alias from being modified
+     * @param $item
+     * @return $this
+     */
     public function protect($item)
     {
         array_push($this->protectedItems, $item);
         return $this;
-    }
-
-    protected function checkIfProtected($item)
-    {
-        $this->performProtectedCheck($item);
-
-        if (!is_string($item)) {
-            return;
-        }
-
-        $pieces = explode(".", $item);
-        $current = $pieces[0];
-        $i = 0;
-
-        foreach ($pieces as $piece) {
-            $this->performProtectedCheck($current);
-            if (isset($pieces[$i+1])) {
-                $current .= $current . "." . $pieces[$i+1];
-                $i++;
-            }
-        }
     }
 
     /**
@@ -339,11 +330,31 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Cycle through the nests to see if an item is protected
+     * @param $item
+     */
+    protected function checkIfProtected($item)
+    {
+        $this->performProtectedCheck($item);
+
+        if (!is_string($item)) {
+            return;
+        }
+
+        $prefix = $item;
+        while (false !== $pos = strrpos($prefix, '.')) {
+            $prefix = substr($item, 0, $pos);
+            $this->performProtectedCheck($prefix);
+            $prefix = rtrim($prefix, '.');
+        }
+    }
+
+    /**
+     * Throws an exception if item is protected
      * @param $item
      */
     protected function performProtectedCheck($item)
     {
-// Explicitly protected
         if (in_array($item, $this->protectedItems)) {
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
