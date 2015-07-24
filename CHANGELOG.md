@@ -2,7 +2,7 @@
 All Notable changes to `Manager` will be documented in this file
 
 #v0.8.4 - NEXT
- - Added DependsOnManagesItemsTrait to ensure Collections and ChainsNestedItems can manage items
+ - Split Arrayable stuff in Manager to ArrayableTrait
  - Bug: reversed nestable items so you can get a single item without calling it as method
  - Added: CRUD through nested items magic methods (ChainsNEstedItemsTrait) Issue #3
 

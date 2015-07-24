@@ -11,8 +11,6 @@ namespace Michaels\Manager\Traits;
  */
 trait ChainsNestedItemsTrait
 {
-    use DependsOnManagesItemsTrait;
-
     /**
      * Current level of nesting
      * @var bool|string
@@ -25,7 +23,6 @@ trait ChainsNestedItemsTrait
      */
     public function drop()
     {
-        $this->ensureCanManageItems();
         return $this->remove($this->currentLevel);
     }
 
@@ -38,7 +35,6 @@ trait ChainsNestedItemsTrait
      */
     public function __get($name)
     {
-        $this->ensureCanManageItems();
         $prefix = $this->buildPrefix();
 
         return $this->get($prefix . $name);
@@ -55,7 +51,6 @@ trait ChainsNestedItemsTrait
      */
     public function __call($name, $arguments)
     {
-        $this->ensureCanManageItems();
         $dot = ($this->currentLevel === false) ? '' : '.';
         $this->currentLevel .= $dot . $name;
 
@@ -72,7 +67,6 @@ trait ChainsNestedItemsTrait
      */
     public function __set($key, $value)
     {
-        $this->ensureCanManageItems();
         $prefix = $this->buildPrefix();
 
         return $this->add($prefix . $key, $value);
@@ -83,7 +77,6 @@ trait ChainsNestedItemsTrait
      */
     protected function buildPrefix()
     {
-        $this->ensureCanManageItems();
 
         if ($this->currentLevel === false) {
             return "";
