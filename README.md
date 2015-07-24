@@ -17,9 +17,10 @@ This project began as a three part tutorial series which can be found at http://
   * Fluent, simple, clear API
   * Manage any data type (closure, object, primitives, etc)
   * Manage nested data via dot-notation
-  * Access nested data via magic methods ($manager->one->two->three)
+  * Manage nested data via magic methods ($manager->one()->two()->three)
   * Be composable - integrate into current containers via traits
   * Be extensible.
+  * Allow for protected data (immutable)
   * Test coverage, PSR compliant, [container interoperability](https://github.com/container-interop/container-interop), and best practices
 
 ## Install
@@ -45,7 +46,7 @@ $manager = new Michaels\Manager\Manager([
         ]
     ]
 ]);
-// Note, you may initialze Manager with an array or any instance of Traversable (like Manager itself)
+// Note, you may initialize Manager with an array or any instance of Traversable (like Manager itself)
 
 /* Basic Usage. All works with dot notation as well */
 $manager->add('name', 'value');
@@ -76,20 +77,36 @@ foreach ($manager as $item => $value) {
     // do whatever your heart desires
 }
 
-/* Finally, you may access values using magic methods */
+/* Finally, you may manage values using magic methods */
 $manager->some()->starting()->data; // 'here (optional)'
 $manager->some()->item = 'item'; // sets some.item = 'item'
 $manager->some()->item()->drop(); // deletes some.item
 
-// Note that levels are called as a method with no params. The data is called as a property
+// Note that levels are called as a method with no params. The data is then called, updated, or set as a property.
+```
+
+## Protecting Data
+You can also guard any item or nest from being changed. Simply,
+```php
+$manager->protect('some.data'); //now some.data and everything under it cannot be altered
+$manager->set('some.data.here', 'new-value'); // throws an exception
 ```
 
 ## Using Manager Traits
-If you have your own container objects and want to add Manager functionality to them, you may import traits into your class:
+If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.
+
+There are 3 Traits that make up Manager:
+  1. `ManagesItemsTrait` fulfills `ManagesItemsInterface` and adds most functionality. Look at the interface for full list.
+  2. `ArrayableTrait` makes the class usable as an array (`$manager['some']['data']`) or in loops and such
+  3. `ChainsNestedItemsTrait` allows you to use fluent properties to manage data (`$manager->one()->two()->three = 'three`)
+
+*NOTE THAT* all traits depend on ManagesItemsTrait. If you try to use ChainsNestedItemsTrait or ArrayableTrait without ManagesItemsTrait, you will get all sorts of errors.
+
 ```php
 class MyContainer {
     use Michaels\Manager\Traits\ManagesItemsTrait; // for all the basic functionality
     use Michaels\Manager\Traits\ChainsNestedItemsTrait; // to access nested items via magic methods
+    use Michaels\Manager\Traits\ArrayableTrait; // So you can use $myConainer like an array
     
     // Your stuff here. And you may override anything you like
 }
@@ -113,8 +130,8 @@ class MyClass
 initManager() is used so it doesn't conflict with user-defined init() methods.
 
 #### Two important notes
-  1. Using `ManagesItemsTrait` does not implement ArrayAccess, so you can't use your manager as an array (`$manager['one']`). Extend Manager or take a look at it to do this.
-  2. `ManagesItemsTrait` no longer includes a constructor. It is just best not to include constructors in traits. It is reccommended (though not neccessary) to use a constructor in your class:
+  1. Using `ManagesItemsTrait` does not implement ArrayAccess, so you can't use your manager as an array (`$manager['one']`). Use `ArrayableTrait` for that.
+  2. `ManagesItemsTrait` no longer includes a constructor. It is just best not to include constructors in traits. It is recommended (though not necessary) to use a constructor in your class:
 ```php
 public function __construct($items = [])
 {
@@ -141,6 +158,8 @@ If you try to nest under an existing value that is not an array, an `NestingUnde
 $manager = new Manager(['one' => 1]);
 $manager->add("one.two", "two-value"); // exception
 ```
+
+If you try to alter a protected item, a `ModifyingProtectedItemException` will be thrown.
 ## Interoperability
 Data Manager is [PSR compliant](http://www.php-fig.org/) and [Container Interoperability](https://github.com/container-interop/container-interop) compliant. Any oversights, please let me know.
 

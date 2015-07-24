@@ -363,7 +363,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
      */
-    public function testProtectItems()
+    public function testProtectSingleItem()
     {
         $manager = new Manager([
             'some' => [
@@ -380,7 +380,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
      */
-    public function testProtectNestedItems()
+    public function testProtectItemsUnderANest()
     {
         $manager = new Manager([
             'some' => [
@@ -393,21 +393,4 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->protect('some');
         $manager->set('some.data.here', 'new-value');
     }
-
-//    public function testUnProtectItems()
-//    {
-//        $manager = new Manager([
-//            'some' => [
-//                'data' => [
-//                    'here' => 'value'
-//                ]
-//            ]
-//        ]);
-//
-//        $manager->protect('some');
-//        $manager->unprotect('some');
-//        $manager->set('some.data.here', 'new-value');
-//
-//        $this->assertEquals('new-value', $manager->get('some.data.here'), "failed to reopen item");
-//    }
 }

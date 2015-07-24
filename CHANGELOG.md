@@ -6,6 +6,7 @@ All Notable changes to `Manager` will be documented in this file
  - Initialize `IocContainerTrait` for basic DI functionality
 
 #v0.8.4 - 2015-7-14
+ - Better documentation (README.md)
  - Add protected items functionality
  - Split Arrayable stuff in Manager to ArrayableTrait Issue #11 with tests
  - Bug: reversed nestable items so you can get a single item without calling it as method
