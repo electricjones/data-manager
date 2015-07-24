@@ -3,6 +3,7 @@ namespace Michaels\Manager\Traits;
 
 use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
+use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
@@ -20,6 +21,7 @@ trait ManagesItemsTrait
      * @var string
      */
     protected $nameOfItemsRepository = 'items';
+    protected $protectedItems = [];
 
     /* The user may also set $dataItemsName */
 
@@ -52,6 +54,8 @@ trait ManagesItemsTrait
      */
     public function add($alias, $item = null)
     {
+        $this->checkIfProtected($alias);
+
         // Are we adding multiple items?
         if (is_array($alias)) {
             foreach ($alias as $key => $value) {
@@ -239,6 +243,33 @@ trait ManagesItemsTrait
         $this->initManager($items);
     }
 
+    public function protect($item)
+    {
+        array_push($this->protectedItems, $item);
+        return $this;
+    }
+
+    protected function checkIfProtected($item)
+    {
+        $this->performProtectedCheck($item);
+
+        if (!is_string($item)) {
+            return;
+        }
+
+        $pieces = explode(".", $item);
+        $current = $pieces[0];
+        $i = 0;
+
+        foreach ($pieces as $piece) {
+            $this->performProtectedCheck($current);
+            if (isset($pieces[$i+1])) {
+                $current .= $current . "." . $pieces[$i+1];
+                $i++;
+            }
+        }
+    }
+
     /**
      * Get the collection of items as JSON.
      *
@@ -305,5 +336,16 @@ trait ManagesItemsTrait
         }
 
         return (array) $items;
+    }
+
+    /**
+     * @param $item
+     */
+    protected function performProtectedCheck($item)
+    {
+// Explicitly protected
+        if (in_array($item, $this->protectedItems)) {
+            throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
+        }
     }
 }

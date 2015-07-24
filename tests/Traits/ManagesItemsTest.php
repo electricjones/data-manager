@@ -359,4 +359,55 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $manager->getItemsDirectly(), 'failed to set the new item repo');
         $this->assertFalse(property_exists($manager, 'items'), 'still set items');
     }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
+     */
+    public function testProtectItems()
+    {
+        $manager = new Manager([
+            'some' => [
+                'data' => [
+                    'here' => 'value'
+                ]
+            ]
+        ]);
+
+        $manager->protect('some.data.here');
+        $manager->set('some.data.here', 'new-value');
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
+     */
+    public function testProtectNestedItems()
+    {
+        $manager = new Manager([
+            'some' => [
+                'data' => [
+                    'here' => 'value'
+                ]
+            ]
+        ]);
+
+        $manager->protect('some');
+        $manager->set('some.data.here', 'new-value');
+    }
+
+//    public function testUnProtectItems()
+//    {
+//        $manager = new Manager([
+//            'some' => [
+//                'data' => [
+//                    'here' => 'value'
+//                ]
+//            ]
+//        ]);
+//
+//        $manager->protect('some');
+//        $manager->unprotect('some');
+//        $manager->set('some.data.here', 'new-value');
+//
+//        $this->assertEquals('new-value', $manager->get('some.data.here'), "failed to reopen item");
+//    }
 }

@@ -2,9 +2,11 @@
 All Notable changes to `Manager` will be documented in this file
 
 #v0.8.4 - NEXT
- - Split Arrayable stuff in Manager to ArrayableTrait
+ - Add protected items functionality (ToDo)
+ - Initiate Collections (not in production yet) (ToDo)
+ - Split Arrayable stuff in Manager to ArrayableTrait Issue #11
  - Bug: reversed nestable items so you can get a single item without calling it as method
- - Added: CRUD through nested items magic methods (ChainsNEstedItemsTrait) Issue #3
+ - Added: CRUD through nested items magic methods (ChainsNestedItemsTrait) Issue #3
 
 #v0.8.3 - 2015-6-24
  - Move constructor out of `ManagesItemsTrait`
