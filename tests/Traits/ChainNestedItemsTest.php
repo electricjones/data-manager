@@ -23,6 +23,13 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->manager->initManager($this->testData);
     }
 
+    public function testGetSingleItem()
+    {
+        $this->manager->add('key', 'value');
+
+        $this->assertEquals('value', $this->manager->key, 'failed to return a single item through magic method');
+    }
+
     public function testGetThroughNestedMagicMethods()
     {
         $expectedA = $this->testData['one']['two']['three'];
