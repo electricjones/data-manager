@@ -1,7 +1,9 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
+use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
@@ -19,6 +21,9 @@ trait ManagesItemsTrait
      * @var string
      */
     protected $nameOfItemsRepository = 'items';
+
+    /** @var array Array of protected aliases */
+    protected $protectedItems = [];
 
     /* The user may also set $dataItemsName */
 
@@ -51,6 +56,8 @@ trait ManagesItemsTrait
      */
     public function add($alias, $item = null)
     {
+        $this->checkIfProtected($alias);
+
         // Are we adding multiple items?
         if (is_array($alias)) {
             foreach ($alias as $key => $value) {
@@ -110,6 +117,11 @@ trait ManagesItemsTrait
         return $item;
     }
 
+    /**
+     * Return an item if it exists
+     * @param $alias
+     * @return NoItemFoundMessage
+     */
     public function getIfExists($alias)
     {
         $repo = $this->getItemsName();
@@ -239,6 +251,17 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Guard an alias from being modified
+     * @param $item
+     * @return $this
+     */
+    public function protect($item)
+    {
+        array_push($this->protectedItems, $item);
+        return $this;
+    }
+
+    /**
      * Get the collection of items as JSON.
      *
      * @param  int  $options
@@ -304,5 +327,36 @@ trait ManagesItemsTrait
         }
 
         return (array) $items;
+    }
+
+    /**
+     * Cycle through the nests to see if an item is protected
+     * @param $item
+     */
+    protected function checkIfProtected($item)
+    {
+        $this->performProtectedCheck($item);
+
+        if (!is_string($item)) {
+            return;
+        }
+
+        $prefix = $item;
+        while (false !== $pos = strrpos($prefix, '.')) {
+            $prefix = substr($item, 0, $pos);
+            $this->performProtectedCheck($prefix);
+            $prefix = rtrim($prefix, '.');
+        }
+    }
+
+    /**
+     * Throws an exception if item is protected
+     * @param $item
+     */
+    protected function performProtectedCheck($item)
+    {
+        if (in_array($item, $this->protectedItems)) {
+            throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
+        }
     }
 }

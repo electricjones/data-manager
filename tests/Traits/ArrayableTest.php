@@ -1,13 +1,13 @@
 <?php
 namespace Michaels\Manager\Test;
 
-use Michaels\Manager\Manager;
+use Michaels\Manager\Test\Stubs\ArrayableManagerStub as Manager;
 
 /**
  * Tests Array Access, JSON, and Iterator for Manager.
  * Does NOT test ManagesItemsTrait api.
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase {
+class ArrayableTest extends \PHPUnit_Framework_TestCase {
 
     public function testArrayAccessAdd()
     {
@@ -98,16 +98,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase {
         $expected = json_encode($test);
 
         $this->assertEquals($expected, $json = json_encode($manager), 'failed to encode json');
-    }
-
-    public function testGetSingleItem()
-    {
-        $manager = new Manager();
-
-        $manager->add('key', 'value');
-
-        $this->assertEquals('value', $manager->key, 'failed to return a single item through magic method');
-
     }
 }
 

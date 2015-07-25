@@ -359,4 +359,38 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $manager->getItemsDirectly(), 'failed to set the new item repo');
         $this->assertFalse(property_exists($manager, 'items'), 'still set items');
     }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
+     */
+    public function testProtectSingleItem()
+    {
+        $manager = new Manager([
+            'some' => [
+                'data' => [
+                    'here' => 'value'
+                ]
+            ]
+        ]);
+
+        $manager->protect('some.data.here');
+        $manager->set('some.data.here', 'new-value');
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
+     */
+    public function testProtectItemsUnderANest()
+    {
+        $manager = new Manager([
+            'some' => [
+                'data' => [
+                    'here' => 'value'
+                ]
+            ]
+        ]);
+
+        $manager->protect('some');
+        $manager->set('some.data.here', 'new-value');
+    }
 }

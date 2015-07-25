@@ -1,12 +1,13 @@
 <?php
 namespace Michaels\Manager\Test\Stubs;
+use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Traits\ManagesItemsTrait;
 
 /**
  * Class CustomizedItemsNameStub
  * @package Michaels\Manager\Test\Stubs
  */
-class CustomizedItemsNameStub
+class CustomizedItemsNameStub implements ManagesItemsInterface
 {
     use ManagesItemsTrait;
 
