@@ -35,6 +35,15 @@ trait ManagesIocTrait
     }
 
     /**
+     * Returns the entire IoC Manifest
+     * @return array
+     */
+    public function getIocManifest()
+    {
+        return $this->get($this->nameOfIocManifest);
+    }
+
+    /**
      * Returns the request object with all dependencies
      *
      * string      Full class name for a new object each time
