@@ -16,13 +16,21 @@ trait ManagesIocTrait
     /**
      * Initializes IoC Container
      * @param array $components
-     * @return mixed
      */
     public function initDI(array $components = [])
     {
         foreach ($components as $alias => $factory) {
-            $this->add($this->nameOfIocManifest . ".$alias", $factory);
+            $this->set($this->nameOfIocManifest . ".$alias", $factory);
         }
+    }
+
+    /**
+     * Returns the entire IoC Manifest
+     * @return array
+     */
+    public function getIocManifest()
+    {
+        return $this->get($this->nameOfIocManifest);
     }
 
     /**
@@ -72,7 +80,7 @@ trait ManagesIocTrait
      */
     public function di($alias, $factory)
     {
-        $this->add($this->nameOfIocManifest . ".$alias", $factory);
+        $this->set($this->nameOfIocManifest . ".$alias", $factory);
     }
 
     /**
