@@ -27,4 +27,9 @@ class ChainsNestedItemsTraitStub implements ManagesItemsInterface
     {
         $this->initManager($items);
     }
+
+    public function someMethod()
+    {
+        //do nothing
+    }
 }

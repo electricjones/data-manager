@@ -46,6 +46,14 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($expectedC, $actualC, 'failed to retrieve third nested value');
     }
 
+    public function testDoesntSetLevelForValidMethodCall() {
+        $this->manager->someMethod();
+        $this->manager->one = "one";
+        $this->assertEquals("one", $this->manager->get('one'));
+        $this->assertEquals("one", $this->manager->one);
+        $this->assertFalse($this->manager->has('someMethod'));
+    }
+
     public function testAddTopLevelItemThroughMagicMethod(){
         $this->manager->one = "one";
         $this->assertEquals("one", $this->manager->get('one'));
