@@ -40,7 +40,9 @@ trait ManagesIocTrait
      */
     public function getIocManifest()
     {
-        return $this->get($this->nameOfIocManifest);
+        $manifest = $this->getIfExists($this->nameOfIocManifest);
+
+        return ($manifest instanceof NoItemFoundMessage) ? [] : $manifest;
     }
 
     /**
