@@ -34,15 +34,27 @@ trait ManagesItemsTrait
      * This is an alias for reset()
      *
      * @param array $items
+     * @return $this
      */
-    public function initManager($items = [])
+    public function initManager($items = null)
     {
         if (property_exists($this, 'dataItemsName')) {
             $this->setItemsName($this->dataItemsName);
         }
 
         $repo = $this->getItemsName();
+
+        if (!isset($this->$repo)) {
+            $this->$repo = [];
+        }
+
+        if (is_null($items)) {
+            return $this;
+        }
+
         $this->$repo = is_array($items) ? $items : $this->getArrayableItems($items);
+
+        return $this;
     }
 
     /**
