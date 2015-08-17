@@ -35,17 +35,6 @@ trait ManagesIocTrait
     }
 
     /**
-     * Returns the entire IoC Manifest
-     * @return array
-     */
-    public function getIocManifest()
-    {
-        $manifest = $this->getIfExists($this->nameOfIocManifest);
-
-        return ($manifest instanceof NoItemFoundMessage) ? [] : $manifest;
-    }
-
-    /**
      * Returns the request object with all dependencies
      *
      * string      Full class name for a new object each time
