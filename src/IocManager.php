@@ -24,9 +24,9 @@ class IocManager implements ManagesItemsInterface, ContainerInterface, IocManage
      * @param array $di
      * @param array $items
      */
-    public function __construct($di = [], $items = [])
+    public function __construct(array $di = [], array $items = [])
     {
-        $this->initDI($di);
         $this->initManager($items);
+        $this->initDI($di);
     }
 }

@@ -1,20 +1,20 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
-use Michaels\Manager\Test\Stubs\IocManagerStub as Manager;
+use Michaels\Manager\IocManager as Manager;
 use StdClass;
 
 class ManagesIocTest extends \PHPUnit_Framework_TestCase
 {
     public $manager;
-    public $expected;
+    public $testData;
 
-    public function setup()
+    public function setUp()
     {
         $object = new stdClass();
         $object->type = 'object';
 
-        $this->expected = [
+        $this->testData = [
             'string' => 'Michaels\Manager\Manager',
             'callable' => function () {
                 $return = new stdClass();
@@ -23,35 +23,55 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
             },
             'object' => $object
         ];
-
-        $this->manager = new Manager();
     }
 
     /** Begin Tests **/
-    public function testInitIocContainer()
+//    public function testInitIocContainer()
+//    {
+//        $manager = new Manager();
+//        $manager->initDI($this->testData);
+//
+//        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
+//    }
+
+    // THIS IS NOT PART OF THE TRAIT, ONLY THE CONCRETE CLASS. Tested here to save time.
+    public function testAnotherInit()
+    {
+        $manager = new Manager($this->testData, ['other' => ['items' => true]]);
+        $this->assertTrue($manager->get("other.items"), "failed to set generic items");
+        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
+    }
+
+    public function testGetIocManifest()
+    {
+        $manager = new Manager($this->testData);
+
+        $this->assertEquals($this->testData, $manager->getIocManifest(), "Failed to return di manifest");
+    }
+
+    public function testGetEmptyManifestIfUninitialized()
     {
         $manager = new Manager();
-        $manager->initDI($this->expected);
 
-        $this->assertEquals($this->expected, $manager->get('_diManifest'), "Failed to return di manifest");
+        $this->assertEquals([], $manager->getIocManifest(), "Failed to return di manifest");
     }
 
     public function testAddDependencies()
     {
         $manager = new Manager();
 
-        foreach ($this->expected as $key => $value) {
+        foreach ($this->testData as $key => $value) {
             $manager->di($key, $value);
         }
 
-        $this->assertEquals($this->expected, $manager->get('_diManifest'), "Failed to return di manifest");
+        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
 
     public function testFetchDependencies()
     {
         $manager = new Manager();
 
-        $manager->initDI($this->expected);
+        $manager->initDI($this->testData);
 
         $string = $manager->fetch('string'); // Should return Manager
         $callable = $manager->fetch('callable'); // Should return stdClass::type = callable
@@ -79,7 +99,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     {
         $manager = new Manager();
 
-        $manager->initDI($this->expected);
+        $manager->initDI($this->testData);
 
         $manager->share('string');
         $manager->share('callable');

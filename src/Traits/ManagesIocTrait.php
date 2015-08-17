@@ -19,9 +19,8 @@ trait ManagesIocTrait
      */
     public function initDI(array $components = [])
     {
-        foreach ($components as $alias => $factory) {
-            $this->set($this->nameOfIocManifest . ".$alias", $factory);
-        }
+        $this->initManager();
+        $this->add($this->nameOfIocManifest, $components);
     }
 
     /**
