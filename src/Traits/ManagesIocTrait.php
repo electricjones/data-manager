@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Michaels\Manager\Contracts\IocContainerInterface;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 
 /**
@@ -124,6 +125,10 @@ trait ManagesIocTrait
     protected function produceDependency($alias)
     {
         $factory = $this->get($this->nameOfIocManifest . ".$alias");
+
+        if ($factory instanceof IocContainerInterface) {
+            return $factory->fetch($alias);
+        }
 
         if (is_string($factory)) {
             return new $factory();

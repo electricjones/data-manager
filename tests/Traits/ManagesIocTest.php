@@ -15,7 +15,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $object->type = 'object';
 
         $this->testData = [
-            'string' => 'Michaels\Manager\Manager',
+            'string' => '\SplObjectStorage', // Used here for overhead
             'callable' => function () {
                 $return = new stdClass();
                 $return->type = 'callable';
@@ -26,13 +26,13 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     }
 
     /** Begin Tests **/
-//    public function testInitIocContainer()
-//    {
-//        $manager = new Manager();
-//        $manager->initDI($this->testData);
-//
-//        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
-//    }
+    public function testInitIocContainer()
+    {
+        $manager = new Manager();
+        $manager->initDI($this->testData);
+
+        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
+    }
 
     // THIS IS NOT PART OF THE TRAIT, ONLY THE CONCRETE CLASS. Tested here to save time.
     public function testAnotherInit()
@@ -77,9 +77,24 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $callable = $manager->fetch('callable'); // Should return stdClass::type = callable
         $object = $manager->fetch('object'); // Should return stdClass::type = object
 
-        $this->assertInstanceOf('Michaels\Manager\Manager', $string, "Failed to return string factory");
+        $this->assertInstanceOf('\SplObjectStorage', $string, "Failed to return string factory");
         $this->assertEquals('callable', $callable->type, 'Failed to return callable factory');
         $this->assertEquals('object', $object->type, "Failed to return object factory");
+    }
+
+    public function testManagerInstanceAsFactory()
+    {
+        $factory = new Manager([
+            'container' => '\stdClass',
+        ]);
+
+        $manager = new Manager([
+            'container' => $factory
+        ]);
+
+        $actual= $manager->fetch('container'); // Should return Manager
+
+        $this->assertInstanceOf('\stdClass', $actual, "failed to produce from a string");
     }
 
     /**
@@ -109,7 +124,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $callable = $manager->fetch('callable'); // Should return stdClass::type = callable
         $object = $manager->fetch('object'); // Should return stdClass::type = object
 
-        $this->assertInstanceOf('Michaels\Manager\Manager', $string, "Failed to return string factory");
+        $this->assertInstanceOf('\SplObjectStorage', $string, "Failed to return string factory");
         $this->assertEquals('callable', $callable->type, 'Failed to return callable factory');
         $this->assertEquals('object', $object->type, "Failed to return object factory");
     }
