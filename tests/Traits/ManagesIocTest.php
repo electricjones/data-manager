@@ -109,23 +109,55 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $manager->fetch('one');
     }
 
-    /* ToDo: This does not actually test the share functionality */
-    public function testShare()
+    public function testShareObject()
+    {
+        // Setup
+        $manager = new Manager();
+        $object = new stdClass();
+        $object->prop = 'property';
+
+        $manager->initDI([
+            'object' => $object
+        ]);
+
+        // Share and modify
+        $manager->share('object');
+        $manager->fetch('object')->prop = 'new-object-value';
+
+        // Get the modified object back
+        $actual = $manager->fetch('object');
+        $this->assertEquals('new-object-value', $actual->prop, "failed to share string");
+    }
+
+    public function testShareString()
+    {
+        // Setup
+        $manager = new Manager();
+        $manager->initDI([
+            'string' => 'stdClass'
+        ]);
+
+        // Share and modify
+        $manager->share('string');
+        $manager->fetch('string')->prop = 'new-string-value';
+
+        // Get the shared back
+        $actual = $manager->fetch('string');
+        $this->assertEquals('new-string-value', $actual->prop, "failed to share string");
+    }
+
+    public function testShareFactory()
     {
         $manager = new Manager();
+        $manager->initDI([
+            'factory' => function () {
+                return new stdClass();
+            }
+        ]);
+        $manager->share('factory');
 
-        $manager->initDI($this->testData);
+        $manager->fetch('factory')->prop = 'new-factory-value';
 
-        $manager->share('string');
-        $manager->share('callable');
-        $manager->share('object');
-
-        $string = $manager->fetch('string'); // Should return Manager
-        $callable = $manager->fetch('callable'); // Should return stdClass::type = callable
-        $object = $manager->fetch('object'); // Should return stdClass::type = object
-
-        $this->assertInstanceOf('\SplObjectStorage', $string, "Failed to return string factory");
-        $this->assertEquals('callable', $callable->type, 'Failed to return callable factory');
-        $this->assertEquals('object', $object->type, "Failed to return object factory");
+        $this->assertEquals('new-factory-value', $manager->fetch('factory')->prop, "failed to share string");
     }
 }

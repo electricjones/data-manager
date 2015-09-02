@@ -49,20 +49,20 @@ trait ManagesIocTrait
      */
     public function fetch($alias, $fallback = null)
     {
-        $shared = $this->getIfExists($this->nameOfIocManifest . "singletons.$alias");
+        $shared = $this->getIfExists($this->nameOfIocManifest . "._singletons.$alias");
 
         if ($shared instanceof NoItemFoundMessage) {
-            // This is not a shared item, new one each time
+            // This is not a shared item. We want a new one each time
             return $this->produceDependency($alias);
         } else {
             // This is shared, and object has already been cached
             if (is_object($shared)) {
                 return $shared;
 
-                // This is shared, but we must produce and cache it
+            // This is shared, but we must produce and cache it
             } else {
                 $object = $this->produceDependency($alias);
-                $this->set($this->nameOfIocManifest . "_singletons.$alias", $object);
+                $this->set($this->nameOfIocManifest . "._singletons.$alias", $object);
                 return $object;
             }
         }
@@ -92,7 +92,7 @@ trait ManagesIocTrait
      */
     public function share($alias)
     {
-        $this->add($this->nameOfIocManifest . "_singletons.$alias", false);
+        $this->add($this->nameOfIocManifest . "._singletons.$alias", true);
     }
 
     /**
