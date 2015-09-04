@@ -4,7 +4,8 @@
   "keywords": [
     "data", "collection", "container", "manager",
     "nest", "nested", "array", "dot notation",
-    "access", "deep data"
+    "access", "deep data", "config", "configuration",
+    "defaults"
   ],
   "homepage": "https://github.com/chrismichaels84/data-manager",
   "license": "MIT",

@@ -92,6 +92,51 @@ $manager->protect('some.data'); //now some.data and everything under it cannot b
 $manager->set('some.data.here', 'new-value'); // throws an exception
 ```
 
+## Merging Defaults Into Current Dataset
+When using Manager to store configuration data, it is important to be able to set defaults.
+You can merge an array of defaults into manager via `loadDefaults(array $defaults)`
+
+Imagine your configuration starts like
+```php
+$manager = new Manager([
+    'name' => 'My Awesome App',
+    'site' => [
+        'url' => 'http://youwishyouwerethiscool.com/',
+        'assets' => '/static'
+    ]
+]);
+```
+
+But your app needs `site.title` and `author`. Simply
+```php
+$manager->loadDefaults([
+    'site' => [
+        'url' => 'http://the_default_url.com/',
+        'protocol' => "https",
+        'assets' => '/assets',
+    ],
+    'database' => "mysql"
+]);
+```
+
+And now, your configuration looks like
+```php
+    'name' => 'My Awesome App',
+    'site' => [
+        'url' => 'http://youwishyouwerethiscool.com/'
+        'protocol' => "https",
+        'assets' => '/static' // NOT the default /assets
+    ],
+    'database' => "mysql"
+```
+
+A couple of things to keep in mind:
+  * This works recursively and as far down as you want.
+  * If any value is set before loading defaults, that value is preserved
+  * If a starting value is set to an array (`one.two = []`) and a default lives beneath (`one.two.three = default`), then the default **will** be set.
+  * On the other hand, if the value exists and is **not** an array, the default will be ignored. 
+  (`one.two = 'something'`) In this case, there is no `one.two.three`, even after loading defaults.
+
 ## Using Manager Traits
 If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.
 
