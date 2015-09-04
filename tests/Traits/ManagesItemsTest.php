@@ -393,4 +393,80 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->protect('some');
         $manager->set('some.data.here', 'new-value');
     }
+
+    public function testLoadDefaultsIntoEmptyManager()
+    {
+        $manager = new Manager();
+
+        $defaults = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => 'four'
+            ]
+        ];
+
+        $manager->loadDefaults($defaults);
+
+        $this->assertEquals($defaults, $manager->getAll(), "failed to load defaults");
+    }
+
+    public function testLoadDefaultsIntoNonEmptyManager()
+    {
+        $defaults = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'seven' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ]
+        ];
+
+        $starting = [
+            'one' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'seven' => [
+                'c' => 'over-ridden-c',
+            ],
+            'eight' => 8,
+        ];
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => 'michael',
+            ],
+            'five' => 5,
+            'seven' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'over-ridden-c',
+            ],
+            'eight' => 8,
+        ];
+
+        $manager = new Manager($starting);
+        $manager->loadDefaults($defaults);
+
+        $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
+    }
 }

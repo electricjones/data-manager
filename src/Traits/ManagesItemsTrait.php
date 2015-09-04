@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Interop\Container\Exception\NotFoundException;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
@@ -271,6 +272,29 @@ trait ManagesItemsTrait
     {
         array_push($this->protectedItems, $item);
         return $this;
+    }
+
+    public function loadDefaults(array $defaults)
+    {
+        $this->mergeDefaults($defaults);
+    }
+
+    protected function mergeDefaults(array $defaults, $level = '')
+    {
+        foreach ($defaults as $key => $value) {
+            if (is_array($value)) {
+                $original = $this->getIfExists(ltrim("$level.$key", "."));
+                if (is_array($original)) {
+                    $this->mergeDefaults($value, "$level.$key");
+                } elseif ($original instanceof NoItemFoundMessage) {
+                    $this->set(ltrim("$level.$key", "."), $value);
+                }
+            } else {
+                if (!$this->exists(ltrim("$level.$key", "."))) {
+                    $this->set(ltrim("$level.$key", "."), $value);
+                }
+            }
+        }
     }
 
     /**

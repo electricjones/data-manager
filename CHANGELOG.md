@@ -1,10 +1,13 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# NEXT 
+# Future
  - Initialize `CollectsItemsTrait` and `Collection` class
- - Initialize `IocContainerTrait` for basic DI functionality
 
+#v0.8.5 - NEXT 
+ - Adds `IocContainerTrait` for basic DI functionality
+ - Adds `loadDefaults(array $defaults)` to `ManagesItemsTrait`
+ 
 #v0.8.4 - 2015-7-14
  - Better documentation (README.md)
  - Add protected items functionality
