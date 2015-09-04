@@ -15,7 +15,7 @@ This project began as a three part tutorial series which can be found at http://
 ## Goals
   * Light weight
   * Fluent, simple, clear API
-  * Manage any data type (closure, object, primitives, etc)
+  * Manage any data type (closure, object, primitives, etc.)
   * Manage nested data via dot-notation
   * Manage nested data via magic methods ($manager->one()->two()->three)
   * Be composable - integrate into current containers via traits
@@ -23,6 +23,15 @@ This project began as a three part tutorial series which can be found at http://
   * Allow for protected data (immutable)
   * Test coverage, PSR compliant, [container interoperability](https://github.com/container-interop/container-interop), and best practices
 
+## Extras
+On top of being a powerful data-manager, there are traits that add features.
+They are not documented here, but see other readmes for:
+  * [IoC Container](ioc.md): Use Manager as a simple but powerful Dependency Injection Container. Includes
+    * Resolving dependencies from classnames, closures, eager loading, and more,
+    * Creating singletons,
+    * Configuring dependencies for dependencies,
+    * Fallbacks, preparing objects, and more.
+    
 ## Install
 Via Composer
 ``` bash
@@ -148,37 +157,6 @@ If you are using the `ManagesItemsTrait` and want to use an internal property be
   1. Use `$manager->setItemsName($nameOfProperty)` either in your constructor or before you add anything
   2. Set the `$dataItemsName` property to a string of the new property name. Then be sure to call `initManager()` in your constructor.
 
-## Experimental Features (Beta)
-Another trait is included that will turn `Manager` into a simple IoC container. For more information about IoC and dependency injection see [Php The Right Way](http://www.phptherightway.com/#dependency_injection)
-
-The DI feature of Manager is inspired, mostly, by [Pimple](http://pimple.sensiolabs.org/)
-
-To use it, simply `use` the `ManagesIocTrait` **after** `ManagesItemsTrait`.
-
-Now you can:
-```php
-// Setup a dependency using a classname
-$manager->di('event_dispatcher', 'Full\Class\Here');
-
-// Setup a dependency using a callable for lazy loading
-$manager->di('event_dispatcher', function ($di) {
-    // you have access to the container through $di
-    return new WhateverObject($di->fetch('another_dependency');
-});
-
-// Setup a dependency using an object
-// Setup a dependency using an object for eager loading
-$manager->di('event_dispatcher', new WhateverObject($di->fetch('another_dependency');
-
-$events = $manager->fetch('event_dispatcher');
-
-// Or you can force the use of singletons
-$events->share('event_dispatcher');
-$singleton = $events->fetch('event_dispatcher');
-```
-
-Any feedback here would be appreciated. Take a look at `IocManagerInterface` for future plans.
-
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
 
@@ -191,6 +169,7 @@ $manager->add("one.two", "two-value"); // exception
 ```
 
 If you try to alter a protected item, a `ModifyingProtectedItemException` will be thrown.
+
 ## Interoperability
 Data Manager is [PSR compliant](http://www.php-fig.org/) and [Container Interoperability](https://github.com/container-interop/container-interop) compliant. Any oversights, please let me know.
 
