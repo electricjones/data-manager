@@ -15,7 +15,7 @@ This project began as a three part tutorial series which can be found at http://
 ## Goals
   * Light weight
   * Fluent, simple, clear API
-  * Manage any data type (closure, object, primitives, etc)
+  * Manage any data type (closure, object, primitives, etc.)
   * Manage nested data via dot-notation
   * Manage nested data via magic methods ($manager->one()->two()->three)
   * Be composable - integrate into current containers via traits
@@ -23,6 +23,15 @@ This project began as a three part tutorial series which can be found at http://
   * Allow for protected data (immutable)
   * Test coverage, PSR compliant, [container interoperability](https://github.com/container-interop/container-interop), and best practices
 
+## Extras
+On top of being a powerful data-manager, there are traits that add features.
+They are not documented here, but see other readmes for:
+  * [IoC Container](ioc.md): Use Manager as a simple but powerful Dependency Injection Container. Includes
+    * Resolving dependencies from classnames, closures, eager loading, and more,
+    * Creating singletons,
+    * Configuring dependencies for dependencies,
+    * Fallbacks, preparing objects, and more.
+    
 ## Install
 Via Composer
 ``` bash
@@ -205,6 +214,7 @@ $manager->add("one.two", "two-value"); // exception
 ```
 
 If you try to alter a protected item, a `ModifyingProtectedItemException` will be thrown.
+
 ## Interoperability
 Data Manager is [PSR compliant](http://www.php-fig.org/) and [Container Interoperability](https://github.com/container-interop/container-interop) compliant. Any oversights, please let me know.
 
