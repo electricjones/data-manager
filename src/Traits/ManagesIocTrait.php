@@ -2,6 +2,7 @@
 namespace Michaels\Manager\Traits;
 
 use Michaels\Manager\Contracts\IocContainerInterface;
+use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 
 /**
@@ -43,17 +44,17 @@ trait ManagesIocTrait
      * object      The exact object to be returned
      *
      * @param string $alias
-     * @param string|object|callable $fallback
+     * @param string|mixed $fallback
      * @return object
      * @throws \Exception
      */
-    public function fetch($alias, $fallback = null)
+    public function fetch($alias, $fallback = '_michaels_no_fallback')
     {
         $shared = $this->getIfExists($this->nameOfIocManifest . "._singletons.$alias");
 
         if ($shared instanceof NoItemFoundMessage) {
             // This is not a shared item. We want a new one each time
-            return $this->produceDependency($alias);
+            return $this->produceDependency($alias, $fallback);
         } else {
             // This is shared, and object has already been cached
             if (is_object($shared)) {
@@ -61,7 +62,7 @@ trait ManagesIocTrait
 
             // This is shared, but we must produce and cache it
             } else {
-                $object = $this->produceDependency($alias);
+                $object = $this->produceDependency($alias, $fallback);
                 $this->set($this->nameOfIocManifest . "._singletons.$alias", $object);
                 return $object;
             }
@@ -78,11 +79,17 @@ trait ManagesIocTrait
      *
      * @param string $alias
      * @param callable|string|object $factory
+     * @param array $declared
      * @return object
      */
-    public function di($alias, $factory)
+    public function di($alias, $factory, array $declared = null)
     {
         $this->set($this->nameOfIocManifest . ".$alias", $factory);
+
+        // Setup any declared dependencies
+        if ($declared) {
+            $this->set($this->nameOfIocManifest . "._declarations.$alias", $declared);
+        }
     }
 
     /**
@@ -93,6 +100,11 @@ trait ManagesIocTrait
     public function share($alias)
     {
         $this->add($this->nameOfIocManifest . "._singletons.$alias", true);
+    }
+
+    public function setup($alias, $pipeline)
+    {
+        $this->add($this->nameOfIocManifest . "._pipelines.$alias", $pipeline);
     }
 
     /**
@@ -118,29 +130,70 @@ trait ManagesIocTrait
     /**
      * Produces the object from an alias
      * @param $alias
+     * @param mixed|string $fallback
      * @return mixed
+     * @throws ItemNotFoundException
      * @throws \Exception
-     * @throws \Michaels\Manager\Exceptions\ItemNotFoundException
      */
-    protected function produceDependency($alias)
+    protected function produceDependency($alias, $fallback = '_michaels_no_fallback')
     {
-        $factory = $this->get($this->nameOfIocManifest . ".$alias");
+        /* Get the registered factory (string, closure, object, container, NoItemFoundMessage) */
+        $factory = $this->getIfExists($this->nameOfIocManifest . ".$alias");
 
-        if ($factory instanceof IocContainerInterface) {
-            return $factory->fetch($alias);
+        /* Manage not founds and fallback */
+        if ($factory instanceof NoItemFoundMessage) {
+            if ($fallback !== '_michaels_no_fallback') {
+                return $fallback;
+            } else {
+                throw new ItemNotFoundException("$alias not found");
+            }
         }
 
-        if (is_string($factory)) {
-            return new $factory();
+        /* Get any declared dependencies */
+        $declared = $this->getIfExists($this->nameOfIocManifest . "._declarations.$alias");
+        $dependencies = [];
+
+        // Now setup those dependencies into an array
+        if (!$declared instanceof NoItemFoundMessage) {
+            $dependencies = array_map(function (&$value) use ($alias) {
+                if (is_string($value) && $this->exists($this->nameOfIocManifest . ".$alias")) {
+                    return $this->fetch($value);
+                }
+                return $value;
+            }, $declared);
+        }
+
+        /* Produce the object itself */
+        if ($factory instanceof IocContainerInterface) {
+            $object = $factory->fetch($alias);
+
+        } elseif (is_string($factory)) {
+            $class = new \ReflectionClass($factory);
+            $object = $class->newInstanceArgs($dependencies);
 
         } elseif (is_callable($factory)) {
-            return call_user_func($factory);
+            array_unshift($dependencies, $this);
+            $object = call_user_func_array($factory, $dependencies);
 
         } elseif (is_object($factory)) {
-            return $factory;
+            $object = $factory;
+
+            if (method_exists($object, "needs")) {
+                call_user_func_array([$object, 'needs'], $dependencies);
+            }
 
         } else {
             throw new \Exception("`fetch()` can only return from strings, callables, or objects");
         }
+
+        /* Run the object through the pipeline, if desired */
+        $pipeline = $this->getIfExists($this->nameOfIocManifest . "._pipelines.$alias");
+
+        if (!$pipeline instanceof NoItemFoundMessage) {
+            $object = $pipeline($object, $this);
+        }
+
+        /* Return the final object */
+        return $object;
     }
 }

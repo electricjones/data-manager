@@ -78,17 +78,19 @@ $events->share('event_dispatcher');
 $singleton = $events->fetch('event_dispatcher');
 ```
 
-## Fallbacks (Not Yet Implemented)
+## Fallbacks
 By default, if you fetch an item that does not exist, you will get an `ItemNotFoundException`.
 If you want a fallback, simply `$manager->fetch('doesnt_exist', $fallback);`
 
-## Prepare an object after created but before returned (Not Yet Implemented)
+## Prepare an object after created but before returned
 It is also possible to pass a dependency through some sort of pipeline that will alter the object before returned.
 ```php
-$manager->setup('event_dispatcher, function ($dispatcher, $manager) {
+$manager->setup('event_dispatcher', function ($dispatcher, $manager) {
     // Do whatever you want to $dispatcher and then return it
 });
 ```
+
+Note that fallbacks are not sent through the pipeline.
 
 ## Setting Dependencies Implicitly (Not Yet Implemented)
 You can tell Manager how to configure a certain dependency when you register it.
@@ -120,10 +122,6 @@ Will pass a `new One()` and `new Two()` into the `needs()` method of `$object` i
 
 If you pass a value that is not a registered dependency, then the value itself is passed.
 
-## Configure needs before hand (Not Yet Implemented)
-You can also
-```php
-$manager->configure('event_dispatcher')->needs('one')->needs('two');
-```
+NOTE: For the moment, you cannot prepare dependencies that are instances of containers.
 
 Any feedback here would be appreciated. Take a look at `IocManagerInterface` for future plans.

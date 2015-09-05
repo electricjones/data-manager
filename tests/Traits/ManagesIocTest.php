@@ -2,6 +2,7 @@
 namespace Michaels\Manager\Test\Traits;
 
 use Michaels\Manager\IocManager as Manager;
+use Michaels\Manager\Test\Stubs\DependencyFactoryStub;
 use StdClass;
 
 class ManagesIocTest extends \PHPUnit_Framework_TestCase
@@ -159,5 +160,131 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $manager->fetch('factory')->prop = 'new-factory-value';
 
         $this->assertEquals('new-factory-value', $manager->fetch('factory')->prop, "failed to share string");
+    }
+
+    public function testFactoryManagerInjection()
+    {
+        $manager = new Manager();
+        $email = new stdClass();
+        $email->test = 'testing';
+
+        // Register dependencies
+        $manager->di('email', $email);
+
+        $manager->di('logger', function ($di) {
+            $logger = new stdClass();
+            $logger->email = $di->fetch('email');
+            return $logger;
+        });
+
+        $manager->di('application', function ($di) {
+            $application = new stdClass();
+            $application->logger = $di->fetch('logger');
+            return $application;
+        });
+
+        $application = $manager->fetch('application');
+
+        $this->assertEquals($email, $application->logger->email, "failed to set dependencies down the chain");
+    }
+
+    public function testFallbacks()
+    {
+        $manager = new Manager();
+        $fallback = new stdClass();
+        $fallback->testing = "yes";
+
+        $actual = $manager->fetch('notset', $fallback);
+
+        $this->assertEquals($fallback, $actual, "failed to return fallback");
+    }
+
+    public function testPrepareDependencies()
+    {
+        $manager = new Manager();
+        $manager->di('prepared', new stdClass());
+        $manager->di('unprepared', new stdClass());
+
+        $manager->setup('prepared', function ($object, $manager) {
+            $object->prepared = 'yes';
+            return $object;
+        });
+
+        $this->assertEquals('yes', $manager->fetch('prepared')->prepared, "failed to prepare object");
+        $this->assertFalse(isset($manager->fetch('unprepared')->prepared), "failed to return unprepared object");
+    }
+
+    public function testDeclaringDependenciesWithClassnames()
+    {
+        $manager = new Manager();
+
+        // Setup the dependencies
+        $one = new stdClass();
+        $one->a = "A";
+
+        $two = new stdClass();
+        $two->b = "B";
+
+        $manager->di('one', $one);
+        $manager->di('two', $two);
+
+        // Declare the one that needs dependencies
+        $manager->di('three', 'Michaels\Manager\Test\Stubs\DependencyFactoryStub', ['one', 'two', true]);
+
+        $three = $manager->fetch('three');
+
+        $this->assertEquals("A", $three->one->a, "failed to set the first dependency");
+        $this->assertEquals("B", $three->two->b, "failed to set the second dependency");
+        $this->assertEquals(true, $three->three, "failed to set the passed argument");
+    }
+
+    public function testDeclaringDependenciesWithObjects()
+    {
+        $manager = new Manager();
+
+        // Setup the dependencies
+        $one = new stdClass();
+        $one->a = "A";
+
+        $two = new stdClass();
+        $two->b = "B";
+
+        $manager->di('one', $one);
+        $manager->di('two', $two);
+
+        // Declare the one that needs dependencies
+        $manager->di('three', new DependencyFactoryStub(), ['one', 'two', true]);
+
+        $three = $manager->fetch('three');
+
+        $this->assertEquals("A", $three->one->a, "failed to set the first dependency");
+        $this->assertEquals("B", $three->two->b, "failed to set the second dependency");
+        $this->assertEquals(true, $three->three, "failed to set the passed argument");
+    }
+
+    public function testDeclaringDependenciesWithClosures()
+    {
+        $manager = new Manager();
+
+        // Setup the dependencies
+        $one = new stdClass();
+        $one->a = "A";
+
+        $two = new stdClass();
+        $two->b = "B";
+
+        $manager->di('one', $one);
+        $manager->di('two', $two);
+
+        // Declare the one that needs dependencies
+        $manager->di('three', function ($di, $one, $two, $three) {
+            return new DependencyFactoryStub($one, $two, $three);
+        }, ['one', 'two', true]);
+
+        $three = $manager->fetch('three');
+
+        $this->assertEquals("A", $three->one->a, "failed to set the first dependency");
+        $this->assertEquals("B", $three->two->b, "failed to set the second dependency");
+        $this->assertEquals(true, $three->three, "failed to set the passed argument");
     }
 }
