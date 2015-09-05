@@ -12,7 +12,7 @@ Manager can:
 
 ## Setup
 Simply include the `Michaels\Manager\ManagesIocTrait` in your class, or create a new `Michaels\Manager\IocManager`.
-*NOTE THAT* `ManagesIocTrait` depend on ManagesItemsTrait. 
+**NOTE THAT** `ManagesIocTrait` depend on ManagesItemsTrait. 
 If you to use `ManagesIocTrait` without `ManagesItemsTrait`, you will get all sorts of errors.
 
 The IoC container is inspired, mostly, by [Pimple](http://pimple.sensiolabs.org/)
@@ -118,7 +118,6 @@ Will pass a `new One()` and `new Two()` into the closure.
 $manager->di('event_dispatcher', $object, ['one', 'two']);
 ```
 Will pass a `new One()` and `new Two()` into the `needs()` method of `$object` if it exists.
-```
 
 If you pass a value that is not a registered dependency, then the value itself is passed.
 
