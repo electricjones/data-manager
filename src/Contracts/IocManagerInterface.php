@@ -13,7 +13,7 @@ interface IocManagerInterface extends IocContainerInterface
      * @param array $components
      * @return mixed
      */
-    public function initDI(array $components = []);
+    public function initDi(array $components = []);
 
     /**
      * Adds a dependency to the manager

@@ -30,7 +30,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     public function testInitIocContainer()
     {
         $manager = new Manager();
-        $manager->initDI($this->testData);
+        $manager->initDi($this->testData);
 
         $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
@@ -72,7 +72,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     {
         $manager = new Manager();
 
-        $manager->initDI($this->testData);
+        $manager->initDi($this->testData);
 
         $string = $manager->fetch('string'); // Should return Manager
         $callable = $manager->fetch('callable'); // Should return stdClass::type = callable
@@ -117,7 +117,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $object = new stdClass();
         $object->prop = 'property';
 
-        $manager->initDI([
+        $manager->initDi([
             'object' => $object
         ]);
 
@@ -134,7 +134,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     {
         // Setup
         $manager = new Manager();
-        $manager->initDI([
+        $manager->initDi([
             'string' => 'stdClass'
         ]);
 
@@ -150,7 +150,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     public function testShareFactory()
     {
         $manager = new Manager();
-        $manager->initDI([
+        $manager->initDi([
             'factory' => function () {
                 return new stdClass();
             }

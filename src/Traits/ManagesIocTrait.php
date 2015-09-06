@@ -21,8 +21,9 @@ trait ManagesIocTrait
     /**
      * Initializes IoC Container
      * @param array $components
+     * @return void;
      */
-    public function initDI(array $components = [])
+    public function initDi(array $components = [])
     {
         $this->initManager();
         $this->add($this->nameOfIocManifest, $components);
@@ -83,7 +84,7 @@ trait ManagesIocTrait
      * @param string $alias
      * @param callable|string|object $factory
      * @param array $declared
-     * @return object
+     * @return void
      */
     public function di($alias, $factory, array $declared = null)
     {
@@ -193,6 +194,7 @@ trait ManagesIocTrait
         $pipeline = $this->getIfExists($this->nameOfIocManifest . "._pipelines.$alias");
 
         if (!$pipeline instanceof NoItemFoundMessage) {
+            /** @var \Closure $pipeline */
             $object = $pipeline($object, $this);
         }
 

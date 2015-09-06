@@ -15,6 +15,7 @@ interface ManagesItemsInterface
      * This is an alias for reset()
      *
      * @param array $items
+     * @return $this
      */
     public function initManager($items = []);
 

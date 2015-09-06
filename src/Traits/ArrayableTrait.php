@@ -14,7 +14,7 @@ trait ArrayableTrait
     /**
      * @implements ArrayAccess
      * @param $offset
-     * @return
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -24,7 +24,7 @@ trait ArrayableTrait
     /**
      * @implements ArrayAccess
      * @param $offset
-     * @return
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -68,6 +68,7 @@ trait ArrayableTrait
 
     /**
      * @implements JSONSerializable
+     * @return string
      */
     public function jsonSerialize()
     {
