@@ -5,6 +5,7 @@ use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
 use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
+use Michaels\Manager\Test\Stubs\TraversableStub;
 use StdClass;
 
 class ManagesItemsTest extends \PHPUnit_Framework_TestCase
@@ -67,12 +68,12 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager = new Manager();
         $manager->initManager(null);
 
-        $this->assertEquals([], $manager->getAll());
+        $this->assertEquals([], $manager->all());
 
         $manager = new Manager();
         $manager->initManager();
 
-        $this->assertEquals([], $manager->getAll());
+        $this->assertEquals([], $manager->all());
     }
 
     public function testInitManagerFromManager()
@@ -83,13 +84,23 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $secondManager = new Manager();
         $secondManager->initManager($firstManager);
 
-        $this->assertEquals(['foo' => 'bar'], $secondManager->getAll());
+        $this->assertEquals(['foo' => 'bar'], $secondManager->all());
     }
 
     public function testInitManagerFromObject()
     {
         $object = new stdClass();
         $object->foo = 'bar';
+        $manager = new Manager();
+        $manager->initManager($object);
+
+        $this->assertEquals(['foo' => 'bar'], $manager->getAll());
+    }
+
+    public function testInitManagerFromTraversable()
+    {
+        $object = new TraversableStub();
+        $object['foo'] = 'bar';
         $manager = new Manager();
         $manager->initManager($object);
 
@@ -181,6 +192,24 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testGetIfExistsReturnsMessageIfNoExists()
     {
         $actual = $this->manager->getIfExists('nope');
+
+        $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
+        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
+    }
+
+    public function testGetIfHasReturnsItemIfExists()
+    {
+        $this->manager->add($this->simpleNestData);
+
+        $actual = $this->manager->getIfHas('one.two');
+        $expected = $this->simpleNestData['one']['two'];
+
+        $this->assertEquals($expected, $actual, "failed to return an item that exists");
+    }
+
+    public function testGetIfHasReturnsMessageIfNoExists()
+    {
+        $actual = $this->manager->getIfHas('nope');
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');

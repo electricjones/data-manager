@@ -60,7 +60,7 @@ trait ManagesIocTrait
             if (is_object($shared)) {
                 return $shared;
 
-            // This is shared, but we must produce and cache it
+                // This is shared, but we must produce and cache it
             } else {
                 $object = $this->produceDependency($alias, $fallback);
                 $this->set($this->nameOfIocManifest . "._singletons.$alias", $object);

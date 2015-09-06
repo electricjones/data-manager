@@ -26,7 +26,7 @@ class DependencyFactoryStub
         $this->one = $one;
     }
 
-    public function needs($one, $two, $three)
+    public function needs($one = null, $two = null, $three = null)
     {
         $this->two = $two;
         $this->three = $three;

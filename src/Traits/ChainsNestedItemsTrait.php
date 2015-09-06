@@ -73,6 +73,7 @@ trait ChainsNestedItemsTrait
     }
 
     /**
+     * Creates a prefix
      * @return array
      */
     protected function buildPrefix()

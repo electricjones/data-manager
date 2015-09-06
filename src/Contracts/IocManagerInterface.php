@@ -2,7 +2,7 @@
 namespace Michaels\Manager\Contracts;
 
 /**
- * Contract for Manager instances that return prepared data
+ * Contract for Manager instances that manage dependencies
  * @package Michaels\Manager
  */
 interface IocManagerInterface extends IocContainerInterface
@@ -35,32 +35,4 @@ interface IocManagerInterface extends IocContainerInterface
      * @return mixed
      */
     public function share($alias);
-
-    /**
-     * Begin a configuration chain for needs(), gets(), prepared()
-     * @param $alias
-     * @return mixed
-     */
-//    public function configure($alias);
-
-    /**
-     * Declare that a dependency needs another dependency
-     *
-     * If string, need gets added to constructor in order
-     * If callable, need gets added to arguments in order
-     * If object, need gets passed to needs() in order, if exists
-     *
-     * @param $alias
-     * @return mixed
-     */
-//    public function needs($alias);
-
-    /**
-     * Runs an object through the callable after creation
-     * but before return
-     *
-     * @param callable $processor
-     * @return mixed
-     */
-//    public function prepared(callable $processor);
 }

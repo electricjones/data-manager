@@ -70,6 +70,10 @@ $manager->di('application', function ($di) {
 ```
 Now an `Application` will have a `Logger` and a `Logger` will have an `Email`
 
+## Fallbacks
+By default, if you fetch an item that does not exist, you will get an `ItemNotFoundException`.
+If you want a fallback, simply `$manager->fetch('doesnt_exist', $fallback);`
+
 ## Using Singletons
 By default, every time you `fetch()` an item, it will return a new instance of that item (unless the item is an object).
 If you want a singleton (that is return the same one each time):
@@ -77,10 +81,6 @@ If you want a singleton (that is return the same one each time):
 $events->share('event_dispatcher');
 $singleton = $events->fetch('event_dispatcher');
 ```
-
-## Fallbacks
-By default, if you fetch an item that does not exist, you will get an `ItemNotFoundException`.
-If you want a fallback, simply `$manager->fetch('doesnt_exist', $fallback);`
 
 ## Prepare an object after created but before returned
 It is also possible to pass a dependency through some sort of pipeline that will alter the object before returned.
@@ -91,6 +91,8 @@ $manager->setup('event_dispatcher', function ($dispatcher, $manager) {
 ```
 
 Note that fallbacks are not sent through the pipeline.
+
+Also note that you must setup pipelines BEFORE you `fetch()` the first instance of a `share()`d dependency.
 
 ## Setting Dependencies Implicitly (Not Yet Implemented)
 You can tell Manager how to configure a certain dependency when you register it.

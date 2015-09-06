@@ -1,8 +1,6 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Interop\Container\Exception\NotFoundException;
-use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
@@ -64,7 +62,7 @@ trait ManagesItemsTrait
      * Allow for dot notation (one.two.three) and item nesting.
      *
      * @param string $alias Key to be stored
-     * @param mixed  $item Value to be stored
+     * @param mixed $item Value to be stored
      * @return $this
      */
     public function add($alias, $item = null)
@@ -300,7 +298,7 @@ trait ManagesItemsTrait
     /**
      * Get the collection of items as JSON.
      *
-     * @param  int  $options
+     * @param  int $options
      * @return string
      */
     public function toJson($options = 0)
@@ -350,7 +348,7 @@ trait ManagesItemsTrait
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param  mixed  $items
+     * @param  mixed $items
      * @return array
      */
     protected function getArrayableItems($items)
@@ -362,7 +360,7 @@ trait ManagesItemsTrait
             return iterator_to_array($items);
         }
 
-        return (array) $items;
+        return (array)$items;
     }
 
     /**

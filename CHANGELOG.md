@@ -5,7 +5,7 @@ All Notable changes to `Manager` will be documented in this file
  - Initialize `CollectsItemsTrait` and `Collection` class
 
 #v0.8.5 - NEXT
- - Adds `IocContainerTrait` for basic DI functionality as experimental
+ - Adds `IocContainerTrait` for basic DI functionality
    - initDI() and share()
    - produce from classname, object, factory, or instance of manager
    - fallbacks, pipelines, and explicit dependencies

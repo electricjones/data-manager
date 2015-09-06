@@ -1,12 +1,11 @@
 <?php
 namespace Michaels\Manager;
 
-use ArrayIterator;
 use ArrayAccess;
 use Countable;
+use Interop\Container\ContainerInterface;
 use IteratorAggregate;
 use JsonSerializable;
-use Interop\Container\ContainerInterface;
 use Michaels\Manager\Contracts\ChainsNestedItemsInterface;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Traits\ArrayableTrait;
