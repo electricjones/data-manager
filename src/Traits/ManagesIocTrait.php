@@ -21,7 +21,7 @@ trait ManagesIocTrait
     /**
      * Initializes IoC Container
      * @param array $components
-     * @return void;
+     * @return void
      */
     public function initDi(array $components = [])
     {
