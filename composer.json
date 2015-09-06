@@ -5,7 +5,7 @@
     "data", "collection", "container", "manager",
     "nest", "nested", "array", "dot notation",
     "access", "deep data", 
-    "dependency injection", "ioc"
+    "dependency injection", "ioc",
     "config", "configuration", "defaults"
   ],
   "homepage": "https://github.com/chrismichaels84/data-manager",
