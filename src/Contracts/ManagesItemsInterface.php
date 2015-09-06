@@ -80,6 +80,13 @@ interface ManagesItemsInterface
     public function set($alias, $item = null);
 
     /**
+     * Return an item if it exists
+     * @param $alias
+     * @return \Michaels\Manager\Messages\NoItemFoundMessage|mixed
+     */
+    public function getIfExists($alias);
+
+    /**
      * Deletes an item
      *
      * @param $alias

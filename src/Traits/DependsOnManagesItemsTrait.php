@@ -11,6 +11,8 @@ trait DependsOnManagesItemsTrait
 
     abstract public function getAll();
 
+    abstract public function getIfExists($alias);
+
     abstract public function all();
 
     abstract public function exists($alias);
