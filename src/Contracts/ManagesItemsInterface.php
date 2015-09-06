@@ -15,6 +15,7 @@ interface ManagesItemsInterface
      * This is an alias for reset()
      *
      * @param array $items
+     * @return \Michaels\Manager\Traits\ManagesItemsTrait
      */
     public function initManager($items = []);
 
@@ -33,9 +34,9 @@ interface ManagesItemsInterface
      * Get a single item
      *
      * @param string $alias
-     * @param null $fallback
+     * @param string $fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
-     * @return mixed
+     * @return string
      */
     public function get($alias, $fallback = null);
 
@@ -123,7 +124,7 @@ interface ManagesItemsInterface
 
     /**
      * When manager instance is used as a string, return json of items
-     * @return mixed
+     * @return string
      */
     public function __toString();
 }

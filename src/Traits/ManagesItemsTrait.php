@@ -232,7 +232,7 @@ trait ManagesItemsTrait
         while (count($parts) > 1) {
             $step = array_shift($parts);
             if (isset($loc[$step]) && is_array($loc[$step])) {
-                $loc =& $loc[$step];
+                $loc = & $loc[$step];
             }
         }
 
@@ -360,7 +360,7 @@ trait ManagesItemsTrait
             return iterator_to_array($items);
         }
 
-        return (array)$items;
+        return (array) $items;
     }
 
     /**
