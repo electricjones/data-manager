@@ -129,7 +129,7 @@ trait ManagesIocTrait
 
     /**
      * Produces the object from an alias
-     * @param $alias
+     * @param string $alias
      * @param mixed|string $fallback
      * @return mixed
      * @throws ItemNotFoundException
@@ -155,7 +155,7 @@ trait ManagesIocTrait
 
         // Now setup those dependencies into an array
         if (!$declared instanceof NoItemFoundMessage) {
-            $dependencies = array_map(function (&$value) use ($alias) {
+            $dependencies = array_map(function(&$value) use ($alias) {
                 if (is_string($value) && $this->exists($this->nameOfIocManifest . ".$alias")) {
                     return $this->fetch($value);
                 }
