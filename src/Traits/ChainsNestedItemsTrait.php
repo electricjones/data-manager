@@ -11,6 +11,8 @@ namespace Michaels\Manager\Traits;
  */
 trait ChainsNestedItemsTrait
 {
+    use DependsOnManagesItemsTrait;
+
     /**
      * Current level of nesting
      * @var bool|string

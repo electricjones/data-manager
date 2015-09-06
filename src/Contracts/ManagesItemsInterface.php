@@ -103,9 +103,10 @@ interface ManagesItemsInterface
 
     /**
      * Returns json serialized representation of array of items
+     * @param  int $options
      * @return string
      */
-    public function toJson();
+    public function toJson($options = 0);
 
     /**
      * Confirm that manager has no items

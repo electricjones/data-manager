@@ -13,6 +13,9 @@ use Michaels\Manager\Messages\NoItemFoundMessage;
  */
 trait ManagesIocTrait
 {
+    use DependsOnManagesItemsTrait;
+
+    /** @var string Name of the ioc manifest */
     protected $nameOfIocManifest = '_diManifest';
 
     /**
