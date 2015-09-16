@@ -579,10 +579,21 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
      */
 
-    public function testSerializationTypeUnsupportedException()
+    public function testSerializationTypeUnsupportedExceptionForHydrate()
     {
         $data = "just a string";
         $this->manager->hydrateFrom('someType', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+
+    public function testSerializationTypeUnsupportedExceptionForAppend()
+    {
+        $data = "just a string";
+        $this->manager->appendFrom('someType', $data);
 
     }
 
