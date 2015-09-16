@@ -393,4 +393,63 @@ trait ManagesItemsTrait
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
     }
+
+    /**
+     * Hydrate with external data
+     *
+     * @param $type  string    The type of data to be hydrated into the manager
+     * @param $data string     The data to be hydrated into the manager
+     * @return $this
+     */
+    public function hydrateFrom($type, $data)
+    {
+        // we can possibly do some polymorphism for any other serialization types later
+        if($type !== 'json'){
+            return $this;
+        }
+
+        $decodedData = json_decode($data, true); // true gives us associative arrays
+
+        if ($this->isJson()){
+
+            $this->reset($decodedData);
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * Hydrate with external data, appending to current data
+     *
+     * @param $type  string    The type of data to be hydrated into the manager
+     * @param $data string     The data to be hydrated into the manager
+     * @return $this
+     */
+    public function appendFrom($type, $data)
+    {
+        // we can possibly do some polymorphism for any other serialization types later
+        if($type !== 'json'){
+            return $this;
+        }
+
+        $decodedData = json_decode($data, true); // true gives us associative arrays
+
+        if ($this->isJson()){
+
+            $this->add($decodedData);
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * Checks if the input is really a json string
+     * @return bool
+     */
+    private function isJson()
+    {
+        return (json_last_error() === JSON_ERROR_NONE);
+    }
 }

@@ -498,4 +498,80 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
     }
+
+    public function testHydrateFromJson()
+    {
+        $json = json_encode($this->testData);
+        $this->manager->clear();
+        $this->manager->hydrateFrom('json', $json);
+
+        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON");
+
+    }
+
+    public function testAppendFromJson()
+    {
+        $startData = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'six' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ]
+        ];
+
+        $appendData = json_encode([
+            'seven' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'eight' => [
+                'foo' => 'bar',
+            ],
+            'nine' => 10
+        ]);
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'six' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ],
+            'seven' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'eight' => [
+                'foo' => 'bar'
+            ],
+            'nine' => 10
+        ];
+
+        $this->manager->reset($startData);
+        $this->manager->appendFrom('json', $appendData);
+
+        $this->assertEquals($expected, $this->manager->getAll(), "failed to append from JSON");
+
+    }
 }
