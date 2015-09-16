@@ -1,6 +1,8 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Guzzle\Service\Exception\InconsistentClientTransferException;
+use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
@@ -410,14 +412,14 @@ trait ManagesItemsTrait
             throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
-        $decodedData = json_decode($data, true); // true gives us associative arrays
+        $decodedData = $this->decodeToJson($data);
 
-        if ($this->isJson()){
+        if ($this->isJson($decodedData)){
 
             $this->reset($decodedData);
             return $this;
         }
-        // need to add an exception here
+        throw new IncorrectDataException("The data is not proper JSON");
     }
 
     /**
@@ -435,22 +437,41 @@ trait ManagesItemsTrait
             throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
-        $decodedData = json_decode($data, true); // true gives us associative arrays
+        $decodedData = $this->decodeToJson($data);
 
-        if ($this->isJson()){
+        if ($this->isJson($decodedData)){
 
             $this->add($decodedData);
             return $this;
         }
-        // need to add an exception here
+        throw new IncorrectDataException("The data is not proper JSON");
     }
 
     /**
      * Checks if the input is really a json string
+     * @param $data mixed|null
      * @return bool
      */
-    private function isJson()
+    private function isJson($data)
     {
-        return (json_last_error() === JSON_ERROR_NONE);
+
+        if ($data !== "") {
+            return (json_last_error() === JSON_ERROR_NONE);
+        }
+    }
+
+    /**
+     * Decodes JSON data to array
+     * @param $data string
+     * @return mixed|null
+     */
+    private function decodeToJson($data)
+    {
+        if (is_string($data)){
+
+            return json_decode($data, true); // true gives us associative arrays
+        }
+
+        return "";
     }
 }

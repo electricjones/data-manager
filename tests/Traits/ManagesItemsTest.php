@@ -597,4 +597,26 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
+     */
+
+    public function testIncorrectDataExceptionForHydrate()
+    {
+        $data = array();
+        $this->manager->hydrateFrom('json', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
+     */
+
+    public function testIncorrectDataExceptionForAppend()
+    {
+        $data = array();
+        $this->manager->appendFrom('json', $data);
+
+    }
+
 }
