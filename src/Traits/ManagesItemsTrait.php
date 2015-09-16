@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
@@ -400,12 +401,13 @@ trait ManagesItemsTrait
      * @param $type  string    The type of data to be hydrated into the manager
      * @param $data string     The data to be hydrated into the manager
      * @return $this
+     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
      */
     public function hydrateFrom($type, $data)
     {
         // we can possibly do some polymorphism for any other serialization types later
         if($type !== 'json'){
-            return $this;
+            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
         $decodedData = json_decode($data, true); // true gives us associative arrays
@@ -413,10 +415,9 @@ trait ManagesItemsTrait
         if ($this->isJson()){
 
             $this->reset($decodedData);
+            return $this;
         }
-
-        return $this;
-
+        // need to add an exception here
     }
 
     /**
@@ -425,12 +426,13 @@ trait ManagesItemsTrait
      * @param $type  string    The type of data to be hydrated into the manager
      * @param $data string     The data to be hydrated into the manager
      * @return $this
+     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     *
      */
     public function appendFrom($type, $data)
     {
-        // we can possibly do some polymorphism for any other serialization types later
         if($type !== 'json'){
-            return $this;
+            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
         $decodedData = json_decode($data, true); // true gives us associative arrays
@@ -438,10 +440,9 @@ trait ManagesItemsTrait
         if ($this->isJson()){
 
             $this->add($decodedData);
+            return $this;
         }
-
-        return $this;
-
+        // need to add an exception here
     }
 
     /**

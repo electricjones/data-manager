@@ -212,7 +212,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $actual = $this->manager->getIfHas('nope');
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
-        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
+        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct message');
     }
 
     public function testUpdateSingleItem()
@@ -574,4 +574,16 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->manager->getAll(), "failed to append from JSON");
 
     }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+
+    public function testSerializationTypeUnsupportedException()
+    {
+        $data = "just a string";
+        $this->manager->hydrateFrom('someType', $data);
+
+    }
+
 }
