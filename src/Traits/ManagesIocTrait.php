@@ -164,7 +164,7 @@ trait ManagesIocTrait
 
         // Now setup those dependencies into an array
         if (!$declared instanceof NoItemFoundMessage) {
-            $dependencies = array_map(function (&$value) use ($alias) {
+            $dependencies = array_map(function(&$value) use ($alias) {
                 if (is_string($value) && $this->exists($this->nameOfIocManifest . ".$alias")) {
                     return $this->fetch($value);
                 }

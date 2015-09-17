@@ -387,7 +387,7 @@ trait ManagesItemsTrait
 
     /**
      * When manager instance is used as a string, return json of items
-     * @return mixed
+     * @return string
      */
     public function __toString()
     {
