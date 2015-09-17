@@ -619,4 +619,12 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testDenormalizedTypeInput()
+    {
+        $json = json_encode($this->testData);
+        $this->manager->clear();
+        $this->manager->hydrateFrom('jSOn  ', $json);
+
+        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON, with type `jSOn  `.");
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Guzzle\Service\Exception\InconsistentClientTransferException;
 use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
@@ -408,13 +407,13 @@ trait ManagesItemsTrait
     public function hydrateFrom($type, $data)
     {
         // we can possibly do some polymorphism for any other serialization types later
-        if($type !== 'json'){
+        if( ! $this->checkType($type)){
             throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
-        $decodedData = $this->decodeToJson($data);
+        $decodedData = $this->decodeFromJson($data);
 
-        if ($this->isJson($decodedData)){
+        if ($this->validateJson($decodedData)){
 
             $this->reset($decodedData);
             return $this;
@@ -433,13 +432,13 @@ trait ManagesItemsTrait
      */
     public function appendFrom($type, $data)
     {
-        if($type !== 'json'){
+        if( ! $this->checkType($type)){
             throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
-        $decodedData = $this->decodeToJson($data);
+        $decodedData = $this->decodeFromJson($data);
 
-        if ($this->isJson($decodedData)){
+        if ($this->validateJson($decodedData)){
 
             $this->add($decodedData);
             return $this;
@@ -452,7 +451,7 @@ trait ManagesItemsTrait
      * @param $data mixed|null
      * @return bool
      */
-    private function isJson($data)
+    private function validateJson($data)
     {
 
         if ($data !== "") {
@@ -465,7 +464,7 @@ trait ManagesItemsTrait
      * @param $data string
      * @return mixed|null
      */
-    private function decodeToJson($data)
+    private function decodeFromJson($data)
     {
         if (is_string($data)){
 
@@ -473,5 +472,20 @@ trait ManagesItemsTrait
         }
 
         return "";
+    }
+
+    /**
+     *  Check to make sure the type input is ok. Currently only for JSON.
+     * @param $type
+     * @return bool
+     */
+    private function checkType($type)
+    {
+        $type = strtolower(trim($type));
+
+        if ($type !== 'json') {
+              return false;
+        }
+        return true;
     }
 }
