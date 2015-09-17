@@ -68,18 +68,9 @@ trait ManagesItemsTrait
      */
     public function hydrateFrom($type, $data)
     {
-        // we can possibly do some polymorphism for any other serialization types later
-        if (!$this->isFormatSupported($type)) {
-            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
-        }
-
-        $decodedData = $this->decodeFromJson($data);
-
-        if ($this->validateJson($decodedData)) {
-            $this->reset($decodedData);
-            return $this;
-        }
-        throw new IncorrectDataException("The data is not proper JSON");
+        $decodedData = $this->prepareData($type, $data);
+        $this->reset($decodedData);
+        return $this;
     }
 
     /**
@@ -93,17 +84,31 @@ trait ManagesItemsTrait
      */
     public function appendFrom($type, $data)
     {
+        $decodedData = $this->prepareData($type, $data);
+        $this->add($decodedData);
+        return $this;
+    }
+
+    /**
+     * Validate and decode non-native data
+     * @param $type
+     * @param $data
+     * @return mixed|null
+     */
+    protected function prepareData($type, $data)
+    {
+        // we can possibly do some polymorphism for any other serialization types later
         if (!$this->isFormatSupported($type)) {
             throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
 
         $decodedData = $this->decodeFromJson($data);
 
-        if ($this->validateJson($decodedData)) {
-            $this->add($decodedData);
-            return $this;
+        if (!$this->validateJson($decodedData)) {
+            throw new IncorrectDataException("The data is not proper JSON");
         }
-        throw new IncorrectDataException("The data is not proper JSON");
+
+        return $decodedData;
     }
 
     /**
