@@ -36,7 +36,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     }
 
     // THIS IS NOT PART OF THE TRAIT, ONLY THE CONCRETE CLASS. Tested here to save time.
-    public function testAnotherInit()
+    public function testInitViaConstructor()
     {
         $manager = new Manager($this->testData, ['other' => ['items' => true]]);
         $this->assertTrue($manager->get("other.items"), "failed to set generic items");

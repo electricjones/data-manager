@@ -91,7 +91,7 @@ interface ManagesItemsInterface
      * Deletes an item
      *
      * @param $alias
-     * @return void
+     * @return $this
      */
     public function remove($alias);
 

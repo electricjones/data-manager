@@ -20,7 +20,7 @@ trait DependsOnManagesItemsTrait
      * Allow for dot notation (one.two.three) and item nesting.
      *
      * @param string $alias Key to be stored
-     * @param mixed  $item Value to be stored
+     * @param mixed $item Value to be stored
      * @return $this
      */
     abstract public function add($alias, $item = null);
@@ -40,7 +40,7 @@ trait DependsOnManagesItemsTrait
      *
      * @return array
      */
-     abstract public function getAll();
+    abstract public function getAll();
 
     /**
      * Return all items as array
@@ -86,7 +86,7 @@ trait DependsOnManagesItemsTrait
      * Deletes an item
      *
      * @param $alias
-     * @return void
+     * @return $this
      */
     abstract public function remove($alias);
 

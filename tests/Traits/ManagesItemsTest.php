@@ -1,9 +1,7 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
-use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
-use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
 use Michaels\Manager\Test\Stubs\TraversableStub;
 use StdClass;
@@ -119,11 +117,11 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testAddMultipleItemsAtOnce()
     {
         $this->manager->add([
-            'objectTest'    => new StdClass(),
-            'closureTest'   => function() {
+            'objectTest' => new StdClass(),
+            'closureTest' => function () {
                 return true;
             },
-            'stringTest'     => 'value'
+            'stringTest' => 'value'
         ]);
 
         $items = $this->manager->getAll();
@@ -251,8 +249,8 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testClear()
     {
         $this->manager->add([
-            'one'    => 'one',
-            'two'     => 'two'
+            'one' => 'one',
+            'two' => 'two'
         ]);
 
         $this->manager->clear();
@@ -600,10 +598,9 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
      */
-
     public function testIncorrectDataExceptionForHydrate()
     {
-        $data = array();
+        $data = [];
         $this->manager->hydrateFrom('json', $data);
 
     }
@@ -611,7 +608,6 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
      */
-
     public function testIncorrectDataExceptionForAppend()
     {
         $data = array();

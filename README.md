@@ -31,6 +31,7 @@ They are not documented here, but see other readmes for:
     * Creating singletons,
     * Configuring dependencies for dependencies,
     * Fallbacks, preparing objects, and more.
+  * Use Manager as a configuration bank, complete with defaults.
     
 ## Install
 Via Composer
@@ -77,8 +78,8 @@ $manager->toJson(); // returns json of all items
 echo $manager; // returns json string of all items
 $manager->reset($array); // rebuild with new items
 $manager->clear(); // empty the manager
-$manager->hydrateFrom($type, $data); // imports from serialized data into new data set - currently only JSON
-$manager->appendFrom($type, $data); // same as hydrate, but adds data to current data set
+$manager->hydrateFrom('json', $data); // imports from serialized data into new data set - currently only JSON
+$manager->appendFrom('json', $data); // same as hydrate, but adds data to current data set
 
 /* You can also use $manager as an array or in loops */
 $manager['some']['starting']['data']; // 'here (optional)'
@@ -232,10 +233,11 @@ You may also use the **tests** under `tests/traits` to test your integrated func
 Contributions are welcome and will be fully credited. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
-If you discover any security related issues, please email phoenixlabsdev@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please email chrismichaels84@gmail.com instead of using the issue tracker.
 
 ## Credits
 - [Michael Wilson](https://github.com/chrismichaels84)
+- [Scott](https://github.com/smolinari)
 - Open an issue to join in!
 
 ## License

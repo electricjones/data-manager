@@ -11,6 +11,7 @@ All Notable changes to `Manager` will be documented in this file
    - fallbacks, pipelines, and explicit dependencies
  - Adds `loadDefaults(array $defaults)` to `ManagesItemsTrait`
  - Adds `DependsOnManagesItemsTrait` to ensure that other traits require Manages Items.
+ - Adds `hydrateFrom()` and `appendFrom()` for non-native object formats
  
 #v0.8.4 - 2015-7-14
  - Better documentation (README.md)

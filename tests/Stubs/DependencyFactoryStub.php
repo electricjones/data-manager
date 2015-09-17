@@ -1,12 +1,5 @@
 <?php
 namespace Michaels\Manager\Test\Stubs;
-use ArrayAccess;
-use Countable;
-use IteratorAggregate;
-use JsonSerializable;
-use Michaels\Manager\Contracts\ManagesItemsInterface;
-use Michaels\Manager\Traits\ArrayableTrait;
-use Michaels\Manager\Traits\ManagesItemsTrait;
 
 /**
  * Class DependencyFacoryStub

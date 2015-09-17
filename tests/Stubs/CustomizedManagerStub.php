@@ -1,5 +1,6 @@
 <?php
 namespace Michaels\Manager\Test\Stubs;
+
 use Michaels\Manager\Manager;
 
 /**
@@ -9,6 +10,7 @@ use Michaels\Manager\Manager;
 class CustomizedManagerStub extends Manager
 {
     protected $other;
+
     public function __construct($items, $other)
     {
         $this->initManager($items);

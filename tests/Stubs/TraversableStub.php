@@ -1,7 +1,5 @@
 <?php
 namespace Michaels\Manager\Test\Stubs;
-use Michaels\Manager\Traits\ArrayableTrait;
-use Traversable;
 
 /**
  * Class CustomizedManagerStub

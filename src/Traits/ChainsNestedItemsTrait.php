@@ -25,7 +25,8 @@ trait ChainsNestedItemsTrait
      */
     public function drop()
     {
-        return $this->remove($this->currentLevel);
+        $this->remove($this->currentLevel);
+        return $this;
     }
 
     /**
