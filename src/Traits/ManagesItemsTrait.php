@@ -1,6 +1,8 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Michaels\Manager\Exceptions\IncorrectDataException;
+use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
@@ -392,5 +394,98 @@ trait ManagesItemsTrait
         if (in_array($item, $this->protectedItems)) {
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
+    }
+
+    /**
+     * Hydrate with external data
+     *
+     * @param $type  string    The type of data to be hydrated into the manager
+     * @param $data string     The data to be hydrated into the manager
+     * @return $this
+     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+    public function hydrateFrom($type, $data)
+    {
+        // we can possibly do some polymorphism for any other serialization types later
+        if( ! $this->checkType($type)){
+            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
+        }
+
+        $decodedData = $this->decodeFromJson($data);
+
+        if ($this->validateJson($decodedData)){
+
+            $this->reset($decodedData);
+            return $this;
+        }
+        throw new IncorrectDataException("The data is not proper JSON");
+    }
+
+    /**
+     * Hydrate with external data, appending to current data
+     *
+     * @param $type  string    The type of data to be hydrated into the manager
+     * @param $data string     The data to be hydrated into the manager
+     * @return $this
+     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     *
+     */
+    public function appendFrom($type, $data)
+    {
+        if( ! $this->checkType($type)){
+            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
+        }
+
+        $decodedData = $this->decodeFromJson($data);
+
+        if ($this->validateJson($decodedData)){
+
+            $this->add($decodedData);
+            return $this;
+        }
+        throw new IncorrectDataException("The data is not proper JSON");
+    }
+
+    /**
+     * Checks if the input is really a json string
+     * @param $data mixed|null
+     * @return bool
+     */
+    private function validateJson($data)
+    {
+
+        if ($data !== "") {
+            return (json_last_error() === JSON_ERROR_NONE);
+        }
+    }
+
+    /**
+     * Decodes JSON data to array
+     * @param $data string
+     * @return mixed|null
+     */
+    private function decodeFromJson($data)
+    {
+        if (is_string($data)){
+
+            return json_decode($data, true); // true gives us associative arrays
+        }
+
+        return "";
+    }
+
+    /**
+     *  Check to make sure the type input is ok. Currently only for JSON.
+     * @param $type
+     * @return bool
+     */
+    private function checkType($type)
+    {
+        $type = strtolower(trim($type));
+
+        if ($type !== 'json') {
+              return false;
+        }
+        return true;
     }
 }

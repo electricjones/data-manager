@@ -212,7 +212,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $actual = $this->manager->getIfHas('nope');
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
-        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
+        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct message');
     }
 
     public function testUpdateSingleItem()
@@ -497,5 +497,134 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->loadDefaults($defaults);
 
         $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
+    }
+
+    public function testHydrateFromJson()
+    {
+        $json = json_encode($this->testData);
+        $this->manager->clear();
+        $this->manager->hydrateFrom('json', $json);
+
+        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON");
+
+    }
+
+    public function testAppendFromJson()
+    {
+        $startData = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'six' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ]
+        ];
+
+        $appendData = json_encode([
+            'seven' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'eight' => [
+                'foo' => 'bar',
+            ],
+            'nine' => 10
+        ]);
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'six' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ],
+            'seven' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'eight' => [
+                'foo' => 'bar'
+            ],
+            'nine' => 10
+        ];
+
+        $this->manager->reset($startData);
+        $this->manager->appendFrom('json', $appendData);
+
+        $this->assertEquals($expected, $this->manager->getAll(), "failed to append from JSON");
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+
+    public function testSerializationTypeUnsupportedExceptionForHydrate()
+    {
+        $data = "just a string";
+        $this->manager->hydrateFrom('someType', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+
+    public function testSerializationTypeUnsupportedExceptionForAppend()
+    {
+        $data = "just a string";
+        $this->manager->appendFrom('someType', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
+     */
+
+    public function testIncorrectDataExceptionForHydrate()
+    {
+        $data = array();
+        $this->manager->hydrateFrom('json', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
+     */
+
+    public function testIncorrectDataExceptionForAppend()
+    {
+        $data = array();
+        $this->manager->appendFrom('json', $data);
+
+    }
+
+    public function testDenormalizedTypeInput()
+    {
+        $json = json_encode($this->testData);
+        $this->manager->clear();
+        $this->manager->hydrateFrom('jSOn  ', $json);
+
+        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON, with type `jSOn  `.");
     }
 }
