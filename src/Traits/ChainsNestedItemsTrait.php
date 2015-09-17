@@ -11,6 +11,8 @@ namespace Michaels\Manager\Traits;
  */
 trait ChainsNestedItemsTrait
 {
+    use DependsOnManagesItemsTrait;
+
     /**
      * Current level of nesting
      * @var bool|string
@@ -23,7 +25,8 @@ trait ChainsNestedItemsTrait
      */
     public function drop()
     {
-        return $this->remove($this->currentLevel);
+        $this->remove($this->currentLevel);
+        return $this;
     }
 
     /**
@@ -73,7 +76,8 @@ trait ChainsNestedItemsTrait
     }
 
     /**
-     * @return array
+     * Creates a prefix
+     * @return string
      */
     protected function buildPrefix()
     {

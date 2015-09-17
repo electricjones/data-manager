@@ -1,12 +1,7 @@
 <?php
-namespace Michaels\Manager\Contracts;
+namespace Michaels\Manager\Traits;
 
-/**
- * API Methods for managing items
- *
- * See src/Traits/ManagesItemsTrait.php for implementation example
- */
-interface ManagesItemsInterface
+trait DependsOnManagesItemsTrait
 {
     /**
      * Initializes a new manager instance.
@@ -17,7 +12,7 @@ interface ManagesItemsInterface
      * @param array $items
      * @return $this
      */
-    public function initManager($items = []);
+    abstract public function initManager($items = []);
 
     /**
      * Adds a single item.
@@ -25,34 +20,34 @@ interface ManagesItemsInterface
      * Allow for dot notation (one.two.three) and item nesting.
      *
      * @param string $alias Key to be stored
-     * @param mixed  $item Value to be stored
+     * @param mixed $item Value to be stored
      * @return $this
      */
-    public function add($alias, $item = null);
+    abstract public function add($alias, $item = null);
 
     /**
      * Get a single item
      *
      * @param string $alias
-     * @param string $fallback
+     * @param null $fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
-     * @return string
+     * @return mixed
      */
-    public function get($alias, $fallback = null);
+    abstract public function get($alias, $fallback = null);
 
     /**
      * Return all items as array
      *
      * @return array
      */
-    public function getAll();
+    abstract public function getAll();
 
     /**
      * Return all items as array
      *
      * @return array
      */
-    public function all();
+    abstract public function all();
 
     /**
      * Confirm or deny that an item exists
@@ -60,7 +55,7 @@ interface ManagesItemsInterface
      * @param $alias
      * @return bool
      */
-    public function exists($alias);
+    abstract public function exists($alias);
 
     /**
      * Confirm or deny that an item exists
@@ -68,7 +63,7 @@ interface ManagesItemsInterface
      * @param $alias
      * @return bool
      */
-    public function has($alias);
+    abstract public function has($alias);
 
     /**
      * Updates an item
@@ -78,14 +73,14 @@ interface ManagesItemsInterface
      *
      * @return $this
      */
-    public function set($alias, $item = null);
+    abstract public function set($alias, $item = null);
 
     /**
      * Return an item if it exists
      * @param $alias
      * @return \Michaels\Manager\Messages\NoItemFoundMessage|mixed
      */
-    public function getIfExists($alias);
+    abstract public function getIfExists($alias);
 
     /**
      * Deletes an item
@@ -93,13 +88,13 @@ interface ManagesItemsInterface
      * @param $alias
      * @return $this
      */
-    public function remove($alias);
+    abstract public function remove($alias);
 
     /**
      * Clear the manager
      * @return $this
      */
-    public function clear();
+    abstract public function clear();
 
     /**
      * Reset the manager with an array of items
@@ -107,24 +102,24 @@ interface ManagesItemsInterface
      * @param array $items
      * @return mixed
      */
-    public function reset($items);
+    abstract public function reset($items);
 
     /**
      * Returns json serialized representation of array of items
      * @param  int $options
      * @return string
      */
-    public function toJson($options = 0);
+    abstract public function toJson($options = 0);
 
     /**
      * Confirm that manager has no items
      * @return boolean
      */
-    public function isEmpty();
+    abstract public function isEmpty();
 
     /**
      * When manager instance is used as a string, return json of items
-     * @return string
+     * @return mixed
      */
-    public function __toString();
+    abstract public function __toString();
 }

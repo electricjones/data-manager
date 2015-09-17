@@ -9,11 +9,12 @@ use ArrayIterator;
  */
 trait ArrayableTrait
 {
+    use DependsOnManagesItemsTrait;
+
     /**
      * @implements ArrayAccess
      * @param $offset
-     * @return
-     * @throws \Michaels\Manager\Exceptions\DependencyNotMetException
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -23,8 +24,7 @@ trait ArrayableTrait
     /**
      * @implements ArrayAccess
      * @param $offset
-     * @return
-     * @throws \Michaels\Manager\Exceptions\DependencyNotMetException
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -35,7 +35,6 @@ trait ArrayableTrait
      * @implements ArrayAccess
      * @param $offset
      * @param $value
-     * @throws \Michaels\Manager\Exceptions\DependencyNotMetException
      */
     public function offsetSet($offset, $value)
     {
@@ -45,7 +44,6 @@ trait ArrayableTrait
     /**
      * @implements ArrayAccess
      * @param $offset
-     * @throws \Michaels\Manager\Exceptions\DependencyNotMetException
      */
     public function offsetUnset($offset)
     {
@@ -70,6 +68,7 @@ trait ArrayableTrait
 
     /**
      * @implements JSONSerializable
+     * @return string
      */
     public function jsonSerialize()
     {

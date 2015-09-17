@@ -1,5 +1,6 @@
 <?php
 namespace Michaels\Manager\Test\Stubs;
+
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;

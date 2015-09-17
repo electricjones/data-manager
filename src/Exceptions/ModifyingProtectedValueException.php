@@ -1,10 +1,6 @@
 <?php
 namespace Michaels\Manager\Exceptions;
 
-use Exception;
-use Interop\Container\Exception\ContainerException;
-use Psr\Log\InvalidArgumentException;
-
 /**
  * ModifyingProtectedValueException
  *
@@ -16,7 +12,7 @@ use Psr\Log\InvalidArgumentException;
  *
  * @package Michaels\Manager
  */
-class ModifyingProtectedValueException extends InvalidArgumentException
+class ModifyingProtectedValueException extends \InvalidArgumentException
 {
 
 }

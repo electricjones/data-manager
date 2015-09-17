@@ -1,10 +1,9 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
-use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
-use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
+use Michaels\Manager\Test\Stubs\TraversableStub;
 use StdClass;
 
 class ManagesItemsTest extends \PHPUnit_Framework_TestCase
@@ -67,12 +66,12 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager = new Manager();
         $manager->initManager(null);
 
-        $this->assertEquals([], $manager->getAll());
+        $this->assertEquals([], $manager->all());
 
         $manager = new Manager();
         $manager->initManager();
 
-        $this->assertEquals([], $manager->getAll());
+        $this->assertEquals([], $manager->all());
     }
 
     public function testInitManagerFromManager()
@@ -83,13 +82,23 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $secondManager = new Manager();
         $secondManager->initManager($firstManager);
 
-        $this->assertEquals(['foo' => 'bar'], $secondManager->getAll());
+        $this->assertEquals(['foo' => 'bar'], $secondManager->all());
     }
 
     public function testInitManagerFromObject()
     {
         $object = new stdClass();
         $object->foo = 'bar';
+        $manager = new Manager();
+        $manager->initManager($object);
+
+        $this->assertEquals(['foo' => 'bar'], $manager->getAll());
+    }
+
+    public function testInitManagerFromTraversable()
+    {
+        $object = new TraversableStub();
+        $object['foo'] = 'bar';
         $manager = new Manager();
         $manager->initManager($object);
 
@@ -108,11 +117,11 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testAddMultipleItemsAtOnce()
     {
         $this->manager->add([
-            'objectTest'    => new StdClass(),
-            'closureTest'   => function() {
+            'objectTest' => new StdClass(),
+            'closureTest' => function () {
                 return true;
             },
-            'stringTest'     => 'value'
+            'stringTest' => 'value'
         ]);
 
         $items = $this->manager->getAll();
@@ -186,6 +195,24 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
     }
 
+    public function testGetIfHasReturnsItemIfExists()
+    {
+        $this->manager->add($this->simpleNestData);
+
+        $actual = $this->manager->getIfHas('one.two');
+        $expected = $this->simpleNestData['one']['two'];
+
+        $this->assertEquals($expected, $actual, "failed to return an item that exists");
+    }
+
+    public function testGetIfHasReturnsMessageIfNoExists()
+    {
+        $actual = $this->manager->getIfHas('nope');
+
+        $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
+        $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct message');
+    }
+
     public function testUpdateSingleItem()
     {
         $this->manager->add('item', 'original-value');
@@ -222,8 +249,8 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testClear()
     {
         $this->manager->add([
-            'one'    => 'one',
-            'two'     => 'two'
+            'one' => 'one',
+            'two' => 'two'
         ]);
 
         $this->manager->clear();
@@ -392,5 +419,208 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $manager->protect('some');
         $manager->set('some.data.here', 'new-value');
+    }
+
+    public function testLoadDefaultsIntoEmptyManager()
+    {
+        $manager = new Manager();
+
+        $defaults = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => 'four'
+            ]
+        ];
+
+        $manager->loadDefaults($defaults);
+
+        $this->assertEquals($defaults, $manager->getAll(), "failed to load defaults");
+    }
+
+    public function testLoadDefaultsIntoNonEmptyManager()
+    {
+        $defaults = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'seven' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ]
+        ];
+
+        $starting = [
+            'one' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'seven' => [
+                'c' => 'over-ridden-c',
+            ],
+            'eight' => 8,
+        ];
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => 'michael',
+            ],
+            'five' => 5,
+            'seven' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'over-ridden-c',
+            ],
+            'eight' => 8,
+        ];
+
+        $manager = new Manager($starting);
+        $manager->loadDefaults($defaults);
+
+        $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
+    }
+
+    public function testHydrateFromJson()
+    {
+        $json = json_encode($this->testData);
+        $this->manager->clear();
+        $this->manager->hydrateFrom('json', $json);
+
+        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON");
+
+    }
+
+    public function testAppendFromJson()
+    {
+        $startData = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'six' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ]
+        ];
+
+        $appendData = json_encode([
+            'seven' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'eight' => [
+                'foo' => 'bar',
+            ],
+            'nine' => 10
+        ]);
+
+        $expected = [
+            'one' => [
+                'two' => [
+                    'three' => [
+                        'true' => true,
+                    ]
+                ],
+                'four' => [
+                    'six' => false,
+                ]
+            ],
+            'five' => 5,
+            'six' => [
+                'a' => 'A',
+                'b' => 'B',
+                'c' => 'C',
+            ],
+            'seven' => [
+                'two' => [],
+                'four' => 'michael'
+            ],
+            'eight' => [
+                'foo' => 'bar'
+            ],
+            'nine' => 10
+        ];
+
+        $this->manager->reset($startData);
+        $this->manager->appendFrom('json', $appendData);
+
+        $this->assertEquals($expected, $this->manager->getAll(), "failed to append from JSON");
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+
+    public function testSerializationTypeUnsupportedExceptionForHydrate()
+    {
+        $data = "just a string";
+        $this->manager->hydrateFrom('someType', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     */
+
+    public function testSerializationTypeUnsupportedExceptionForAppend()
+    {
+        $data = "just a string";
+        $this->manager->appendFrom('someType', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
+     */
+    public function testIncorrectDataExceptionForHydrate()
+    {
+        $data = [];
+        $this->manager->hydrateFrom('json', $data);
+
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
+     */
+    public function testIncorrectDataExceptionForAppend()
+    {
+        $data = array();
+        $this->manager->appendFrom('json', $data);
+
+    }
+
+    public function testDenormalizedTypeInput()
+    {
+        $json = json_encode($this->testData);
+        $this->manager->clear();
+        $this->manager->hydrateFrom('jSOn  ', $json);
+
+        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON, with type `jSOn  `.");
     }
 }

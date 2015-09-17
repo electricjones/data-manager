@@ -3,7 +3,6 @@ namespace Michaels\Manager\Contracts;
 
 /**
  * Contract for Managers that use magic methods to burrow into the item store
-
  * See src/Traits/ChainsNestedItemsTrait.php for implementation example.
  */
 interface ChainsNestedItemsInterface

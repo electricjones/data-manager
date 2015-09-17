@@ -1,10 +1,6 @@
 <?php
 namespace Michaels\Manager\Exceptions;
 
-use Exception;
-use Interop\Container\Exception\ContainerException;
-use Psr\Log\InvalidArgumentException;
-
 /**
  * NestingUnderNonArrayException
  *
@@ -15,7 +11,7 @@ use Psr\Log\InvalidArgumentException;
  *
  * @package Michaels\Manager
  */
-class NestingUnderNonArrayException extends InvalidArgumentException
+class NestingUnderNonArrayException extends \InvalidArgumentException
 {
 
 }

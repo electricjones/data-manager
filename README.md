@@ -3,7 +3,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/chrismichaels84/data-manager/master.svg?style=flat-square)](https://travis-ci.org/chrismichaels84/data-manager)
 [![Coverage Status](https://coveralls.io/repos/chrismichaels84/data-manager/badge.svg?branch=master)](https://coveralls.io/r/chrismichaels84/data-manager?branch=master)
-[![Code Climate](https://codeclimate.com/github/chrismichaels84/data-manager/badges/gpa.svg)](https://codeclimate.com/github/chrismichaels84/data-manager)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chrismichaels84/data-manager/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chrismichaels84/data-manager/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/michaels/data-manager.svg?style=flat-square)](https://packagist.org/packages/michaels/data-manager)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/3ef3b9a4-6078-4ddf-bf0d-c84dac87f37a/big.png)](https://insight.sensiolabs.com/projects/3ef3b9a4-6078-4ddf-bf0d-c84dac87f37a)
@@ -15,7 +15,7 @@ This project began as a three part tutorial series which can be found at http://
 ## Goals
   * Light weight
   * Fluent, simple, clear API
-  * Manage any data type (closure, object, primitives, etc)
+  * Manage any data type (closure, object, primitives, etc.)
   * Manage nested data via dot-notation
   * Manage nested data via magic methods ($manager->one()->two()->three)
   * Be composable - integrate into current containers via traits
@@ -23,6 +23,16 @@ This project began as a three part tutorial series which can be found at http://
   * Allow for protected data (immutable)
   * Test coverage, PSR compliant, [container interoperability](https://github.com/container-interop/container-interop), and best practices
 
+## Extras
+On top of being a powerful data-manager, there are traits that add features.
+They are not documented here, but see other readmes for:
+  * [IoC Container](ioc.md): Use Manager as a simple but powerful Dependency Injection Container. Includes
+    * Resolving dependencies from classnames, closures, eager loading, and more,
+    * Creating singletons,
+    * Configuring dependencies for dependencies,
+    * Fallbacks, preparing objects, and more.
+  * Use Manager as a configuration bank, complete with defaults.
+    
 ## Install
 Via Composer
 ``` bash
@@ -68,6 +78,8 @@ $manager->toJson(); // returns json of all items
 echo $manager; // returns json string of all items
 $manager->reset($array); // rebuild with new items
 $manager->clear(); // empty the manager
+$manager->hydrateFrom('json', $data); // imports from serialized data into new data set - currently only JSON
+$manager->appendFrom('json', $data); // same as hydrate, but adds data to current data set
 
 /* You can also use $manager as an array or in loops */
 $manager['some']['starting']['data']; // 'here (optional)'
@@ -91,6 +103,51 @@ You can also guard any item or nest from being changed. Simply,
 $manager->protect('some.data'); //now some.data and everything under it cannot be altered
 $manager->set('some.data.here', 'new-value'); // throws an exception
 ```
+
+## Merging Defaults Into Current Dataset
+When using Manager to store configuration data, it is important to be able to set defaults.
+You can merge an array of defaults into manager via `loadDefaults(array $defaults)`
+
+Imagine your configuration starts like
+```php
+$manager = new Manager([
+    'name' => 'My Awesome App',
+    'site' => [
+        'url' => 'http://youwishyouwerethiscool.com/',
+        'assets' => '/static'
+    ]
+]);
+```
+
+But your app needs `site.title` and `author`. Simply
+```php
+$manager->loadDefaults([
+    'site' => [
+        'url' => 'http://the_default_url.com/',
+        'protocol' => "https",
+        'assets' => '/assets',
+    ],
+    'database' => "mysql"
+]);
+```
+
+And now, your configuration looks like
+```php
+    'name' => 'My Awesome App',
+    'site' => [
+        'url' => 'http://youwishyouwerethiscool.com/'
+        'protocol' => "https",
+        'assets' => '/static' // NOT the default /assets
+    ],
+    'database' => "mysql"
+```
+
+A couple of things to keep in mind:
+  * This works recursively and as far down as you want.
+  * If any value is set before loading defaults, that value is preserved
+  * If a starting value is set to an array (`one.two = []`) and a default lives beneath (`one.two.three = default`), then the default **will** be set.
+  * On the other hand, if the value exists and is **not** an array, the default will be ignored. 
+  (`one.two = 'something'`) In this case, there is no `one.two.three`, even after loading defaults.
 
 ## Using Manager Traits
 If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.
@@ -160,6 +217,7 @@ $manager->add("one.two", "two-value"); // exception
 ```
 
 If you try to alter a protected item, a `ModifyingProtectedItemException` will be thrown.
+
 ## Interoperability
 Data Manager is [PSR compliant](http://www.php-fig.org/) and [Container Interoperability](https://github.com/container-interop/container-interop) compliant. Any oversights, please let me know.
 
@@ -175,10 +233,11 @@ You may also use the **tests** under `tests/traits` to test your integrated func
 Contributions are welcome and will be fully credited. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
-If you discover any security related issues, please email phoenixlabsdev@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please email chrismichaels84@gmail.com instead of using the issue tracker.
 
 ## Credits
 - [Michael Wilson](https://github.com/chrismichaels84)
+- [Scott](https://github.com/smolinari)
 - Open an issue to join in!
 
 ## License

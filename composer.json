@@ -4,15 +4,18 @@
   "keywords": [
     "data", "collection", "container", "manager",
     "nest", "nested", "array", "dot notation",
-    "access", "deep data"
+    "access", "deep data", 
+    "dependency injection", "ioc",
+    "config", "configuration", "defaults",
+    "json"
   ],
   "homepage": "https://github.com/chrismichaels84/data-manager",
   "license": "MIT",
   "authors": [
     {
       "name": "Michael",
-      "email": "phoenixlabsdev@gmail.com",
-      "homepage": "http://phoenixlabstech.org",
+      "email": "chrismichaels84@gmail.com",
+      "homepage": "http://chrismichaelsauthor.com",
       "role": "Lead Developer"
     }
   ],
