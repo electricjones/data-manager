@@ -78,8 +78,9 @@ $manager->toJson(); // returns json of all items
 echo $manager; // returns json string of all items
 $manager->reset($array); // rebuild with new items
 $manager->clear(); // empty the manager
-$manager->hydrateFrom('json', $data); // imports from serialized data into new data set - currently only JSON
-$manager->appendFrom('json', $data); // same as hydrate, but adds data to current data set
+$manager->hydrateFrom('json', $data, [true]); // imports from serialized data into new data set as default
+                                              // currently only JSON supported
+                                              // optional append flag [true] will cause the data to be appended to current data set
 
 /* You can also use $manager as an array or in loops */
 $manager['some']['starting']['data']; // 'here (optional)'

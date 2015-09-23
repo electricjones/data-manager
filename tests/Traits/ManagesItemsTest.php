@@ -567,7 +567,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->manager->reset($startData);
-        $this->manager->appendFrom('json', $appendData);
+        $this->manager->hydrateFrom('json', $appendData, true);
 
         $this->assertEquals($expected, $this->manager->getAll(), "failed to append from JSON");
 
@@ -591,7 +591,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testSerializationTypeUnsupportedExceptionForAppend()
     {
         $data = "just a string";
-        $this->manager->appendFrom('someType', $data);
+        $this->manager->hydrateFrom('someType', $data, true);
 
     }
 
@@ -611,7 +611,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     public function testIncorrectDataExceptionForAppend()
     {
         $data = array();
-        $this->manager->appendFrom('json', $data);
+        $this->manager->hydrateFrom('json', $data, true);
 
     }
 

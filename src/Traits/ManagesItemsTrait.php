@@ -63,29 +63,18 @@ trait ManagesItemsTrait
      *
      * @param $type  string    The type of data to be hydrated into the manager
      * @param $data string     The data to be hydrated into the manager
+     * @param bool $append     When true, data will be appended to the current set
      * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
      */
-    public function hydrateFrom($type, $data)
+    public function hydrateFrom($type, $data, $append=false)
     {
         $decodedData = $this->prepareData($type, $data);
-        $this->reset($decodedData);
-        return $this;
-    }
+        if ($append===false){
+            $this->reset($decodedData);
+        }else{
+            $this->add($decodedData);
+        }
 
-    /**
-     * Hydrate with external data, appending to current data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
-     * @param $data string     The data to be hydrated into the manager
-     * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
-     *
-     */
-    public function appendFrom($type, $data)
-    {
-        $decodedData = $this->prepareData($type, $data);
-        $this->add($decodedData);
         return $this;
     }
 
@@ -97,7 +86,6 @@ trait ManagesItemsTrait
      */
     protected function prepareData($type, $data)
     {
-        // we can possibly do some polymorphism for any other serialization types later
         if (!$this->isFormatSupported($type)) {
             throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
         }
