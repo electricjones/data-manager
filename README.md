@@ -113,18 +113,17 @@ Imagine your configuration starts like
 $manager = new Manager([
     'name' => 'My Awesome App',
     'site' => [
-        'url' => 'http://youwishyouwerethiscool.com/',
-        'assets' => '/static'
+        'url' => 'https://youwishyouwerethiscool.com/',
+        'protocol' => 'https',
     ]
 ]);
 ```
 
-But your app needs `site.title` and `author`. Simply
+But your app needs `site.assets` for the assets directory. Simply
 ```php
 $manager->loadDefaults([
     'site' => [
         'url' => 'http://the_default_url.com/',
-        'protocol' => "https",
         'assets' => '/assets',
     ],
     'database' => "mysql"
@@ -135,9 +134,9 @@ And now, your configuration looks like
 ```php
     'name' => 'My Awesome App',
     'site' => [
-        'url' => 'http://youwishyouwerethiscool.com/'
+        'url' => 'https://youwishyouwerethiscool.com/'
         'protocol' => "https",
-        'assets' => '/static' // NOT the default /assets
+        'assets' => '/assets'
     ],
     'database' => "mysql"
 ```
