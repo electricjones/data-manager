@@ -623,4 +623,14 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON, with type `jSOn  `.");
     }
+
+    public function testLoadingOfSingleJsonConfigFile()
+    {
+        $this->assertEquals(1,2);
+    }
+
+    public function testLoadingOfMultipleJsonConfigFiles()
+    {
+        $this->assertEquals(1,2);
+    }
 }
