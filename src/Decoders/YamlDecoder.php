@@ -1,10 +1,12 @@
 <?php
 namespace Michaels\Manager\Decoders;
 
+use Michaels\Manager\Contracts\DecoderInterface;
+
 /**
  * SerializationTypeNotSupportedException
  * @package Michaels\Manager
  */
-class JsonDecoder extends Decoder
+class YamlDecoder implements DecoderInterface
 {
 }

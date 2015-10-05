@@ -2,6 +2,8 @@
 namespace Michaels\Manager\Test;
 
 use Michaels\Manager\Bags\FileBag;
+use Michaels\Manager\Test\Bags\FileBagTestTrait;
+
 
 /**
  * Class FileBagTest
@@ -11,6 +13,8 @@ use Michaels\Manager\Bags\FileBag;
 
 class FileBagTest extends \PHPUnit_Framework_TestCase
 {
+    use FileBagTestTrait;
+
     private $goodTestFileDirectory;
 
     private $goodTestFileObject = array();
@@ -28,92 +32,44 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
      */
     public function setup()
     {
-        $this->goodTestFileDirectory = realpath(__DIR__ . 'Fixtures/Good');
+        $this->goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodNames');
 
         $this->goodTestFileObjects = $this->setFilesToSplInfoObjects($this->goodTestFileDirectory);
         $this->badTestFileObjects = $this->setFilesToBadObjects();
 
-        $this->goodTestFileObject = array_push($this->goodTestFileObject,array_pop($this->goodTestFileObjects));
-        $this->badTestFileObject = array_push($this->badTestFileObject, array_pop($this->badTestFileObjects));
+        $this->goodTestFileObject = $this->goodTestFileObjects[0];
+        $this->badTestFileObject = $this->badTestFileObjects[0];
 
         $this->fileBag = new FileBag($this->goodTestFileObjects);
 
     }
 
-
     /**
-     * This function creates the necessary SplFileInfo objects for testing. Hint, this is what the client coder will
-     * need as a minimum, to pass files into the FileBag to load in the data-manager.
-     * @param $directory
-     * @return array|int
+     * @expectedException \Michaels\Manager\Exceptions\BadFileInfoObjectException
      */
-    function setFilesToSplInfoObjects($directory)
-    {
-        $fileObjects = array();
-        if ($handle = opendir($directory)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                    $fileObject = new \SplFileObject($entry);
-                    $fileObjects = array_push($fileObjects, $fileObject);
-                }
-            }
-            closedir($handle);
-        }
-        return $fileObjects;
-    }
-
-    /**
-     * This function creates an array of empty (non-SplFileInfo) objects
-     *
-     */
-    function setFilesToBadObjects()
-    {
-        $objects = array();
-        for($i=0; $i <= 2; $i++) {
-            $object = new \stdClass();
-            $objects = array_push($objects, $object);
-        }
-        return $objects;
-    }
-
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\BadFileObjectException
-     */
-    public function creationOfFileBagWithBadFileObjectsTest()
+    public function testCreationOfFileBagWithBadFileObjects()
     {
 
         $this->fileBag = new FileBag($this->badTestFileObjects);
 
     }
 
-    /**
-     * Test to make sure files are in the FileBag properly.
-     */
-    public function creationOfFileBagWithGoodFileObjectsTest()
+    public function testCreationOfFileBagWithGoodFileObjects()
     {
-
-        $expected = $this->goodTestFileObject;
-        $this->assertEquals($expected, $this->fileBag->getLast());
+        $this->fileBag->emptyBag();
+        $this->fileBag = new FileBag($this->goodTestFileObjects);
+        $this->assertEquals($this->goodTestFileObjects, $this->fileBag->getAllFileInfoObjects(), "Creation of file bag was not successful.");
     }
 
-
-    /**
-     *
-     */
-    public function getAllFileObjectsInBagTest()
+    public function testGetAllFileObjectsInBag()
     {
-
+        $this->assertEquals(
+            $this->goodTestFileObjects, $this->fileBag->getAllFileInfoObjects(), "All file objects were not retrieved properly.");
     }
 
-    /**
-     *
-     */
-    public function emptyFileBagTest()
+    public function testEmptyingOfFileBag()
     {
-        $expected = array();
-        $this->assertEquals($expected,$this->fileBag->emptyBag());
+        $this->assertEmpty($this->fileBag->emptyBag(), "The fileBag was not properly emptied.");
     }
-
-
 
 }

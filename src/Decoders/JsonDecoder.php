@@ -1,76 +1,61 @@
 <?php
 namespace Michaels\Manager\Decoders;
 
-use Michaels\Manager\Contract\DecoderInterface;
+use Michaels\Manager\Contracts\DecoderInterface;
+use Michaels\Manager\Exceptions\JsonDecodingFailedException;
 /**
-* SerializationTypeNotSupportedException
-* @package Michaels\Manager
-*/
-class JsonDecoder extends DecoderInterface
+ * A standard Json Decoder Module for the data manager file loader.
+ *
+ * @package Michaels\Manager
+ */
+class JsonDecoder implements DecoderInterface
 {
 
-
-
-
-
-
-    /**
-     * Hydrate with external data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
-     * @param $data string     The data to be hydrated into the manager
-     * @param bool $append     When true, data will be appended to the current set
-     * @return $this
-     */
-    public function hydrateFrom($type, $data, $append=false)
-    {
-        $decodedData = $this->prepareData($type, $data);
-        if ($append===false){
-            $this->reset($decodedData);
-        }else{
-            $this->add($decodedData);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Checks if the input is really a json string
-     * @param $data mixed|null
-     * @return bool
-     */
-    protected function validateJson($data)
-    {
-        if ($data !== "") {
-            return (json_last_error() === JSON_ERROR_NONE);
-        }
-    }
+    private $arrayData;
 
     /**
      * Decodes JSON data to array
+     *
      * @param $data string
-     * @return mixed|null
+     * @return array
+     * @throws JsonDecodingFailedException
      */
-    protected function decodeFromJson($data)
+    public function decode($data)
     {
         if (is_string($data)) {
-            return json_decode($data, true); // true gives us associative arrays
+
+            $this->arrayData = json_decode($data, true); // true gives us associative arrays
+
+            if($this->isValidJson()) {
+
+                return $this->arrayData;
+            }
         }
 
-        return "";
+        throw new JsonDecodingFailedException('The data provided was not proper JSON');
     }
+
 
     /**
-     * Check to make sure the type input is ok. Currently only for JSON.
-     * @param $type
-     * @return bool
+     * @return array
      */
-    protected function isFormatSupported($type)
+    public function getMimeType()
     {
-        $type = strtolower(trim($type));
-        $supported = ['json'];
-
-        return in_array($type, $supported);
+        return ['json'];
     }
+
+
+    /**
+     * Checks if the input is really a json string and if the PHP Json decoding was successful.
+     *
+     * @return boolean
+     */
+    protected function isValidJson()
+    {
+        return (json_last_error() === JSON_ERROR_NONE);
+    }
+
+
+
 
 }

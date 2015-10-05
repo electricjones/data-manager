@@ -1,11 +1,9 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
-use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
@@ -58,26 +56,6 @@ trait ManagesItemsTrait
         return $this;
     }
 
-    /**
-     * Validate and decode non-native data
-     * @param $type
-     * @param $data
-     * @return mixed|null
-     */
-    protected function prepareData($type, $data)
-    {
-        if (!$this->isFormatSupported($type)) {
-            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
-        }
-
-        $decodedData = $this->decodeFromJson($data);
-
-        if (!$this->validateJson($decodedData)) {
-            throw new IncorrectDataException("The data is not proper JSON");
-        }
-
-        return $decodedData;
-    }
 
     /**
      * Adds a single item.
