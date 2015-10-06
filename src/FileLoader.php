@@ -61,7 +61,7 @@ class FileLoader
     /**
      * Add a file bag, or change an array of SplFileInfo Objects as to a proper objects.
      *
-     * @param FileBag $files
+     * @param mixed $files a filebag or an array of SplFileInfo objects.
      */
     public function addFiles($files)
     {
