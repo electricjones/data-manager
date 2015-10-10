@@ -2,7 +2,6 @@
 namespace Michaels\Manager;
 
 use Michaels\Manager\Contracts\DecoderInterface;
-use Michaels\Manager\Decoders\JsonDecoder;
 use Michaels\Manager\Bags\FileBag;
 use Michaels\Manager\Exceptions\UnsupportedFilesException;
 use Michaels\Manager\Exceptions\BadFileDataException;
@@ -12,20 +11,20 @@ use Exception;
 class FileLoader
 {
 
-    private $supportedMimeTypes = array();
+    private $supportedMimeTypes = [];
 
-    private $fileBag = array();
+    private $fileBag = [];
 
-    private $decoders = array();
+    private $decoders = [];
 
     private $manager;
 
-    private $unsupportedFiles = array();
+    private $unsupportedFiles = [];
 
-    private $decodedData = array();
+    private $decodedData = [];
 
     /**
-     * Constructor - gets a manager instance to work with and sets up default decoders.
+     * Constructor - gets a manager instance to work with.
      *
      * @param Manager $manager
      */
@@ -33,10 +32,6 @@ class FileLoader
     public function __construct(Manager $manager)
     {
         $this->manager = $manager;
-
-        $this->addDecoder(new JsonDecoder());
-        //$this->addDecoder(new YamlDecoder());
-
     }
 
     /**
@@ -47,19 +42,15 @@ class FileLoader
     public function addDecoder(DecoderInterface $decoder)
     {
         $mimeTypes = $decoder->getMimeType();
-        if (empty($this->supportedMimeTypes)){
-            $this->supportedMimeTypes = $mimeTypes;
-        }else{
-            array_merge($this->supportedMimeTypes, $mimeTypes);
-        }
+        $this->supportedMimeTypes = array_merge($this->supportedMimeTypes, $mimeTypes);
         foreach($mimeTypes as $type)
         {
-            $this->decoders[$type] = &$decoder;
+            $this->decoders[$type] = $decoder;
         }
     }
 
     /**
-     * Add a file bag, or change an array of SplFileInfo Objects as to a proper objects.
+     * Add a file bag, or change an array of SplFileInfo Objects to proper objects.
      *
      * @param mixed $files a filebag or an array of SplFileInfo objects.
      */
@@ -79,7 +70,8 @@ class FileLoader
     }
 
     /**
-     * Process file bag to load into the data manager
+     * Process file bag to load into the data manager.
+     * A file bag is an array of SplFileInfo objects.
      *
      * @param bool $append set to true, if you want to append data to the manager.
      * @throws \Exception
@@ -94,6 +86,8 @@ class FileLoader
         {
             $mimeType = $file->getExtension();
 
+            $this->checkAndAddDefaultDecoder($mimeType);
+
             if ($this->isSupportedMimeType($mimeType)){
 
                 $data= $this->getFileContents($file);
@@ -106,7 +100,7 @@ class FileLoader
 
         if ( ! empty($this->unsupportedFiles)){
             $badFiles = implode(", ", $this->unsupportedFiles);
-            throw new UnsupportedFilesException('The files '. $badFiles .' are not supported by the available decoders.');
+            throw new UnsupportedFilesException('The file(s) '. $badFiles .' are not supported by the available decoders.');
         }
 
         if ($append){
@@ -123,7 +117,7 @@ class FileLoader
      */
     protected function isSupportedMimeType($type)
     {
-        return in_array($type, $this->supportedMimeTypes) ? true: false;
+        return in_array($type, $this->supportedMimeTypes);
     }
 
     /**
@@ -156,6 +150,9 @@ class FileLoader
         return $content;
     }
 
+    /**
+     * This method appends data to an existing manager.
+     */
     protected function addDataToManger()
     {
         foreach ($this->decodedData as $data)
@@ -164,6 +161,9 @@ class FileLoader
         }
     }
 
+    /**
+     * This method will start with a fresh manager and then add data to it.
+     */
     protected function resetManagerAndAddData()
     {
         $reset = true;
@@ -177,5 +177,24 @@ class FileLoader
         }
     }
 
+    /**
+     * Default decoder class factory method.
+     * Checks to make sure we have a default decoder available and if so, adds it as a decoder to the file loader.
+     *
+     * @param $mimeType
+     */
+    protected function checkAndAddDefaultDecoder($mimeType)
+    {
+        $decoderClass = ucfirst($mimeType)."Decoder";
+        //var_dump("File:".__DIR__.'/Decoders/'.$decoderClass.'.php', file_exists(__DIR__.'/Decoders/'.$decoderClass.'.php') , ! $this->isSupportedMimeType($mimeType));
+        if(file_exists(__DIR__.'/Decoders/'.$decoderClass.'.php') && ! $this->isSupportedMimeType($mimeType)){
 
+            include_once(__DIR__.'/Decoders/'.$decoderClass.'.php');
+            $nameSpace = "Michaels\\Manager\\Decoders\\";
+            $fqcn = $nameSpace . $decoderClass;
+            $decoder = new $fqcn();
+            $this->addDecoder($decoder);
+        }
+
+    }
 }

@@ -19,8 +19,8 @@ interface DecoderInterface
 
     /**
      * The data returned is the actual file extensions supported for the files to decode.
-     * Make sure the first array element is the prefix of the decoder class.
-     * i.e. if array is ['yaml', 'yml'] the decoder class must be "YamlDecoder"
+     * For instance, if you want to decode Yaml files with the extensions ".yml" and ".yaml",
+     * then you want to set the return array to ['yaml', 'yml'].
      *
      * @return array
      */

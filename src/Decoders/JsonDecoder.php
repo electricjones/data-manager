@@ -37,7 +37,7 @@ class JsonDecoder implements DecoderInterface
 
 
     /**
-     * @return array
+     * @return string
      */
     public function getMimeType()
     {
