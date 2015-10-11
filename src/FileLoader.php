@@ -42,6 +42,9 @@ class FileLoader
     public function addDecoder(DecoderInterface $decoder)
     {
         $mimeTypes = $decoder->getMimeType();
+        if($this->isSupportedMimeType($mimeTypes[0])){
+            return; // we already have the decoder loaded!
+        }
         $this->supportedMimeTypes = array_merge($this->supportedMimeTypes, $mimeTypes);
         foreach($mimeTypes as $type)
         {
@@ -112,7 +115,7 @@ class FileLoader
 
     /**
      * Check to make sure the mime type is ok.
-     * @param $type
+     * @param $type a mime type
      * @return bool
      */
     protected function isSupportedMimeType($type)
@@ -186,7 +189,7 @@ class FileLoader
     protected function checkAndAddDefaultDecoder($mimeType)
     {
         $decoderClass = ucfirst($mimeType)."Decoder";
-        //var_dump("File:".__DIR__.'/Decoders/'.$decoderClass.'.php', file_exists(__DIR__.'/Decoders/'.$decoderClass.'.php') , ! $this->isSupportedMimeType($mimeType));
+
         if(file_exists(__DIR__.'/Decoders/'.$decoderClass.'.php') && ! $this->isSupportedMimeType($mimeType)){
 
             include_once(__DIR__.'/Decoders/'.$decoderClass.'.php');

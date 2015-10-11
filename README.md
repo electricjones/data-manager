@@ -46,7 +46,7 @@ See `Michaels\Manager\Manager` for an example.
 
 ## Getting Started
 Manager does exactly what you would expect: it *manages* complex items such as config data, arrays, and closures.
-The best way to get started is simply instantiate `Michaels\Manager\Mangaer`
+The best way to get started is simply instantiate `Michaels\Manager\Manager`
 
 ```php
 $manager = new Michaels\Manager\Manager([
@@ -78,9 +78,10 @@ $manager->toJson(); // returns json of all items
 echo $manager; // returns json string of all items
 $manager->reset($array); // rebuild with new items
 $manager->clear(); // empty the manager
-$manager->hydrateFrom('json', $data, [true]); // imports from serialized data into new data set as default
-                                              // currently only JSON supported
-                                              // optional append flag [true] will cause the data to be appended to current data set
+$manager->addDecoder(DecoderInterface $decoder); // adds a file decoder to the file loader
+$manager->loadFiles($files); // adds data from files into a manager instance
+
+/* for more explaination on the file loader, see that section below */
 
 /* You can also use $manager as an array or in loops */
 $manager['some']['starting']['data']; // 'here (optional)'
@@ -205,6 +206,14 @@ If you are using the `ManagesItemsTrait` and want to use an internal property be
 
   1. Use `$manager->setItemsName($nameOfProperty)` either in your constructor or before you add anything
   2. Set the `$dataItemsName` property to a string of the new property name. Then be sure to call `initManager()` in your constructor.
+
+## Loading Files
+Manager also give you the ability to load file data into the manager. A good use case for this is loading configuration data out of different configuration files.
+
+  1. Use `$manager->loadFiles($files)` to load a group of files. The `$files` argument can be either a `\FileBag` object or an array of `\SplFileInfo` objects. Most likely you would use an array, like the return result of [Symfony's Finder Component](https://github.com/symfony/Finder), which can locate files in a directory tree and return them as `\SplFileInfo` objects.
+  2. If you have created your own type of config file, you can also create a decoder for those types of files. All you need to do is follow the `\DecoderInterface` interface and return a php array of data through the `decode()` method. Then, once you have a decoder, you can add the decoder to the file loader with `$manager->addDecoder($decoder);` Once the decoder is added, you can then load your custom config files to the Manager, as in the previous step. 
+
+NOTE: Currently Manager supports Yaml and Json file formats out of the box.   
 
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
