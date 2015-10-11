@@ -143,6 +143,11 @@ class FileLoader
      */
     protected function getFileContents($file)
     {
+        if ( $file->getExtension() === 'php') {
+            $content = include $file->getPathname();
+            return $content;
+        }
+
         $level = error_reporting(0);
         $content = file_get_contents($file->getPathname());
         error_reporting($level);
