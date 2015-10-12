@@ -32,7 +32,7 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
      */
     public function setup()
     {
-        $this->goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodNames');
+        $this->goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodExtensions');
 
         $this->goodTestFileObjects = $this->setFilesToSplInfoObjects($this->goodTestFileDirectory);
         $this->badTestFileObjects = $this->setFilesToBadObjects();

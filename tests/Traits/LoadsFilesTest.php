@@ -3,6 +3,7 @@ namespace Michaels\Manager\Test\Traits;
 
 use Michaels\Manager\Test\Bags\FileBagTestTrait;
 use Michaels\Manager\Manager;
+use Michaels\Manager\Decoders\CustomXmlDecoder;
 
 class LoadsFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,9 +37,22 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
     public function testLoadingFiles()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodData');
-        $goodFileData =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
+        $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
         $this->manager = new Manager();
-        $this->manager->loadFiles($goodFileData);
+        $this->manager->loadFiles($goodFiles);
+
+        $this->assertEquals($this->defaultArray, $this->manager->all());
+
+    }
+
+    public function testAddingDecoder()
+    {
+        $goodCustomTestFileDirectory = realpath(__DIR__ . '/../Fixtures/CustomFileWithGoodData');
+        $customDecoder = new CustomXmlDecoder();
+        $goodFiles =  $this->setFilesToSplInfoObjects($goodCustomTestFileDirectory);
+        $this->manager = new Manager();
+        $this->manager->addDecoder($customDecoder);
+        $this->manager->loadFiles($goodFiles);
 
         $this->assertEquals($this->defaultArray, $this->manager->all());
 

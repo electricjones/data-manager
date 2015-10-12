@@ -5,6 +5,7 @@ use Michaels\Manager\Manager;
 use Michaels\Manager\FileLoader;
 use Michaels\Manager\Bags\FileBag;
 use Michaels\Manager\Test\Bags\FileBagTestTrait;
+use Michaels\Manager\Decoders\CustomXmlDecoder;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +15,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     private $manager;
 
-    private $defaultArray;
+    private $defaultArray = [];
 
     /**
      *
@@ -40,14 +41,13 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
             ],
             'top' => 'top-value',
         ];
-
     }
 
     public function testAddingFileArray()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
-        $goodFileData =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
-        $this->fileLoader->addFiles($goodFileData);
+        $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
+        $this->fileLoader->addFiles($goodFiles);
         $this->fileLoader->hydrateManager();
         $this->assertEquals($this->defaultArray, $this->manager->getAll());
 
@@ -57,8 +57,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function testAddingFileBag()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
-        $goodFileData =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
-        $fileBag = new FileBag($goodFileData);
+        $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
+        $fileBag = new FileBag($goodFiles);
         $this->fileLoader->addFiles($fileBag);
         $this->fileLoader->hydrateManager();
 
@@ -74,6 +74,18 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddingADecoder()
     {
+        $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
+        $goodCustomFileDirectory = realpath(__DIR__ . '/Fixtures/CustomFileWithGoodData');
+        $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
+        $goodCustomFile = $this->setFilesToSplInfoObjects($goodCustomFileDirectory);
+        $goodFiles = array_merge($goodFiles, $goodCustomFile);
+        $customDecoder = new CustomXmlDecoder();
+        $fileBag = new FileBag($goodFiles);
+        $this->fileLoader->addDecoder($customDecoder);
+        $this->fileLoader->addFiles($fileBag);
+        $this->fileLoader->hydrateManager();
+
+        $this->assertEquals($this->defaultArray, $this->manager->getAll());
 
     }
 
