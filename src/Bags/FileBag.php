@@ -22,12 +22,12 @@ class FileBag
 
     /**
      * Set up the bag with a proper array of SplFileInfo objects
-     * @param $arrayOfSplFileInfoObjects
-     * @throws BadFileInfoObjectException
+     * @param array $splFileInfoObjects
+     * @internal param $arrayOfSplFileInfoObjects
      */
-    private function initialize($arrayOfSplFileInfoObjects)
+    private function initialize(array $splFileInfoObjects)
     {
-        foreach ($arrayOfSplFileInfoObjects as $object)
+        foreach ($splFileInfoObjects as $object)
         {
             if($this->isSplFileInfoObject($object)){
 
@@ -42,13 +42,13 @@ class FileBag
     }
 
     /**
-     * Check for an \SplfileInfo object
+     * Check for an \SplFileInfo object
      * @param $object
      * @return bool
      */
     protected function isSplFileInfoObject($object)
     {
-        return $object instanceof  \SplFileInfo ? true : false;
+        return ($object instanceof  \SplFileInfo);
     }
 
     /**
