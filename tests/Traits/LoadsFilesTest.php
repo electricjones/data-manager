@@ -1,7 +1,7 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
-use Michaels\Manager\Test\Bags\FileBagTestTrait;
+use Michaels\Manager\Test\Utilities\FileBagTestTrait;
 use Michaels\Manager\Manager;
 use Michaels\Manager\Decoders\CustomXmlDecoder;
 
