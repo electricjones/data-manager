@@ -323,6 +323,11 @@ trait ManagesItemsTrait
         return $loc;
     }
 
+    /**
+     * Prepare the returned value
+     * @param $value
+     * @return mixed
+     */
     protected function prepareReturnedValue($value)
     {
         // Are we looking for Collections?
