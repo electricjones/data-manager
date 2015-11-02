@@ -2,7 +2,7 @@
 namespace Michaels\Manager\Test;
 
 use Michaels\Manager\Bags\FileBag;
-use Michaels\Manager\Test\Bags\FileBagTestTrait;
+use Michaels\Manager\Test\Utilities\FileBagTestTrait;
 
 
 /**
