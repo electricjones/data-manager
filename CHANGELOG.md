@@ -1,10 +1,10 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# Future
- - Initialize `CollectsItemsTrait` and `Collection` class
+# NEXT
+ - Adds `isArrayable()` helper method to `ManagesItemsTrait`
 
-#v0.8.5 - NEXT
+#v0.8.5 - 9-17-2015
  - Adds `IocContainerTrait` for basic DI functionality
    - initDI() and share()
    - produce from classname, object, factory, or instance of manager
