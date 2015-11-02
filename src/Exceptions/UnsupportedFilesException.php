@@ -6,3 +6,4 @@ class UnsupportedFilesException extends \InvalidArgumentException
 {
 
 }
+

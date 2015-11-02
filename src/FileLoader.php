@@ -7,21 +7,65 @@ use Michaels\Manager\Exceptions\UnsupportedFilesException;
 use Michaels\Manager\Exceptions\BadFileDataException;
 use Exception;
 
+/**
+ * Class FileLoader
+ *
+ * Adds file loading capability to the data manager.
+ *
+ * @package Michaels\Manager
+ */
 
 class FileLoader
 {
+    /**
+     * The data which will be decoded.
+     *
+     * @var array
+     */
+    protected $dataToDecode = [];
 
-    private $supportedMimeTypes = [];
+    /**
+     * The array of supported Mime types, which is defined in each decoder class.
+     *
+     * @var array
+     */
+    protected $supportedMimeTypes = [];
 
-    private $fileBag = [];
+    /**
+     * A container for the SPLFileInfo objects
+     *
+     * @var array
+     */
+    protected $fileBag = [];
 
-    private $decoders = [];
+    /**
+     * An array holding data about the loaded decoders.
+     *
+     * @var array
+     */
+    protected $decoders = [];
 
-    private $manager;
+    /**
+     * The Manager object, which the file data is loaded into.
+     *
+     * @var Manager
+     */
+    protected $manager;
 
-    private $unsupportedFiles = [];
+    /**
+     * Should there be an attempt to load an unsupported file type (determined by the mime types array), then they
+     * will be stored in this array for later display in an error message.
+     *
+     * @var array
+     */
+    protected $unsupportedFiles = [];
 
-    private $decodedData = [];
+    /**
+     * The data array, once it has been processed through a decoder.
+     *
+     * @var array
+     */
+    protected $decodedData = [];
 
     /**
      * Constructor - gets a manager instance to work with.
@@ -42,7 +86,7 @@ class FileLoader
     public function addDecoder(DecoderInterface $decoder)
     {
         $mimeTypes = $decoder->getMimeType();
-        if($this->isSupportedMimeType($mimeTypes[0])){
+        if($this->isSupportedMimeType($mimeTypes[0])) {
             return; // we already have the decoder loaded!
         }
         $this->supportedMimeTypes = array_merge($this->supportedMimeTypes, $mimeTypes);
@@ -59,11 +103,11 @@ class FileLoader
      */
     public function addFiles($files)
     {
-        if ($files instanceof Filebag){
+        if ($files instanceof Filebag) {
             $this->fileBag =  $files->getAllFileInfoObjects();
             return;
         }
-        if (is_array($files)){
+        if (is_array($files)) {
             $tempFileBag = new FileBag($files);
             $this->fileBag = $tempFileBag->getAllFileInfoObjects();
             return;
@@ -81,7 +125,7 @@ class FileLoader
      */
     public function hydrateManager($append = false)
     {
-        if(empty($this->fileBag)){
+        if(empty($this->fileBag)) {
             throw new Exception("FileBag is empty. Make sure you have initialized the FileLoader and added files.");
         }
 
@@ -91,12 +135,12 @@ class FileLoader
 
             $this->checkAndAddDefaultDecoder($mimeType);
 
-            if ($this->isSupportedMimeType($mimeType)){
+            if ($this->isSupportedMimeType($mimeType)) {
 
                 $data= $this->getFileContents($file);
                 $this->decodedData[] = $this->decoders[$mimeType]->decode($data);
 
-            }else{
+            } else {
                 $this->unsupportedFiles[] = $file;
             }
         }
@@ -106,7 +150,7 @@ class FileLoader
             throw new UnsupportedFilesException('The file(s) '. $badFiles .' are not supported by the available decoders.');
         }
 
-        if ($append){
+        if ($append) {
             $this->addDataToManager();
             return;
         }
@@ -163,8 +207,8 @@ class FileLoader
      */
     protected function addDataToManger()
     {
-        foreach ($this->decodedData as $data)
-        {
+        foreach ($this->decodedData as $data) {
+
             $this->manager->add($data);
         }
     }
@@ -175,8 +219,8 @@ class FileLoader
     protected function resetManagerAndAddData()
     {
         $reset = true;
-        foreach ($this->decodedData as $data)
-        {
+        foreach ($this->decodedData as $data) {
+
             if ($reset === true){
                 $this->manager->reset($data);
                 $reset = false;
@@ -195,14 +239,14 @@ class FileLoader
     {
         $decoderClass = ucfirst($mimeType)."Decoder";
 
-        if(file_exists(__DIR__.'/Decoders/'.$decoderClass.'.php') && ! $this->isSupportedMimeType($mimeType)){
+        if(file_exists(__DIR__.'/Decoders/'.$decoderClass.'.php') && ! $this->isSupportedMimeType($mimeType)) {
 
-            include_once(__DIR__.'/Decoders/'.$decoderClass.'.php');
             $nameSpace = "Michaels\\Manager\\Decoders\\";
-            $fqcn = $nameSpace . $decoderClass;
-            $decoder = new $fqcn();
+            $fullQualifiedClassName = $nameSpace . $decoderClass;
+            $decoder = new $fullQualifiedClassName();
             $this->addDecoder($decoder);
         }
 
     }
 }
+

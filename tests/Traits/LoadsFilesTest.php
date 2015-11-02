@@ -58,3 +58,4 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
 
     }
 }
+

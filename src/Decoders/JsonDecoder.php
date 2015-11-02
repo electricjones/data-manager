@@ -59,3 +59,4 @@ class JsonDecoder implements DecoderInterface
 
 
 }
+

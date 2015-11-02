@@ -57,3 +57,4 @@ class JsonDecoderTest extends \PHPUnit_Framework_TestCase
     }
 
 }
+

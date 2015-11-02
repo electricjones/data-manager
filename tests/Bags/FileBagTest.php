@@ -49,9 +49,7 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreationOfFileBagWithBadFileObjects()
     {
-
         $this->fileBag = new FileBag($this->badTestFileObjects);
-
     }
 
     public function testCreationOfFileBagWithGoodFileObjects()

@@ -4,7 +4,7 @@ namespace Michaels\Manager\Test;
 use Michaels\Manager\Manager;
 use Michaels\Manager\FileLoader;
 use Michaels\Manager\Bags\FileBag;
-use Michaels\Manager\Test\Bags\FileBagTestTrait;
+use Michaels\Manager\Test\Utilities\FileBagTestTrait;
 use Michaels\Manager\Decoders\CustomXmlDecoder;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -91,3 +91,4 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
 
 }
+

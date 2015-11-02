@@ -50,3 +50,4 @@ class YamlDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->testArrayData, $this->yamlDecoder->decode($this->yamlData));
     }
 }
+

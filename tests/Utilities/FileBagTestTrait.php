@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager\Test\Bags;
+namespace Michaels\Manager\Test\Utilities;
 
 use StdClass;
 use SplFileInfo;
@@ -42,3 +42,4 @@ trait FileBagTestTrait
     }
 
 }
+

@@ -12,3 +12,4 @@ class YmlDecoder extends YamlDecoder implements DecoderInterface
      */
 
 }
+

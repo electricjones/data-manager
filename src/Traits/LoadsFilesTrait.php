@@ -55,3 +55,4 @@ trait LoadsFilesTrait
         $this->fileLoader->addDecoder($decoder);
     }
 }
+

@@ -27,3 +27,4 @@ interface LoadsFilesInterface
     public function addDecoder(DecoderInterface $decoder);
 
 }
+

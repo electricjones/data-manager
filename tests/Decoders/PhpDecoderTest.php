@@ -49,3 +49,4 @@ class PhpDecoderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->testArrayData, $this->phpDecoder->decode($this->phpData));
     }
 }
+
