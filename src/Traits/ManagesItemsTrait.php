@@ -439,6 +439,24 @@ trait ManagesItemsTrait
 
         return (array)$items;
     }
+    
+        /**
+     * Returns `true` if value can be used as array or traversed.
+     * @param $value
+     * @return bool
+     */
+    protected function isArrayable($value)
+    {
+        if ($value instanceof ManagesItemsTrait
+            || $value instanceof ManagesItemsInterface
+            || $value instanceof Traversable
+            || is_array($value)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Cycle through the nests to see if an item is protected
