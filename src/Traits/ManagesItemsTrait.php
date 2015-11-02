@@ -1,7 +1,6 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
@@ -175,7 +174,7 @@ trait ManagesItemsTrait
      */
     protected function getArrayableItems($items)
     {
-        if ($items instanceof ManagesItemsTrait || $items instanceof ManagesItemsInterface) {
+        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
             return $items->getAll();
 
         } elseif ($items instanceof Traversable) {
@@ -183,6 +182,33 @@ trait ManagesItemsTrait
         }
 
         return (array)$items;
+    }
+
+    /**
+     * Return all items as array
+     *
+     * @return array
+     */
+    public function getAll()
+    {
+        $repo = $this->getItemsName();
+        return $this->prepareReturnedValue($this->$repo);
+    }
+
+    /**
+     * Prepare the returned value
+     * @param $value
+     * @return mixed
+     */
+    protected function prepareReturnedValue($value)
+    {
+        // Are we looking for Collections?
+        if (method_exists($this, 'toCollection')) {
+            return $this->toCollection($value);
+        }
+
+        // No? Just return the value
+        return $value;
     }
 
     /**
@@ -324,22 +350,6 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Prepare the returned value
-     * @param $value
-     * @return mixed
-     */
-    protected function prepareReturnedValue($value)
-    {
-        // Are we looking for Collections?
-        if (method_exists($this, 'toCollection')) {
-            return $this->toCollection($value);
-        }
-
-        // No? Just return the value
-        return $value;
-    }
-
-    /**
      * Return an item if it exist
      * Alias of getIfExists()
      *
@@ -359,17 +369,6 @@ trait ManagesItemsTrait
     public function all()
     {
         return $this->getAll();
-    }
-
-    /**
-     * Return all items as array
-     *
-     * @return array
-     */
-    public function getAll()
-    {
-        $repo = $this->getItemsName();
-        return $this->prepareReturnedValue($this->$repo);
     }
 
     /**
@@ -524,5 +523,23 @@ trait ManagesItemsTrait
     public function toJson($options = 0)
     {
         return json_encode($this->getAll(), $options);
+    }
+
+    /**
+     * Returns `true` if value can be used as array or traversed.
+     * @param $value
+     * @return bool
+     */
+    protected function isArrayable($value)
+    {
+        if ($value instanceof ManagesItemsTrait
+            || $value instanceof ManagesItemsInterface
+            || $value instanceof Traversable
+            || is_array($value)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
