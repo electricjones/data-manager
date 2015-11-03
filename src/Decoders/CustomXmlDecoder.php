@@ -11,7 +11,8 @@ use Michaels\Manager\Contracts\DecoderInterface;
  */
 class CustomXmlDecoder implements DecoderInterface
 {
-    private $arrayData = [];
+    /** @var array Decoded data */
+    protected $arrayData = [];
 
     /**
      * This is the method, which does the decoding work.
@@ -23,10 +24,9 @@ class CustomXmlDecoder implements DecoderInterface
     {
         $xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
-        $this->arrayData = json_decode($json,TRUE);
+        $this->arrayData = json_decode($json, true);
         return $this->arrayData;
     }
-
 
     /**
      * The data returned is the actual file extensions supported for the files to decode.
@@ -39,7 +39,4 @@ class CustomXmlDecoder implements DecoderInterface
     {
         return ['xml'];
     }
-
 }
-
-

@@ -16,7 +16,7 @@ interface LoadsFilesInterface
      * @param $append boolean
      * @return array
      */
-    public function loadFiles(array $files, $append=false);
+    public function loadFiles(array $files, $append = false);
 
     /**
      * Allows for the addition of a custom decoder to load custom files..
@@ -25,6 +25,4 @@ interface LoadsFilesInterface
      * @return mixed
      */
     public function addDecoder(DecoderInterface $decoder);
-
 }
-

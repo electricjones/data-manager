@@ -11,36 +11,40 @@ namespace Michaels\Manager\Traits;
 use Michaels\Manager\Contracts\DecoderInterface;
 use Michaels\Manager\FileLoader;
 
+/**
+ * Loads data from configuration-type files into Manager
+ * @package Michaels\Manager\Traits
+ */
 trait LoadsFilesTrait
 {
-    private $fileLoader;
+    use DependsOnManagesItemsTrait;
+
+    /** @var  \Michaels\Manager\FileLoader Instance of the FileLoader */
+    protected $fileLoader;
 
     /**
      * Makes sure a FileLoader object was created or creates one.
-     *
      */
-    private function initializeFileLoader()
+    protected function initializeFileLoader()
     {
-        if ( ! is_object($this->fileLoader)){
-
-            $this->fileLoader = new FileLoader($this);
+        if (!is_object($this->fileLoader)) {
+            $this->fileLoader = new FileLoader();
         }
     }
 
     /**
      * This method adds the file loading functionality.
      *
-     *
      * @param array $files an array of SplFileInfo Objects
      * @param $append boolean true, if data should be appended to the manager.
      * @return array
      */
-    public function loadFiles(array $files, $append=false)
+    public function loadFiles(array $files, $append = false)
     {
         $this->initializeFileLoader();
         $this->fileLoader->addFiles($files);
-        $this->fileLoader->hydrateManager($append);
-
+        $data = $this->fileLoader->process();
+        $this->hydrate($data, $append);
     }
 
     /**
@@ -55,4 +59,3 @@ trait LoadsFilesTrait
         $this->fileLoader->addDecoder($decoder);
     }
 }
-

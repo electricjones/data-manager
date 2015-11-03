@@ -7,7 +7,8 @@ use Michaels\Manager\Test\Stubs\ArrayableManagerStub as Manager;
  * Tests Array Access, JSON, and Iterator for Manager.
  * Does NOT test ManagesItemsTrait api.
  */
-class ArrayableTest extends \PHPUnit_Framework_TestCase {
+class ArrayableTest extends \PHPUnit_Framework_TestCase
+{
 
     public function testArrayAccessAdd()
     {
@@ -56,7 +57,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase {
     public function testIteratorUseForEach()
     {
         $expected = [
-            'one'   => [
+            'one' => [
                 'two' => 'two-value'
             ],
             'three' => 'three-value'

@@ -1,13 +1,13 @@
 <?php
 namespace Michaels\Manager\Decoders;
+
+use Michaels\Manager\Contracts\DecoderInterface;
+
 /**
  * A wrapper for the PHP Decoder Module for the data manager file loader.
  *
  * @package Michaels\Manager
  */
-
-use Michaels\Manager\Contracts\DecoderInterface;
-
 class PhpDecoder implements DecoderInterface
 {
 
@@ -22,7 +22,6 @@ class PhpDecoder implements DecoderInterface
         return $data;
     }
 
-
     /**
      * The data returned is the actual file extensions supported for the files to decode.
      * For instance, if you want to decode Yaml files with the extensions ".yml" and ".yaml",
@@ -34,6 +33,4 @@ class PhpDecoder implements DecoderInterface
     {
         return ['php'];
     }
-
 }
-

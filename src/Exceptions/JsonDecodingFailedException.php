@@ -9,4 +9,3 @@ class JsonDecodingFailedException extends \InvalidArgumentException
 {
 
 }
-

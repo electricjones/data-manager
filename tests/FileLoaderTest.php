@@ -48,10 +48,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
         $this->fileLoader->addFiles($goodFiles);
-        $this->fileLoader->hydrateManager();
-        $this->assertEquals($this->defaultArray, $this->manager->getAll());
-
-
+        $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
 
     public function testAddingFileBag()
@@ -60,16 +57,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
         $fileBag = new FileBag($goodFiles);
         $this->fileLoader->addFiles($fileBag);
-        $this->fileLoader->hydrateManager();
 
-        $this->assertEquals($this->defaultArray, $this->manager->getAll());
-
-
-    }
-
-    public function testResettingFileLoader()
-    {
-
+        $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
 
     public function testAddingADecoder()
@@ -83,12 +72,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $fileBag = new FileBag($goodFiles);
         $this->fileLoader->addDecoder($customDecoder);
         $this->fileLoader->addFiles($fileBag);
-        $this->fileLoader->hydrateManager();
 
-        $this->assertEquals($this->defaultArray, $this->manager->getAll());
-
+        $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
-
-
 }
 

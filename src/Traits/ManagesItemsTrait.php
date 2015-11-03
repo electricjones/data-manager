@@ -56,6 +56,22 @@ trait ManagesItemsTrait
         return $this;
     }
 
+    /**
+     * Hydrate with external data, optionally append
+     *
+     * @param $data string     The data to be hydrated into the manager
+     * @param bool $append When true, data will be appended to the current set
+     * @return $this
+     */
+    public function hydrate($data, $append = false)
+    {
+        if ($append === false) {
+            $this->reset($data);
+        } else {
+            $this->add($data);
+        }
+        return $this;
+    }
 
     /**
      * Adds a single item.
@@ -385,8 +401,8 @@ trait ManagesItemsTrait
 
         return (array)$items;
     }
-    
-        /**
+
+    /**
      * Returns `true` if value can be used as array or traversed.
      * @param $value
      * @return bool

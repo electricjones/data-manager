@@ -11,38 +11,18 @@ use Michaels\Manager\Exceptions\BadFileInfoObjectException;
  */
 class FileBag
 {
+    /**
+     * @var array An array of SplFileInfo objects
+     */
+    protected $fileObjects = [];
 
-    private $fileObjects = [];
-
+    /**
+     * Constructs a new FileBag
+     * @param $arrayOfSplFileInfoObjects
+     */
     public function __construct($arrayOfSplFileInfoObjects)
     {
         $this->initialize($arrayOfSplFileInfoObjects);
-    }
-
-    /**
-     * Set up the bag with a proper array of SplFileInfo objects
-     * @param array $splFileInfoObjects
-     * @internal param $arrayOfSplFileInfoObjects
-     */
-    private function initialize(array $splFileInfoObjects)
-    {
-        foreach ($splFileInfoObjects as $object) {
-            if ($this->isSplFileInfoObject($object)) {
-                array_unshift($this->fileObjects, $object);
-            } else {
-                throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
-            }
-        }
-    }
-
-    /**
-     * Check for an \SplFileInfo object
-     * @param $object
-     * @return bool
-     */
-    protected function isSplFileInfoObject($object)
-    {
-        return ($object instanceof \SplFileInfo);
     }
 
     /**
@@ -64,5 +44,30 @@ class FileBag
         return $this->fileObjects;
     }
 
-}
+    /**
+     * Set up the bag with a proper array of SplFileInfo objects
+     * @param array $splFileInfoObjects
+     * @internal param $arrayOfSplFileInfoObjects
+     */
+    protected function initialize(array $splFileInfoObjects)
+    {
+        foreach ($splFileInfoObjects as $object) {
+            if ($this->isSplFileInfoObject($object)) {
+                array_unshift($this->fileObjects, $object);
+//                $this->fileObjects[] = $object;
+            } else {
+                throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
+            }
+        }
+    }
 
+    /**
+     * Check for an \SplFileInfo object
+     * @param $object
+     * @return bool
+     */
+    protected function isSplFileInfoObject($object)
+    {
+        return ($object instanceof \SplFileInfo);
+    }
+}

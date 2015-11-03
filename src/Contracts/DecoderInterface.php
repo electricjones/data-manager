@@ -2,7 +2,7 @@
 namespace Michaels\Manager\Contracts;
 
 /**
- *
+ * Contract for Decoders
  * @package Michaels\Manager
  */
 
@@ -16,7 +16,6 @@ interface DecoderInterface
      */
     public function decode($data);
 
-
     /**
      * The data returned is the actual file extensions supported for the files to decode.
      * For instance, if you want to decode Yaml files with the extensions ".yml" and ".yaml",
@@ -25,7 +24,4 @@ interface DecoderInterface
      * @return array
      */
     public function getMimeType();
-
-
 }
-

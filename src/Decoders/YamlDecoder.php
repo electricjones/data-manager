@@ -10,7 +10,8 @@ use Symfony\Component\Yaml\Parser;
  */
 class YamlDecoder implements DecoderInterface
 {
-    private $arrayData = [];
+    /** @var array Decoded data */
+    protected $arrayData = [];
 
     /**
      * This is the method, which does the decoding work.
@@ -25,7 +26,6 @@ class YamlDecoder implements DecoderInterface
         return $this->arrayData;
     }
 
-
     /**
      * The data returned is the actual file extensions supported for the files to decode.
      * For instance, if you want to decode Yaml files with the extensions ".yml" and ".yaml",
@@ -35,8 +35,6 @@ class YamlDecoder implements DecoderInterface
      */
     public function getMimeType()
     {
-        return ['yaml','yml'];
+        return ['yaml', 'yml'];
     }
-
 }
-
