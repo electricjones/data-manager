@@ -155,10 +155,10 @@ trait ManagesItemsTrait
         $repo = $this->getItemsName();
         $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
-            if (!isset($loc[$step])) {
-                return new NoItemFoundMessage($alias);
-            } else {
+            if (array_key_exists($step, $loc)) {
                 $loc = &$loc[$step];
+            } else {
+                return new NoItemFoundMessage($alias);
             }
         }
         return $loc;

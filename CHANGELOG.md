@@ -9,6 +9,8 @@ All Notable changes to `Manager` will be documented in this file
  - Adds basic collection functionality 
    - Returns instance of `MutableArray` collection if requested
    - Introduced CollectionTrait with tests
+   
+ - Bug: `getIfExists()` now returns `null` if item has been initializes with null(#17)
 
 # v0.8.5 - 9-17-2015
  - Adds `IocContainerTrait` for basic DI functionality

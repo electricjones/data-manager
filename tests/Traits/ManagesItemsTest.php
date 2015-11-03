@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
+use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
 use Michaels\Manager\Test\Stubs\TraversableStub;
@@ -193,6 +194,16 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
+    }
+
+    public function testDoesNotReturnNoItemFoundIfItemValueIsNull()
+    {
+        // See https://github.com/chrismichaels84/data-manager/issues/17
+        $manager = new Manager(['one' => ['two' => null]]);
+        $actual = $manager->getIfExists('one.two');
+
+        $this->assertNotInstanceOf(get_class(new NoItemFoundMessage()), $actual, "failed: returned a NoItemFoundMessage");
+        $this->assertEquals(null, $actual, "failed to return `null` as value");
     }
 
     public function testGetIfHasReturnsItemIfExists()
