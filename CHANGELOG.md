@@ -2,6 +2,7 @@
 All Notable changes to `Manager` will be documented in this file
 
 # v0.8.6 - NEXT
+ - Adds `push()` to `ManagesItemsTrait` to push values onto a nested array (#27)
  - Adds ability to load configuration from files using various decoders
    - Adds `FileBag`, `FileLoader`, various decoders, and `LoadsFilesTrait` with tests
  - Adds `isArrayable()` helper method to `ManagesItemsTrait`

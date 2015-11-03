@@ -122,6 +122,37 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Push a value or values onto the end of an array inside manager
+     * @param string $alias The level of nested data
+     * @param mixed $value The first value to append
+     * @param null|mixed $_ Optional other values to apend
+     * @return int Number of items pushed
+     * @throws ItemNotFoundException If pushing to unset array
+     */
+    public function push($alias, $value, $_ = null)
+    {
+        if (isset($_)) {
+            $values = func_get_args();
+            array_shift($values);
+        } else {
+            $values = [$value];
+        }
+
+        $array = $this->get($alias);
+
+        if (!is_array($array)) {
+            throw new NestingUnderNonArrayException("You may only push items onto an array");
+        }
+
+        foreach ($values as $value) {
+            array_push($array, $value);
+        }
+        $this->set($alias, $array);
+
+        return count($values);
+    }
+
+    /**
      * Get a single item
      *
      * @param string $alias

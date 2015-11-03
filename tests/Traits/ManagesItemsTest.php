@@ -507,4 +507,50 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
     }
+
+    public function testPushSingleValueOntoIndexArray()
+    {
+        $manager = new Manager(['one' => ['two' => []]]);
+        $manager->push('one.two', 'three');
+
+        $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
+    }
+
+    public function testPushMultipleValuesOntoIndexArray()
+    {
+        $manager = new Manager(['one' => ['two' => []]]);
+        $manager->push('one.two', 'three', 'four', 'five');
+
+        $this->assertEquals(['three', 'four', 'five'], $manager->get('one.two'), "failed to push value onto array");
+    }
+
+    public function testPushSingleValueOntoAssocArray()
+    {
+        $manager = new Manager(['one' => ['two' => ['three' => 'four']]]);
+        $manager->push('one.two', 'five');
+
+        $this->assertEquals(['three' => 'four', 'five'], $manager->get('one.two'), "failed to push value onto array");
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
+     */
+    public function testPushSingleValueOntoString()
+    {
+        $manager = new Manager(['one' => ['two' => 'string']]);
+        $manager->push('one.two', 'three');
+
+        $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
+     */
+    public function testPushSingleValueOntoNothing()
+    {
+        $manager = new Manager(['one' => ['two']]);
+        $manager->push('one.two', 'three');
+
+        $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
+    }
 }
