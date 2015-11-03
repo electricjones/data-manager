@@ -108,11 +108,12 @@ class FileLoader
     public function decodeFileBagData(FileBag $fileBag)
     {
         $decodedData = [];
-        if (empty($fileBag->getAllFileInfoObjects())) {
+        $files = $fileBag->getAllFileInfoObjects();
+        if (empty($files)) {
             throw new Exception("FileBag is empty. Make sure you have initialized the FileLoader and added files.");
         }
 
-        foreach ($fileBag->getAllFileInfoObjects() as $file) {
+        foreach ($files as $file) {
             $fileData = $this->decodeFile($file);
             if ($fileData) {
                 foreach ($fileData as $k => $v) {
@@ -198,7 +199,7 @@ class FileLoader
             return $this->decoders[$mimeType]->decode($data);
         }
 
-        $this->unsupportedFiles[] = $file;
+        $this->unsupportedFiles[] = $file->getFilename();
         return false;
     }
 
