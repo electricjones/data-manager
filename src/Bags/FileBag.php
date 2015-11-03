@@ -20,7 +20,7 @@ class FileBag
      * Constructs a new FileBag
      * @param $arrayOfSplFileInfoObjects
      */
-    public function __construct($arrayOfSplFileInfoObjects)
+    public function __construct(array $arrayOfSplFileInfoObjects = [])
     {
         $this->initialize($arrayOfSplFileInfoObjects);
     }
@@ -49,13 +49,15 @@ class FileBag
      * @param array $splFileInfoObjects
      * @internal param $arrayOfSplFileInfoObjects
      */
-    protected function initialize(array $splFileInfoObjects)
+    protected function initialize(array $splFileInfoObjects = [])
     {
-        foreach ($splFileInfoObjects as $object) {
-            if ($this->isSplFileInfoObject($object)) {
-                array_push($this->fileObjects, $object);
-            } else {
-                throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
+        if (!empty($splFileInfoObjects)) {
+            foreach ($splFileInfoObjects as $object) {
+                if ($this->isSplFileInfoObject($object)) {
+                    array_push($this->fileObjects, $object);
+                } else {
+                    throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
+                }
             }
         }
     }

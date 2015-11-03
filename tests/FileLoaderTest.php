@@ -13,19 +13,11 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     private $fileLoader;
 
-    private $manager;
-
     private $defaultArray = [];
 
-    /**
-     *
-     */
-    protected function setUp()
+    public function setup()
     {
-        $this->manager = new Manager();
-        $this->fileLoader = new FileLoader($this->manager);
-
-
+        $this->fileLoader = new FileLoader();
         $this->defaultArray = [
             'one' => [
                 'two' => [
@@ -43,7 +35,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testAddingFileArray()
+    public function testAddingFilesAsArray()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
@@ -75,5 +67,62 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
-}
 
+    public function testAddDecoder()
+    {
+        $customDecoder = new CustomXmlDecoder();
+        $this->fileLoader->addDecoder($customDecoder);
+        $actual = $this->fileLoader->getDecoders();
+
+        $this->assertEquals(['xml' => $customDecoder], $actual, "failed to add the decoder");
+        $this->assertCount(1, $actual, "failed to add a single decoder");
+
+        $this->assertEquals(['xml'], $this->fileLoader->getMimeTypes(), "failed to add to supported mime types list");
+        $this->assertCount(1, $actual, "failed to add a single mime type");
+    }
+
+    public function testAddDecoderTwice()
+    {
+        $customDecoder = new CustomXmlDecoder();
+        $this->fileLoader->addDecoder($customDecoder);
+        $this->fileLoader->addDecoder($customDecoder);
+        $actual = $this->fileLoader->getDecoders();
+
+        $this->assertEquals(['xml' => $customDecoder], $actual, "failed to add the decoder");
+        $this->assertCount(1, $actual, "failed to add a single decoder");
+
+        $this->assertEquals(['xml'], $this->fileLoader->getMimeTypes(), "failed to add to supported mime types list");
+        $this->assertCount(1, $actual, "failed to add a single mime type");
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testErrorWhenDecodingEmptyFileBag()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->decodeFileBagData(new FileBag());
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\UnsupportedFilesException
+     */
+    public function testErrorWhenDecodingInvalidFileTypes()
+    {
+        $this->fileLoader->addFiles([
+            new \SplFileInfo(realpath('/Fixtures/FilesWithBadNames/config.ini')),
+            new \SplFileInfo(realpath('/Fixtures/FilesWithBadNames/config.txt')),
+        ]);
+
+        $this->fileLoader->process();
+    }
+
+    /**
+     * @expectedException \Michaels\Manager\Exceptions\BadFileDataException
+     */
+    public function testErrorWhenAddingInvalidFileBag()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->addFiles('string');
+    }
+}

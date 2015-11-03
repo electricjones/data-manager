@@ -5,7 +5,7 @@ use Arrayzy\MutableArray;
 use Michaels\Manager\Test\Stubs\CollectionStub;
 use StdClass;
 
-class CollectionTraitTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     public $manager;
     public $testData;

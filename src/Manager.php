@@ -29,10 +29,9 @@ class Manager implements
     ArrayAccess,
     Countable,
     IteratorAggregate,
-    JsonSerializable,
-    LoadsFilesInterface
+    JsonSerializable
 {
-    use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait, LoadsFilesTrait;
+    use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait;
 
     /**
      * The items stored in the manager

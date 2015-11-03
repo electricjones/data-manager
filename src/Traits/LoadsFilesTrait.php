@@ -24,11 +24,12 @@ trait LoadsFilesTrait
 
     /**
      * Makes sure a FileLoader object was created or creates one.
+     * @param FileLoader $fileLoader
      */
-    protected function initializeFileLoader()
+    protected function initializeFileLoader(FileLoader $fileLoader = null)
     {
-        if (!is_object($this->fileLoader)) {
-            $this->fileLoader = new FileLoader();
+        if (!isset($this->fileLoader)) {
+            $this->setFileLoader(($fileLoader) ? $fileLoader : new FileLoader());
         }
     }
 
@@ -57,5 +58,21 @@ trait LoadsFilesTrait
     {
         $this->initializeFileLoader();
         $this->fileLoader->addDecoder($decoder);
+    }
+
+    /**
+     * @return FileLoader
+     */
+    public function getFileLoader()
+    {
+        return $this->fileLoader;
+    }
+
+    /**
+     * @param FileLoader $fileLoader
+     */
+    public function setFileLoader($fileLoader)
+    {
+        $this->fileLoader = $fileLoader;
     }
 }

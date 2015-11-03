@@ -88,17 +88,6 @@ class FileLoader
     }
 
     /**
-     * Resets the file loader back to initial state.
-     */
-    public function reset()
-    {
-        $this->fileBag = [];
-        $this->supportedMimeTypes = [];
-        $this->unsupportedFiles = [];
-        $this->dataToDecode = [];
-    }
-
-    /**
      * Process the current FileBag and return an array
      * @return array
      * @throws Exception
@@ -119,7 +108,7 @@ class FileLoader
     public function decodeFileBagData(FileBag $fileBag)
     {
         $decodedData = [];
-        if (empty($fileBag)) {
+        if (empty($fileBag->getAllFileInfoObjects())) {
             throw new Exception("FileBag is empty. Make sure you have initialized the FileLoader and added files.");
         }
 
@@ -156,7 +145,6 @@ class FileLoader
      * Returns the contents of the file.
      *
      * @return string the contents of the file
-     *
      * @throws \RuntimeException
      */
     protected function getFileContents($file)
@@ -192,7 +180,6 @@ class FileLoader
             $decoder = new $fullQualifiedClassName();
             $this->addDecoder($decoder);
         }
-
     }
 
     /**
@@ -213,5 +200,23 @@ class FileLoader
 
         $this->unsupportedFiles[] = $file;
         return false;
+    }
+
+    /**
+     * Returns currently attached custom decoders
+     * @return array
+     */
+    public function getDecoders()
+    {
+        return $this->decoders;
+    }
+
+    /**
+     * Returns currently supported Mime Types
+     * @return array
+     */
+    public function getMimeTypes()
+    {
+        return $this->supportedMimeTypes;
     }
 }
