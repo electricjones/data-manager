@@ -9,11 +9,10 @@ use Michaels\Manager\Exceptions\BadFileInfoObjectException;
  *
  * @package Michaels\Manager\Bags
  */
-
 class FileBag
 {
 
-    private $fileObjects = array();
+    private $fileObjects = [];
 
     public function __construct($arrayOfSplFileInfoObjects)
     {
@@ -27,18 +26,13 @@ class FileBag
      */
     private function initialize(array $splFileInfoObjects)
     {
-        foreach ($splFileInfoObjects as $object)
-        {
-            if($this->isSplFileInfoObject($object)){
-
+        foreach ($splFileInfoObjects as $object) {
+            if ($this->isSplFileInfoObject($object)) {
                 array_unshift($this->fileObjects, $object);
-
-            }else{
-
+            } else {
                 throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
             }
         }
-
     }
 
     /**
@@ -48,7 +42,7 @@ class FileBag
      */
     protected function isSplFileInfoObject($object)
     {
-        return ($object instanceof  \SplFileInfo);
+        return ($object instanceof \SplFileInfo);
     }
 
     /**
@@ -66,7 +60,7 @@ class FileBag
      */
     public function emptyBag()
     {
-        $this->fileObjects = array();
+        $this->fileObjects = [];
         return $this->fileObjects;
     }
 
