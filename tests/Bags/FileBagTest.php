@@ -55,8 +55,8 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
     public function testCreationOfFileBagWithGoodFileObjects()
     {
         $this->fileBag = new FileBag($this->goodTestFileObjects);
-        die(print_r($this->fileBag->getAllFileInfoObjects()));
-//        $this->assertEquals($this->goodTestFileObjects, $this->fileBag->getAllFileInfoObjects(), "Creation of file bag was not successful.");
+//        die(print_r($this->fileBag->getAllFileInfoObjects()));
+        $this->assertEquals($this->goodTestFileObjects, $this->fileBag->getAllFileInfoObjects(), "Creation of file bag was not successful.");
     }
 
     public function testGetAllFileObjectsInBag()
