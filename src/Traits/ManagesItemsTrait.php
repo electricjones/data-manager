@@ -136,13 +136,13 @@ trait ManagesItemsTrait
         // The item was not found
         if ($item instanceof NoItemFoundMessage) {
             if ($fallback !== '_michaels_no_fallback') {
-                return $fallback;
+                $item = $fallback;
             } else {
                 throw new ItemNotFoundException("$alias not found");
             }
         }
 
-        return $item;
+        return $this->prepareReturnedValue($item);
     }
 
     /**
@@ -184,7 +184,7 @@ trait ManagesItemsTrait
     public function getAll()
     {
         $repo = $this->getItemsName();
-        return $this->$repo;
+        return $this->prepareReturnedValue($this->$repo);
     }
 
     /**
@@ -362,6 +362,22 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Prepare the returned value
+     * @param $value
+     * @return mixed
+     */
+    protected function prepareReturnedValue($value)
+    {
+        // Are we looking for Collections?
+        if (method_exists($this, 'toCollection')) {
+            return $this->toCollection($value);
+        }
+
+        // No? Just return the value
+        return $value;
+    }
+
+    /**
      * Recursively merge defaults array and items array
      * @param array $defaults
      * @param string $level
@@ -416,7 +432,6 @@ trait ManagesItemsTrait
         ) {
             return true;
         }
-
         return false;
     }
 
@@ -449,5 +464,44 @@ trait ManagesItemsTrait
         if (in_array($item, $this->protectedItems)) {
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
+    }
+
+    /**
+     * Checks if the input is really a json string
+     * @param $data mixed|null
+     * @return bool
+     */
+    protected function validateJson($data)
+    {
+        if ($data !== "") {
+            return (json_last_error() === JSON_ERROR_NONE);
+        }
+    }
+
+    /**
+     * Decodes JSON data to array
+     * @param $data string
+     * @return mixed|null
+     */
+    protected function decodeFromJson($data)
+    {
+        if (is_string($data)) {
+            return json_decode($data, true); // true gives us associative arrays
+        }
+
+        return "";
+    }
+
+    /**
+     * Check to make sure the type input is ok. Currently only for JSON.
+     * @param $type
+     * @return bool
+     */
+    protected function isFormatSupported($type)
+    {
+        $type = strtolower(trim($type));
+        $supported = ['json'];
+
+        return in_array($type, $supported);
     }
 }

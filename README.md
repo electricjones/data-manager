@@ -32,6 +32,7 @@ They are not documented here, but see other readmes for:
     * Configuring dependencies for dependencies,
     * Fallbacks, preparing objects, and more.
   * Use Manager as a configuration bank, complete with defaults.
+  * Collections for extra array-helper methods (based on [Arrayzy](https://github.com/bocharsky-bw/Arrayzy))
     
 ## Install
 Via Composer
@@ -150,6 +151,19 @@ A couple of things to keep in mind:
   * If a starting value is set to an array (`one.two = []`) and a default lives beneath (`one.two.three = default`), then the default **will** be set.
   * On the other hand, if the value exists and is **not** an array, the default will be ignored. 
   (`one.two = 'something'`) In this case, there is no `one.two.three`, even after loading defaults.
+
+## Collections
+Right now, you may choose to return a `MutableArray` which comes with a lot of helpers.
+Simply include `Michaels\Manager\Traits\CollectionTrait` into your class. By default, `get()` and `getAll()` will return collections.
+These collections behave *identically* to arrays, but come with extra methods. See [Arrayzy](https://github.com/bocharsky-bw/Arrayzy) for a full api.
+
+It is possible to chain things for brevity:
+```php
+$value = $manager->get('one.two.three')->walk(function(){});
+```
+In this case, `walk()` is part of the collection and will apply the callback to each value, then return the updated contents.
+
+You may also disable this by `$manager->useCollections = false`
 
 ## Using Manager Traits
 If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.

@@ -28,7 +28,8 @@
     "satooshi/php-coveralls": "dev-master"
   },
   "suggest": {
-    "symfony/yaml": "~2.7"
+    "symfony/yaml": "If you are using the YAML decoder. ~2.7",
+    "bocharsky-bw/arrayzy": "If you are using the Collections feature, you will need to 'dev-master' until 0.3 is released."
   },
   "autoload": {
     "psr-4": {
