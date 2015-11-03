@@ -17,7 +17,16 @@ interface ManagesItemsInterface
      * @param array $items
      * @return $this
      */
-    public function initManager($items = []);
+    public function initManager($items = null);
+
+    /**
+     * Hydrate with external data, optionally append
+     *
+     * @param $data string     The data to be hydrated into the manager
+     * @param bool $append When true, data will be appended to the current set
+     * @return $this
+     */
+    public function hydrate($data, $append = false);
 
     /**
      * Adds a single item.
@@ -25,20 +34,56 @@ interface ManagesItemsInterface
      * Allow for dot notation (one.two.three) and item nesting.
      *
      * @param string $alias Key to be stored
-     * @param mixed  $item Value to be stored
+     * @param mixed $item Value to be stored
      * @return $this
      */
     public function add($alias, $item = null);
 
     /**
+     * Updates an item
+     *
+     * @param string $alias
+     * @param null $item
+     *
+     * @return $this
+     */
+    public function set($alias, $item = null);
+
+    /**
+     * Push a value or values onto the end of an array inside manager
+     * @param string $alias The level of nested data
+     * @param mixed $value The first value to append
+     * @param null|mixed $_ Optional other values to apend
+     * @return int Number of items pushed
+     * @throws ItemNotFoundException If pushing to unset array
+     */
+    public function push($alias, $value, $_ = null);
+
+    /**
      * Get a single item
      *
      * @param string $alias
-     * @param string $fallback
+     * @param string $fallback Defaults to '_michaels_no_fallback' so null can be a fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
-     * @return string
+     * @return mixed
      */
-    public function get($alias, $fallback = null);
+    public function get($alias, $fallback = '_michaels_no_fallback');
+
+    /**
+     * Return an item if it exist
+     * @param $alias
+     * @return NoItemFoundMessage
+     */
+    public function getIfExists($alias);
+
+    /**
+     * Return an item if it exist
+     * Alias of getIfExists()
+     *
+     * @param $alias
+     * @return NoItemFoundMessage
+     */
+    public function getIfHas($alias);
 
     /**
      * Return all items as array
@@ -49,7 +94,7 @@ interface ManagesItemsInterface
 
     /**
      * Return all items as array
-     *
+     * Alias of getAll()
      * @return array
      */
     public function all();
@@ -64,6 +109,7 @@ interface ManagesItemsInterface
 
     /**
      * Confirm or deny that an item exists
+     * Alias of exists()
      *
      * @param $alias
      * @return bool
@@ -71,21 +117,10 @@ interface ManagesItemsInterface
     public function has($alias);
 
     /**
-     * Updates an item
-     *
-     * @param string $alias
-     * @param null $item
-     *
-     * @return $this
+     * Confirm that manager has no items
+     * @return boolean
      */
-    public function set($alias, $item = null);
-
-    /**
-     * Return an item if it exists
-     * @param $alias
-     * @return \Michaels\Manager\Messages\NoItemFoundMessage|mixed
-     */
-    public function getIfExists($alias);
+    public function isEmpty();
 
     /**
      * Deletes an item
@@ -103,6 +138,7 @@ interface ManagesItemsInterface
 
     /**
      * Reset the manager with an array of items
+     * Alias of initManager()
      *
      * @param array $items
      * @return mixed
@@ -110,17 +146,12 @@ interface ManagesItemsInterface
     public function reset($items);
 
     /**
-     * Returns json serialized representation of array of items
+     * Get the collection of items as JSON.
+     *
      * @param  int $options
      * @return string
      */
     public function toJson($options = 0);
-
-    /**
-     * Confirm that manager has no items
-     * @return boolean
-     */
-    public function isEmpty();
 
     /**
      * When manager instance is used as a string, return json of items
@@ -128,4 +159,3 @@ interface ManagesItemsInterface
      */
     public function __toString();
 }
-

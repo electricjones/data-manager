@@ -122,6 +122,19 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Updates an item
+     *
+     * @param string $alias
+     * @param null $item
+     *
+     * @return $this
+     */
+    public function set($alias, $item = null)
+    {
+        return $this->add($alias, $item);
+    }
+
+    /**
      * Push a value or values onto the end of an array inside manager
      * @param string $alias The level of nested data
      * @param mixed $value The first value to append
@@ -272,19 +285,6 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Updates an item
-     *
-     * @param string $alias
-     * @param null $item
-     *
-     * @return $this
-     */
-    public function set($alias, $item = null)
-    {
-        return $this->add($alias, $item);
-    }
-
-    /**
      * Deletes an item
      *
      * @param $alias
@@ -353,17 +353,6 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Get the collection of items as JSON.
-     *
-     * @param  int $options
-     * @return string
-     */
-    public function toJson($options = 0)
-    {
-        return json_encode($this->getAll(), $options);
-    }
-
-    /**
      * Returns the name of the property that holds data items
      * @return string
      */
@@ -381,6 +370,17 @@ trait ManagesItemsTrait
     {
         $this->nameOfItemsRepository = $nameOfItemsRepository;
         return $this;
+    }
+
+    /**
+     * Get the collection of items as JSON.
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->getAll(), $options);
     }
 
     /**
@@ -495,44 +495,5 @@ trait ManagesItemsTrait
         if (in_array($item, $this->protectedItems)) {
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
-    }
-
-    /**
-     * Checks if the input is really a json string
-     * @param $data mixed|null
-     * @return bool
-     */
-    protected function validateJson($data)
-    {
-        if ($data !== "") {
-            return (json_last_error() === JSON_ERROR_NONE);
-        }
-    }
-
-    /**
-     * Decodes JSON data to array
-     * @param $data string
-     * @return mixed|null
-     */
-    protected function decodeFromJson($data)
-    {
-        if (is_string($data)) {
-            return json_decode($data, true); // true gives us associative arrays
-        }
-
-        return "";
-    }
-
-    /**
-     * Check to make sure the type input is ok. Currently only for JSON.
-     * @param $type
-     * @return bool
-     */
-    protected function isFormatSupported($type)
-    {
-        $type = strtolower(trim($type));
-        $supported = ['json'];
-
-        return in_array($type, $supported);
     }
 }
