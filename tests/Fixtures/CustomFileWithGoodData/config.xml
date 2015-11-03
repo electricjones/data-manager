@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<array>
+    <xml>
+        <one>
+            <two>
+                <three>three-value</three>
+                <four>
+                    <five>five-value</five>
+                </four>
+            </two>
+            <six>
+                <seven>seven-value</seven>
+                <eight>eight-value</eight>
+            </six>
+        </one>
+        <top>top-value</top>
+    </xml>
+</array>

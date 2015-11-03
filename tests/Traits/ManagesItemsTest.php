@@ -1,6 +1,7 @@
 <?php
 namespace Michaels\Manager\Test\Traits;
 
+use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
 use Michaels\Manager\Test\Stubs\TraversableStub;
@@ -193,6 +194,16 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
+    }
+
+    public function testDoesNotReturnNoItemFoundIfItemValueIsNull()
+    {
+        // See https://github.com/chrismichaels84/data-manager/issues/17
+        $manager = new Manager(['one' => ['two' => null]]);
+        $actual = $manager->getIfExists('one.two');
+
+        $this->assertNotInstanceOf(get_class(new NoItemFoundMessage()), $actual, "failed: returned a NoItemFoundMessage");
+        $this->assertEquals(null, $actual, "failed to return `null` as value");
     }
 
     public function testGetIfHasReturnsItemIfExists()
@@ -497,130 +508,49 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
     }
 
-    public function testHydrateFromJson()
+    public function testPushSingleValueOntoIndexArray()
     {
-        $json = json_encode($this->testData);
-        $this->manager->clear();
-        $this->manager->hydrateFrom('json', $json);
+        $manager = new Manager(['one' => ['two' => []]]);
+        $manager->push('one.two', 'three');
 
-        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON");
-
+        $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
     }
 
-    public function testAppendFromJson()
+    public function testPushMultipleValuesOntoIndexArray()
     {
-        $startData = [
-            'one' => [
-                'two' => [
-                    'three' => [
-                        'true' => true,
-                    ]
-                ],
-                'four' => [
-                    'six' => false,
-                ]
-            ],
-            'five' => 5,
-            'six' => [
-                'a' => 'A',
-                'b' => 'B',
-                'c' => 'C',
-            ]
-        ];
+        $manager = new Manager(['one' => ['two' => []]]);
+        $manager->push('one.two', 'three', 'four', 'five');
 
-        $appendData = json_encode([
-            'seven' => [
-                'two' => [],
-                'four' => 'michael'
-            ],
-            'eight' => [
-                'foo' => 'bar',
-            ],
-            'nine' => 10
-        ]);
+        $this->assertEquals(['three', 'four', 'five'], $manager->get('one.two'), "failed to push value onto array");
+    }
 
-        $expected = [
-            'one' => [
-                'two' => [
-                    'three' => [
-                        'true' => true,
-                    ]
-                ],
-                'four' => [
-                    'six' => false,
-                ]
-            ],
-            'five' => 5,
-            'six' => [
-                'a' => 'A',
-                'b' => 'B',
-                'c' => 'C',
-            ],
-            'seven' => [
-                'two' => [],
-                'four' => 'michael'
-            ],
-            'eight' => [
-                'foo' => 'bar'
-            ],
-            'nine' => 10
-        ];
+    public function testPushSingleValueOntoAssocArray()
+    {
+        $manager = new Manager(['one' => ['two' => ['three' => 'four']]]);
+        $manager->push('one.two', 'five');
 
-        $this->manager->reset($startData);
-        $this->manager->appendFrom('json', $appendData);
-
-        $this->assertEquals($expected, $this->manager->getAll(), "failed to append from JSON");
-
+        $this->assertEquals(['three' => 'four', 'five'], $manager->get('one.two'), "failed to push value onto array");
     }
 
     /**
-     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
      */
-
-    public function testSerializationTypeUnsupportedExceptionForHydrate()
+    public function testPushSingleValueOntoString()
     {
-        $data = "just a string";
-        $this->manager->hydrateFrom('someType', $data);
+        $manager = new Manager(['one' => ['two' => 'string']]);
+        $manager->push('one.two', 'three');
 
+        $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
     }
 
     /**
-     * @expectedException \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
+     * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
      */
-
-    public function testSerializationTypeUnsupportedExceptionForAppend()
+    public function testPushSingleValueOntoNothing()
     {
-        $data = "just a string";
-        $this->manager->appendFrom('someType', $data);
+        $manager = new Manager(['one' => ['two']]);
+        $manager->push('one.two', 'three');
 
-    }
-
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
-     */
-    public function testIncorrectDataExceptionForHydrate()
-    {
-        $data = [];
-        $this->manager->hydrateFrom('json', $data);
-
-    }
-
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\IncorrectDataException
-     */
-    public function testIncorrectDataExceptionForAppend()
-    {
-        $data = array();
-        $this->manager->appendFrom('json', $data);
-
-    }
-
-    public function testDenormalizedTypeInput()
-    {
-        $json = json_encode($this->testData);
-        $this->manager->clear();
-        $this->manager->hydrateFrom('jSOn  ', $json);
-
-        $this->assertEquals($this->testData, $this->manager->getAll(), "failed to hydrate from JSON, with type `jSOn  `.");
+        $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
     }
 }

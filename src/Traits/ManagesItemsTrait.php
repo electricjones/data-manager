@@ -1,11 +1,9 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
-use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
@@ -59,56 +57,20 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Hydrate with external data
+     * Hydrate with external data, optionally append
      *
-     * @param $type  string    The type of data to be hydrated into the manager
      * @param $data string     The data to be hydrated into the manager
+     * @param bool $append When true, data will be appended to the current set
      * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
      */
-    public function hydrateFrom($type, $data)
+    public function hydrate($data, $append = false)
     {
-        $decodedData = $this->prepareData($type, $data);
-        $this->reset($decodedData);
-        return $this;
-    }
-
-    /**
-     * Hydrate with external data, appending to current data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
-     * @param $data string     The data to be hydrated into the manager
-     * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
-     *
-     */
-    public function appendFrom($type, $data)
-    {
-        $decodedData = $this->prepareData($type, $data);
-        $this->add($decodedData);
-        return $this;
-    }
-
-    /**
-     * Validate and decode non-native data
-     * @param $type
-     * @param $data
-     * @return mixed|null
-     */
-    protected function prepareData($type, $data)
-    {
-        // we can possibly do some polymorphism for any other serialization types later
-        if (!$this->isFormatSupported($type)) {
-            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
+        if ($append === false) {
+            $this->reset($data);
+        } else {
+            $this->add($data);
         }
-
-        $decodedData = $this->decodeFromJson($data);
-
-        if (!$this->validateJson($decodedData)) {
-            throw new IncorrectDataException("The data is not proper JSON");
-        }
-
-        return $decodedData;
+        return $this;
     }
 
     /**
@@ -160,6 +122,50 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Updates an item
+     *
+     * @param string $alias
+     * @param null $item
+     *
+     * @return $this
+     */
+    public function set($alias, $item = null)
+    {
+        return $this->add($alias, $item);
+    }
+
+    /**
+     * Push a value or values onto the end of an array inside manager
+     * @param string $alias The level of nested data
+     * @param mixed $value The first value to append
+     * @param null|mixed $_ Optional other values to apend
+     * @return int Number of items pushed
+     * @throws ItemNotFoundException If pushing to unset array
+     */
+    public function push($alias, $value, $_ = null)
+    {
+        if (isset($_)) {
+            $values = func_get_args();
+            array_shift($values);
+        } else {
+            $values = [$value];
+        }
+
+        $array = $this->get($alias);
+
+        if (!is_array($array)) {
+            throw new NestingUnderNonArrayException("You may only push items onto an array");
+        }
+
+        foreach ($values as $value) {
+            array_push($array, $value);
+        }
+        $this->set($alias, $array);
+
+        return count($values);
+    }
+
+    /**
      * Get a single item
      *
      * @param string $alias
@@ -174,13 +180,13 @@ trait ManagesItemsTrait
         // The item was not found
         if ($item instanceof NoItemFoundMessage) {
             if ($fallback !== '_michaels_no_fallback') {
-                return $fallback;
+                $item = $fallback;
             } else {
                 throw new ItemNotFoundException("$alias not found");
             }
         }
 
-        return $item;
+        return $this->prepareReturnedValue($item);
     }
 
     /**
@@ -193,10 +199,10 @@ trait ManagesItemsTrait
         $repo = $this->getItemsName();
         $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {
-            if (!isset($loc[$step])) {
-                return new NoItemFoundMessage($alias);
-            } else {
+            if (array_key_exists($step, $loc)) {
                 $loc = &$loc[$step];
+            } else {
+                return new NoItemFoundMessage($alias);
             }
         }
         return $loc;
@@ -222,7 +228,7 @@ trait ManagesItemsTrait
     public function getAll()
     {
         $repo = $this->getItemsName();
-        return $this->$repo;
+        return $this->prepareReturnedValue($this->$repo);
     }
 
     /**
@@ -276,19 +282,6 @@ trait ManagesItemsTrait
     {
         $repo = $this->getItemsName();
         return empty($this->$repo);
-    }
-
-    /**
-     * Updates an item
-     *
-     * @param string $alias
-     * @param null $item
-     *
-     * @return $this
-     */
-    public function set($alias, $item = null)
-    {
-        return $this->add($alias, $item);
     }
 
     /**
@@ -360,17 +353,6 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Get the collection of items as JSON.
-     *
-     * @param  int $options
-     * @return string
-     */
-    public function toJson($options = 0)
-    {
-        return json_encode($this->getAll(), $options);
-    }
-
-    /**
      * Returns the name of the property that holds data items
      * @return string
      */
@@ -391,12 +373,39 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Get the collection of items as JSON.
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->getAll(), $options);
+    }
+
+    /**
      * When manager instance is used as a string, return json of items
      * @return string
      */
     public function __toString()
     {
         return $this->toJson();
+    }
+
+    /**
+     * Prepare the returned value
+     * @param $value
+     * @return mixed
+     */
+    protected function prepareReturnedValue($value)
+    {
+        // Are we looking for Collections?
+        if (method_exists($this, 'toCollection')) {
+            return $this->toCollection($value);
+        }
+
+        // No? Just return the value
+        return $value;
     }
 
     /**
@@ -441,6 +450,23 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Returns `true` if value can be used as array or traversed.
+     * @param $value
+     * @return bool
+     */
+    protected function isArrayable($value)
+    {
+        if ($value instanceof ManagesItemsTrait
+            || $value instanceof ManagesItemsInterface
+            || $value instanceof Traversable
+            || is_array($value)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Cycle through the nests to see if an item is protected
      * @param $item
      */
@@ -469,44 +495,5 @@ trait ManagesItemsTrait
         if (in_array($item, $this->protectedItems)) {
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
-    }
-
-    /**
-     * Checks if the input is really a json string
-     * @param $data mixed|null
-     * @return bool
-     */
-    protected function validateJson($data)
-    {
-        if ($data !== "") {
-            return (json_last_error() === JSON_ERROR_NONE);
-        }
-    }
-
-    /**
-     * Decodes JSON data to array
-     * @param $data string
-     * @return mixed|null
-     */
-    protected function decodeFromJson($data)
-    {
-        if (is_string($data)) {
-            return json_decode($data, true); // true gives us associative arrays
-        }
-
-        return "";
-    }
-
-    /**
-     * Check to make sure the type input is ok. Currently only for JSON.
-     * @param $type
-     * @return bool
-     */
-    protected function isFormatSupported($type)
-    {
-        $type = strtolower(trim($type));
-        $supported = ['json'];
-
-        return in_array($type, $supported);
     }
 }
