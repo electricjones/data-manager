@@ -128,3 +128,4 @@ interface ManagesItemsInterface
      */
     public function __toString();
 }
+
