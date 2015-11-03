@@ -53,8 +53,7 @@ class FileBag
     {
         foreach ($splFileInfoObjects as $object) {
             if ($this->isSplFileInfoObject($object)) {
-                array_unshift($this->fileObjects, $object);
-//                $this->fileObjects[] = $object;
+                array_push($this->fileObjects, $object);
             } else {
                 throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
             }

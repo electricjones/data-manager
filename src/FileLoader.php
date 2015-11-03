@@ -78,6 +78,7 @@ class FileLoader
             $this->fileBag = $files;
             return;
         }
+
         if (is_array($files)) {
             $this->fileBag = new FileBag($files);
             return;
