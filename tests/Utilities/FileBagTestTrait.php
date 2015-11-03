@@ -14,16 +14,20 @@ trait FileBagTestTrait
      */
     public function setFilesToSplInfoObjects($path)
     {
-        $fileObjects = array();
-        if ($handle = opendir($path)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry !== "." && $entry !== "..") {
-                    $fileObject = new SplFileInfo($path.'/'.$entry);
-                    $fileObjects[] = $fileObject;
-                }
-            }
-            closedir($handle);
-        }
+        $fileObjects = [];
+//        if ($handle = opendir($path)) {
+//            while (false !== ($entry = readdir($handle))) {
+//                if ($entry !== "." && $entry !== "..") {
+//                    $fileObject = new SplFileInfo($path.'/'.$entry);
+//                    $fileObjects[] = $fileObject;
+//                }
+//            }
+//            closedir($handle);
+//        }
+        $fileObjects[] = new SplFileInfo($path.'/config.json');
+        $fileObjects[] = new SplFileInfo($path.'/config.php');
+        $fileObjects[] = new SplFileInfo($path.'/config.yml');
+
         return $fileObjects;
     }
 

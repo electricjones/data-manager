@@ -17,13 +17,13 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
 
     private $goodTestFileDirectory;
 
-    private $goodTestFileObject = array();
+    private $goodTestFileObject = [];
 
-    private $badTestFileObject = array();
+    private $badTestFileObject = [];
 
-    private $goodTestFileObjects = array();
+    private $goodTestFileObjects = [];
 
-    private $badTestFileObjects = array();
+    private $badTestFileObjects = [];
 
     private $fileBag;
 
