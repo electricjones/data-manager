@@ -1,11 +1,9 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
-use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
@@ -27,94 +25,6 @@ trait ManagesItemsTrait
     protected $protectedItems = [];
 
     /* The user may also set $dataItemsName */
-
-    /**
-     * Hydrate with external data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
-     * @param $data string     The data to be hydrated into the manager
-     * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
-     */
-    public function hydrateFrom($type, $data)
-    {
-        $decodedData = $this->prepareData($type, $data);
-        $this->reset($decodedData);
-        return $this;
-    }
-
-    /**
-     * Validate and decode non-native data
-     * @param $type
-     * @param $data
-     * @return mixed|null
-     */
-    protected function prepareData($type, $data)
-    {
-        // we can possibly do some polymorphism for any other serialization types later
-        if (!$this->isFormatSupported($type)) {
-            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
-        }
-
-        $decodedData = $this->decodeFromJson($data);
-
-        if (!$this->validateJson($decodedData)) {
-            throw new IncorrectDataException("The data is not proper JSON");
-        }
-
-        return $decodedData;
-    }
-
-    /**
-     * Check to make sure the type input is ok. Currently only for JSON.
-     * @param $type
-     * @return bool
-     */
-    protected function isFormatSupported($type)
-    {
-        $type = strtolower(trim($type));
-        $supported = ['json'];
-
-        return in_array($type, $supported);
-    }
-
-    /**
-     * Decodes JSON data to array
-     * @param $data string
-     * @return mixed|null
-     */
-    protected function decodeFromJson($data)
-    {
-        if (is_string($data)) {
-            return json_decode($data, true); // true gives us associative arrays
-        }
-
-        return "";
-    }
-
-    /**
-     * Checks if the input is really a json string
-     * @param $data mixed|null
-     * @return bool
-     */
-    protected function validateJson($data)
-    {
-        if ($data !== "") {
-            return (json_last_error() === JSON_ERROR_NONE);
-        }
-    }
-
-    /**
-     * Reset the manager with an array of items
-     * Alias of initManager()
-     *
-     * @param array $items
-     * @return mixed
-     */
-    public function reset($items)
-    {
-        $this->initManager($items);
-    }
 
     /**
      * Initializes a new manager instance.
@@ -147,83 +57,19 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Sets the name of the property that holds data items
-     * @param $nameOfItemsRepository
-     * @return $this
-     */
-    public function setItemsName($nameOfItemsRepository)
-    {
-        $this->nameOfItemsRepository = $nameOfItemsRepository;
-        return $this;
-    }
-
-    /**
-     * Returns the name of the property that holds data items
-     * @return string
-     */
-    public function getItemsName()
-    {
-        return $this->nameOfItemsRepository;
-    }
-
-    /**
-     * Results array of items from Collection or Arrayable.
+     * Hydrate with external data, optionally append
      *
-     * @param  mixed $items
-     * @return array
-     */
-    protected function getArrayableItems($items)
-    {
-        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
-            return $items->getAll();
-
-        } elseif ($items instanceof Traversable) {
-            return iterator_to_array($items);
-        }
-
-        return (array)$items;
-    }
-
-    /**
-     * Return all items as array
-     *
-     * @return array
-     */
-    public function getAll()
-    {
-        $repo = $this->getItemsName();
-        return $this->prepareReturnedValue($this->$repo);
-    }
-
-    /**
-     * Prepare the returned value
-     * @param $value
-     * @return mixed
-     */
-    protected function prepareReturnedValue($value)
-    {
-        // Are we looking for Collections?
-        if (method_exists($this, 'toCollection')) {
-            return $this->toCollection($value);
-        }
-
-        // No? Just return the value
-        return $value;
-    }
-
-    /**
-     * Hydrate with external data, appending to current data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
      * @param $data string     The data to be hydrated into the manager
+     * @param bool $append When true, data will be appended to the current set
      * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
-     *
      */
-    public function appendFrom($type, $data)
+    public function hydrate($data, $append = false)
     {
-        $decodedData = $this->prepareData($type, $data);
-        $this->add($decodedData);
+        if ($append === false) {
+            $this->reset($data);
+        } else {
+            $this->add($data);
+        }
         return $this;
     }
 
@@ -273,37 +119,6 @@ trait ManagesItemsTrait
         $loc = $item;
 
         return $this;
-    }
-
-    /**
-     * Cycle through the nests to see if an item is protected
-     * @param $item
-     */
-    protected function checkIfProtected($item)
-    {
-        $this->performProtectedCheck($item);
-
-        if (!is_string($item)) {
-            return;
-        }
-
-        $prefix = $item;
-        while (false !== $pos = strrpos($prefix, '.')) {
-            $prefix = substr($item, 0, $pos);
-            $this->performProtectedCheck($prefix);
-            $prefix = rtrim($prefix, '.');
-        }
-    }
-
-    /**
-     * Throws an exception if item is protected
-     * @param $item
-     */
-    protected function performProtectedCheck($item)
-    {
-        if (in_array($item, $this->protectedItems)) {
-            throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
-        }
     }
 
     /**
@@ -363,24 +178,23 @@ trait ManagesItemsTrait
 
     /**
      * Return all items as array
+     *
+     * @return array
+     */
+    public function getAll()
+    {
+        $repo = $this->getItemsName();
+        return $this->$repo;
+    }
+
+    /**
+     * Return all items as array
      * Alias of getAll()
      * @return array
      */
     public function all()
     {
         return $this->getAll();
-    }
-
-    /**
-     * Confirm or deny that an item exists
-     * Alias of exists()
-     *
-     * @param $alias
-     * @return bool
-     */
-    public function has($alias)
-    {
-        return $this->exists($alias);
     }
 
     /**
@@ -404,6 +218,19 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Confirm or deny that an item exists
+     * Alias of exists()
+     *
+     * @param $alias
+     * @return bool
+     */
+    public function has($alias)
+    {
+        return $this->exists($alias);
+    }
+
+
+    /**
      * Confirm that manager has no items
      * @return boolean
      */
@@ -411,6 +238,19 @@ trait ManagesItemsTrait
     {
         $repo = $this->getItemsName();
         return empty($this->$repo);
+    }
+
+    /**
+     * Updates an item
+     *
+     * @param string $alias
+     * @param null $item
+     *
+     * @return $this
+     */
+    public function set($alias, $item = null)
+    {
+        return $this->add($alias, $item);
     }
 
     /**
@@ -448,6 +288,18 @@ trait ManagesItemsTrait
     }
 
     /**
+     * Reset the manager with an array of items
+     * Alias of initManager()
+     *
+     * @param array $items
+     * @return mixed
+     */
+    public function reset($items)
+    {
+        $this->initManager($items);
+    }
+
+    /**
      * Guard an alias from being modified
      * @param $item
      * @return $this
@@ -467,6 +319,62 @@ trait ManagesItemsTrait
     {
         $this->mergeDefaults($defaults);
         return $this;
+    }
+
+    /**
+     * Get the collection of items as JSON.
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->getAll(), $options);
+    }
+
+    /**
+     * Returns the name of the property that holds data items
+     * @return string
+     */
+    public function getItemsName()
+    {
+        return $this->nameOfItemsRepository;
+    }
+
+    /**
+     * Sets the name of the property that holds data items
+     * @param $nameOfItemsRepository
+     * @return $this
+     */
+    public function setItemsName($nameOfItemsRepository)
+    {
+        $this->nameOfItemsRepository = $nameOfItemsRepository;
+        return $this;
+    }
+
+    /**
+     * When manager instance is used as a string, return json of items
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJson();
+    }
+
+    /**
+     * Prepare the returned value
+     * @param $value
+     * @return mixed
+     */
+    protected function prepareReturnedValue($value)
+    {
+        // Are we looking for Collections?
+        if (method_exists($this, 'toCollection')) {
+            return $this->toCollection($value);
+        }
+
+        // No? Just return the value
+        return $value;
     }
 
     /**
@@ -493,53 +401,90 @@ trait ManagesItemsTrait
     }
 
     /**
-     * Updates an item
+     * Results array of items from Collection or Arrayable.
      *
-     * @param string $alias
-     * @param null $item
-     *
-     * @return $this
+     * @param  mixed $items
+     * @return array
      */
-    public function set($alias, $item = null)
+    protected function getArrayableItems($items)
     {
-        return $this->add($alias, $item);
-    }
+        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
+            return $items->getAll();
 
-    /**
-     * When manager instance is used as a string, return json of items
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toJson();
-    }
-
-    /**
-     * Get the collection of items as JSON.
-     *
-     * @param  int $options
-     * @return string
-     */
-    public function toJson($options = 0)
-    {
-        return json_encode($this->getAll(), $options);
-    }
-
-    /**
-     * Returns `true` if value can be used as array or traversed.
-     * @param $value
-     * @return bool
-     */
-    protected function isArrayable($value)
-    {
-        if ($value instanceof ManagesItemsTrait
-            || $value instanceof ManagesItemsInterface
-            || $value instanceof Traversable
-            || is_array($value)
-        ) {
-            return true;
+        } elseif ($items instanceof Traversable) {
+            return iterator_to_array($items);
         }
 
-        return false;
+        return (array)$items;
+    }
+
+    /**
+     * Cycle through the nests to see if an item is protected
+     * @param $item
+     */
+    protected function checkIfProtected($item)
+    {
+        $this->performProtectedCheck($item);
+
+        if (!is_string($item)) {
+            return;
+        }
+
+        $prefix = $item;
+        while (false !== $pos = strrpos($prefix, '.')) {
+            $prefix = substr($item, 0, $pos);
+            $this->performProtectedCheck($prefix);
+            $prefix = rtrim($prefix, '.');
+        }
+    }
+
+    /**
+     * Throws an exception if item is protected
+     * @param $item
+     */
+    protected function performProtectedCheck($item)
+    {
+        if (in_array($item, $this->protectedItems)) {
+            throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
+        }
+    }
+
+    /**
+     * Checks if the input is really a json string
+     * @param $data mixed|null
+     * @return bool
+     */
+    protected function validateJson($data)
+    {
+        if ($data !== "") {
+            return (json_last_error() === JSON_ERROR_NONE);
+        }
+    }
+
+    /**
+     * Decodes JSON data to array
+     * @param $data string
+     * @return mixed|null
+     */
+    protected function decodeFromJson($data)
+    {
+        if (is_string($data)) {
+            return json_decode($data, true); // true gives us associative arrays
+        }
+
+        return "";
+    }
+
+    /**
+     * Check to make sure the type input is ok. Currently only for JSON.
+     * @param $type
+     * @return bool
+     */
+    protected function isFormatSupported($type)
+    {
+        $type = strtolower(trim($type));
+        $supported = ['json'];
+
+        return in_array($type, $supported);
     }
 }
