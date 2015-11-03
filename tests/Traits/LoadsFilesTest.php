@@ -10,10 +10,11 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
     use FileBagTestTrait;
 
     protected $defaultArray = [];
+    protected $testData;
 
     public function setup()
     {
-        $this->defaultArray = [
+        $this->testData = [
             'one' => [
                 'two' => [
                     'three' => 'three-value',
@@ -28,6 +29,11 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
             ],
             'top' => 'top-value',
         ];
+
+        $this->defaultArray = [];
+        $this->defaultArray['json'] = $this->testData;
+        $this->defaultArray['php'] = $this->testData;
+        $this->defaultArray['yaml'] = $this->testData;
     }
 
     protected function createFileLoaderMock()
@@ -95,6 +101,8 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $manager->addDecoder($customDecoder);
         $manager->loadFiles($goodFiles);
 
-        $this->assertEquals($this->defaultArray, $manager->all());
+        $expected['xml'] = $this->testData;
+
+        $this->assertEquals($expected, $manager->all());
     }
 }

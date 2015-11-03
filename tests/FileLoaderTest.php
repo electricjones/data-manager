@@ -11,6 +11,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     use FileBagTestTrait;
 
+    protected $testData;
     private $fileLoader;
 
     private $defaultArray = [];
@@ -18,7 +19,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->fileLoader = new FileLoader();
-        $this->defaultArray = [
+        $this->testData = [
             'one' => [
                 'two' => [
                     'three' => 'three-value',
@@ -33,6 +34,11 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
             ],
             'top' => 'top-value',
         ];
+
+        $this->defaultArray = [];
+        $this->defaultArray['json'] = $this->testData;
+        $this->defaultArray['php'] = $this->testData;
+        $this->defaultArray['yaml'] = $this->testData;
     }
 
     public function testAddingFilesAsArray()
@@ -65,7 +71,10 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->fileLoader->addDecoder($customDecoder);
         $this->fileLoader->addFiles($fileBag);
 
-        $this->assertEquals($this->defaultArray, $this->fileLoader->process());
+        $expected = $this->defaultArray;
+        $expected['xml'] = $this->testData;
+
+        $this->assertEquals($expected, $this->fileLoader->process());
     }
 
     public function testAddDecoder()
