@@ -32,6 +32,7 @@ They are not documented here, but see other readmes for:
     * Configuring dependencies for dependencies,
     * Fallbacks, preparing objects, and more.
   * Use Manager as a configuration bank, complete with defaults.
+  * Load configuration files (php, yaml, json, xml, and custom)
   * Collections for extra array-helper methods (based on [Arrayzy](https://github.com/bocharsky-bw/Arrayzy))
     
 ## Install
@@ -39,11 +40,6 @@ Via Composer
 ``` bash
 $ composer require michaels/data-manager
 ```
-
-## Upgrading
-Note that between 0.8.2 and 0.8.3, the `__constuct()` method was removed from `ManagesItemsTrait`. If you are using that trait directly, you should implement your own. 
-
-See `Michaels\Manager\Manager` for an example.
 
 ## Getting Started
 Manager does exactly what you would expect: it *manages* complex items such as config data, arrays, and closures.
@@ -79,10 +75,6 @@ $manager->toJson(); // returns json of all items
 echo $manager; // returns json string of all items
 $manager->reset($array); // rebuild with new items
 $manager->clear(); // empty the manager
-$manager->addDecoder(DecoderInterface $decoder); // adds a file decoder to the file loader
-$manager->loadFiles($files); // adds data from files into a manager instance
-
-/* for more explaination on the file loader, see that section below */
 
 /* You can also use $manager as an array or in loops */
 $manager['some']['starting']['data']; // 'here (optional)'
@@ -91,6 +83,11 @@ $manager['some']['starting']['data']; // 'here (optional)'
 foreach ($manager as $item => $value) {
     // do whatever your heart desires
 }
+
+/* You may also push elements onto an array */
+$manager->set('a.b', []);
+$manager->push('a.b', 'c', 'd', 'e');
+$manager->get('a.b'); // ['c', 'd', 'e']
 
 /* Finally, you may manage values using magic methods */
 $manager->some()->starting()->data; // 'here (optional)'
@@ -152,19 +149,6 @@ A couple of things to keep in mind:
   * On the other hand, if the value exists and is **not** an array, the default will be ignored. 
   (`one.two = 'something'`) In this case, there is no `one.two.three`, even after loading defaults.
 
-## Collections
-Right now, you may choose to return a `MutableArray` which comes with a lot of helpers.
-Simply include `Michaels\Manager\Traits\CollectionTrait` into your class. By default, `get()` and `getAll()` will return collections.
-These collections behave *identically* to arrays, but come with extra methods. See [Arrayzy](https://github.com/bocharsky-bw/Arrayzy) for a full api.
-
-It is possible to chain things for brevity:
-```php
-$value = $manager->get('one.two.three')->walk(function(){});
-```
-In this case, `walk()` is part of the collection and will apply the callback to each value, then return the updated contents.
-
-You may also disable this by `$manager->useCollections = false`
-
 ## Using Manager Traits
 If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.
 
@@ -173,15 +157,28 @@ There are 3 Traits that make up Manager:
   2. `ArrayableTrait` makes the class usable as an array (`$manager['some']['data']`) or in loops and such
   3. `ChainsNestedItemsTrait` allows you to use fluent properties to manage data (`$manager->one()->two()->three = 'three`)
 
+And 3 extra Traits to give additional functionality:
+  1. `CollectionTrait` returns collections with all sorts of [array helpers](https://github.com/bocharsky-bw/Arrayzy)
+  2. `ManagesIocTrait` turns Manager into a simple, but complete IoC or Dependency Injection manager
+  3. `LoadsFilesTrait` allows Manager to load data from config files.
+  
+Each of these traits is documented below. To include the functionality simply `use` the trait.
+it is possible to use ALL traits together in one class, though I don't know why you would need to.
+
 *NOTE THAT* all traits depend on ManagesItemsTrait. If you try to use ChainsNestedItemsTrait or ArrayableTrait without ManagesItemsTrait, you will get all sorts of errors.
 
 ```php
+/* An example for UberManager */
 class MyContainer {
-    use Michaels\Manager\Traits\ManagesItemsTrait; // for all the basic functionality
-    use Michaels\Manager\Traits\ChainsNestedItemsTrait; // to access nested items via magic methods
-    use Michaels\Manager\Traits\ArrayableTrait; // So you can use $myConainer like an array
-    
-    // Your stuff here. And you may override anything you like
+    use Michaels\Manager\Traits\ManagesItemsTrait;
+    use Michaels\Manager\Traits\ChainsNestedItemsTrait;
+    use Michaels\Manager\Traits\ArrayableTrait;
+    use Michaels\Manager\Traits\CollectionTrait; 
+    use Michaels\Manager\Traits\LoadsFilesTrait;
+    use Michaels\Manager\Traits\ManagesIocTrait;
+
+    // Your stuff here. And you may override anything you like.
+    // Remember to add a constructor if you want :)
 }
 ```
 
@@ -213,15 +210,22 @@ public function __construct($items = [])
 ```
 
 You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`
+## Additional Features
 
-## Some Advanced Features
-By default, Manager stores all the items in an `$items` property. 
-If you are using the `ManagesItemsTrait` and want to use an internal property besides `$items` to avoid collisions, you have two options:
+### Collections
+Right now, you may choose to return a `MutableArray` which comes with a lot of helpers.
+Simply include `Michaels\Manager\Traits\CollectionTrait` into your class. By default, `get()` and `getAll()` will return collections.
+These collections behave *identically* to arrays, but come with extra methods. See [Arrayzy](https://github.com/bocharsky-bw/Arrayzy) for a full api.
 
-  1. Use `$manager->setItemsName($nameOfProperty)` either in your constructor or before you add anything
-  2. Set the `$dataItemsName` property to a string of the new property name. Then be sure to call `initManager()` in your constructor.
+It is possible to chain things for brevity:
+```php
+$value = $manager->get('one.two.three')->walk(function(){});
+```
+In this case, `walk()` is part of the collection and will apply the callback to each value, then return the updated contents.
 
-## Loading Files
+You may also disable this by `$manager->useCollections = false`
+
+### Loading Files
 Manager also gives you the ability to load file data into the Manager. A good use case for this is loading configuration data out of different configuration files.
 
   1. Use `$manager->loadFiles($files)` to load a group of files. The `$files` argument can be either a `\FileBag` object or an array of `\SplFileInfo` objects. Most likely you would use an array, like the return result of [Symfony's Finder Component](https://github.com/symfony/Finder), which can locate files in a directory tree and return them as `\SplFileInfo` objects.
@@ -229,8 +233,18 @@ Manager also gives you the ability to load file data into the Manager. A good us
 
 NOTE: Currently Manager supports Yaml, Json and PHP file formats out of the box. To use the Yaml decoder, you must require the Symfony Yaml Component in your composer.json file.
 
-## Adding a Decoder
+#### Adding a Decoder
 If you have special files not covered by the default decoders available in Manager, you can also create your own and add it to the Manager prior to decoding the files with the `$manager->loadFiles()` method. For an example custom decoder, have a look at the `\CustomXmlDecoder` class in the `/Decoders` directory. Once you've created your custom decoder, you can add it with the `$manager->addDecoder()` method. Again, you must add the decoder prior to loading any file data. 
+
+### Managing Dependencies
+Please see [ioc.md](ioc.md) for details.
+
+## Some Advanced Features
+By default, Manager stores all the items in an `$items` property. 
+If you are using the `ManagesItemsTrait` and want to use an internal property besides `$items` to avoid collisions, you have two options:
+
+  1. Use `$manager->setItemsName($nameOfProperty)` either in your constructor or before you add anything
+  2. Set the `$dataItemsName` property to a string of the new property name. Then be sure to call `initManager()` in your constructor.
 
 ## Exceptions
 If you try to `get()` an item that doesn't exist, and there is no fallback, an `ItemNotFoundException` will be thrown.
@@ -244,6 +258,13 @@ $manager->add("one.two", "two-value"); // exception
 ```
 
 If you try to alter a protected item, a `ModifyingProtectedItemException` will be thrown.
+
+See /exceptions for more
+
+## Upgrading
+Note that between 0.8.2 and 0.8.3, the `__constuct()` method was removed from `ManagesItemsTrait`. If you are using that trait directly, you should implement your own. 
+
+See `Michaels\Manager\Manager` for an example.
 
 ## Interoperability
 Data Manager is [PSR compliant](http://www.php-fig.org/) and [Container Interoperability](https://github.com/container-interop/container-interop) compliant. Any oversights, please let me know.

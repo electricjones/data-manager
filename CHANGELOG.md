@@ -1,7 +1,7 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# v0.8.6 - NEXT
+# v0.8.6 - 11-3-2015
  - Updates `ManagesItemsInterface`
  - Updates Readme documentation
  
