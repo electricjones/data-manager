@@ -1,11 +1,9 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Michaels\Manager\Exceptions\IncorrectDataException;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
-use Michaels\Manager\Exceptions\SerializationTypeNotSupportedException;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
@@ -58,58 +56,6 @@ trait ManagesItemsTrait
         return $this;
     }
 
-    /**
-     * Hydrate with external data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
-     * @param $data string     The data to be hydrated into the manager
-     * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
-     */
-    public function hydrateFrom($type, $data)
-    {
-        $decodedData = $this->prepareData($type, $data);
-        $this->reset($decodedData);
-        return $this;
-    }
-
-    /**
-     * Hydrate with external data, appending to current data
-     *
-     * @param $type  string    The type of data to be hydrated into the manager
-     * @param $data string     The data to be hydrated into the manager
-     * @return $this
-     * @throws \Michaels\Manager\Exceptions\SerializationTypeNotSupportedException
-     *
-     */
-    public function appendFrom($type, $data)
-    {
-        $decodedData = $this->prepareData($type, $data);
-        $this->add($decodedData);
-        return $this;
-    }
-
-    /**
-     * Validate and decode non-native data
-     * @param $type
-     * @param $data
-     * @return mixed|null
-     */
-    protected function prepareData($type, $data)
-    {
-        // we can possibly do some polymorphism for any other serialization types later
-        if (!$this->isFormatSupported($type)) {
-            throw new SerializationTypeNotSupportedException("$type serialization is not supported.");
-        }
-
-        $decodedData = $this->decodeFromJson($data);
-
-        if (!$this->validateJson($decodedData)) {
-            throw new IncorrectDataException("The data is not proper JSON");
-        }
-
-        return $decodedData;
-    }
 
     /**
      * Adds a single item.
@@ -487,44 +433,5 @@ trait ManagesItemsTrait
         if (in_array($item, $this->protectedItems)) {
             throw new ModifyingProtectedValueException("Cannot access $item because it is protected");
         }
-    }
-
-    /**
-     * Checks if the input is really a json string
-     * @param $data mixed|null
-     * @return bool
-     */
-    protected function validateJson($data)
-    {
-        if ($data !== "") {
-            return (json_last_error() === JSON_ERROR_NONE);
-        }
-    }
-
-    /**
-     * Decodes JSON data to array
-     * @param $data string
-     * @return mixed|null
-     */
-    protected function decodeFromJson($data)
-    {
-        if (is_string($data)) {
-            return json_decode($data, true); // true gives us associative arrays
-        }
-
-        return "";
-    }
-
-    /**
-     * Check to make sure the type input is ok. Currently only for JSON.
-     * @param $type
-     * @return bool
-     */
-    protected function isFormatSupported($type)
-    {
-        $type = strtolower(trim($type));
-        $supported = ['json'];
-
-        return in_array($type, $supported);
     }
 }

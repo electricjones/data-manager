@@ -8,9 +8,11 @@ use IteratorAggregate;
 use JsonSerializable;
 use Michaels\Manager\Contracts\ChainsNestedItemsInterface;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
+use Michaels\Manager\Contracts\LoadsFilesInterface;
 use Michaels\Manager\Traits\ArrayableTrait;
 use Michaels\Manager\Traits\ChainsNestedItemsTrait;
 use Michaels\Manager\Traits\ManagesItemsTrait;
+use Michaels\Manager\Traits\LoadsFilesTrait;
 
 /**
  * Manages deeply nested, complex data.
@@ -27,9 +29,10 @@ class Manager implements
     ArrayAccess,
     Countable,
     IteratorAggregate,
-    JsonSerializable
+    JsonSerializable,
+    LoadsFilesInterface
 {
-    use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait;
+    use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait, LoadsFilesTrait;
 
     /**
      * The items stored in the manager
