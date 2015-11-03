@@ -163,6 +163,8 @@ $value = $manager->get('one.two.three')->walk(function(){});
 ```
 In this case, `walk()` is part of the collection and will apply the callback to each value, then return the updated contents.
 
+You may also disable this by `$manager->useCollections = false`
+
 ## Using Manager Traits
 If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.
 

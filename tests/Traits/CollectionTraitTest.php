@@ -64,4 +64,26 @@ class CollectionTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $actual->count(), "failed to return a working copy of `MutableArray`");
         $this->assertEquals(['a', 'b', 'c', 'd', 'e'], $actual->toArray(), "failed to push items onto an array");
     }
+
+    public function testDoesNotWantCollections()
+    {
+        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager->useCollections = false;
+        $actual = $manager->get('one.two');
+
+        $this->assertNotInstanceOf(get_class(new MutableArray()), $actual, "failed: returned a `MutableArray`");
+        $this->assertTrue(is_array($actual), "failed to return a regular array");
+        $this->assertEquals(['a', 'b', 'c'], $actual, "failed to return correct array");
+    }
+
+    public function testReturnRawForNotArraybleItem()
+    {
+        $manager = new CollectionStub(['one' => ['two' => 'two-value']]);
+        $manager->useCollections = false;
+        $actual = $manager->get('one.two');
+
+        $this->assertNotInstanceOf(get_class(new MutableArray()), $actual, "failed: returned a `MutableArray`");
+        $this->assertFalse(is_array($actual), "failed: returned a regular array");
+        $this->assertEquals('two-value', $actual, "failed to return raw value");
+    }
 }
