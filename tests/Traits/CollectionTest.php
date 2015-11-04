@@ -27,7 +27,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /** Begin Tests **/
-    public function testToCollectionReturnsMutableArray()
+    public function test_to_collection_returns_mutable_array()
     {
         $manager = new CollectionStub(['a', 'b', 'c']);
         $actual = $manager->getAll();
@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(get_class(new MutableArray()), $actual, "failed to return an instance of `MutableArray`");
     }
 
-    public function testUsingCollectionFromGet()
+    public function test_using_collection_from_get()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->get('one.two');
@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $actual->count(), "failed to return a working copy of `MutableArray`");
     }
 
-    public function testUsingCollectionFromGetAll()
+    public function test_using_collection_from_getAll()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->all();
@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['one' => ['two' => ['a', 'b', 'c']], 'd', 'e'], $actual->toArray(), "failed to push items onto an array");
     }
 
-    public function testUsingCollectionWithChainedMethods()
+    public function test_using_collection_with_chained_methods()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->get('one.two')->push('d', 'e');
@@ -65,7 +65,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a', 'b', 'c', 'd', 'e'], $actual->toArray(), "failed to push items onto an array");
     }
 
-    public function testDoesNotWantCollections()
+    public function test_does_not_want_collections()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $manager->useCollections = false;
@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a', 'b', 'c'], $actual, "failed to return correct array");
     }
 
-    public function testReturnRawForNotArraybleItem()
+    public function test_return_raw_for_not_arrayble_item()
     {
         $manager = new CollectionStub(['one' => ['two' => 'two-value']]);
         $manager->useCollections = false;

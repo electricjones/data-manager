@@ -27,7 +27,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     }
 
     /** Begin Tests **/
-    public function testInitIocContainer()
+    public function test_init_ioc_container()
     {
         $manager = new Manager();
         $manager->initDi($this->testData);
@@ -36,28 +36,28 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     }
 
     // THIS IS NOT PART OF THE TRAIT, ONLY THE CONCRETE CLASS. Tested here to save time.
-    public function testInitViaConstructor()
+    public function test_init_via_constructor()
     {
         $manager = new Manager($this->testData, ['other' => ['items' => true]]);
         $this->assertTrue($manager->get("other.items"), "failed to set generic items");
         $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
 
-    public function testGetIocManifest()
+    public function test_get_ioc_manifest()
     {
         $manager = new Manager($this->testData);
 
         $this->assertEquals($this->testData, $manager->getIocManifest(), "Failed to return di manifest");
     }
 
-    public function testGetEmptyManifestIfUninitialized()
+    public function test_get_empty_manifest_if_uninitialized()
     {
         $manager = new Manager();
 
         $this->assertEquals([], $manager->getIocManifest(), "Failed to return di manifest");
     }
 
-    public function testAddDependencies()
+    public function test_add_dependencies()
     {
         $manager = new Manager();
 
@@ -68,7 +68,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
 
-    public function testFetchDependencies()
+    public function test_fetch_dependencies()
     {
         $manager = new Manager();
 
@@ -83,7 +83,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('object', $object->type, "Failed to return object factory");
     }
 
-    public function testManagerInstanceAsFactory()
+    public function test_manager_instance_as_factory()
     {
         $factory = new Manager([
             'container' => '\stdClass',
@@ -101,7 +101,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Exception
      */
-    public function testExceptionOnInvalidFactory()
+    public function test_exception_on_invalid_factory()
     {
         $manager = new Manager();
 
@@ -110,7 +110,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $manager->fetch('one');
     }
 
-    public function testShareObject()
+    public function test_share_object()
     {
         // Setup
         $manager = new Manager();
@@ -130,7 +130,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('new-object-value', $actual->prop, "failed to share string");
     }
 
-    public function testShareString()
+    public function test_share_string()
     {
         // Setup
         $manager = new Manager();
@@ -147,7 +147,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('new-string-value', $actual->prop, "failed to share string");
     }
 
-    public function testShareFactory()
+    public function test_share_factory()
     {
         $manager = new Manager();
         $manager->initDi([
@@ -162,7 +162,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('new-factory-value', $manager->fetch('factory')->prop, "failed to share string");
     }
 
-    public function testFactoryManagerInjection()
+    public function test_factory_manager_injection()
     {
         $manager = new Manager();
         $email = new stdClass();
@@ -188,7 +188,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($email, $application->logger->email, "failed to set dependencies down the chain");
     }
 
-    public function testFallbacks()
+    public function test_fallbacks()
     {
         $manager = new Manager();
         $fallback = new stdClass();
@@ -199,7 +199,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($fallback, $actual, "failed to return fallback");
     }
 
-    public function testPrepareDependencies()
+    public function test_prepare_dependencies()
     {
         $manager = new Manager();
         $manager->di('prepared', new stdClass());
@@ -214,7 +214,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($manager->fetch('unprepared')->prepared), "failed to return unprepared object");
     }
 
-    public function testDeclaringDependenciesWithClassnames()
+    public function test_declaring_dependencies_with_classnames()
     {
         $manager = new Manager();
 
@@ -238,7 +238,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $three->three, "failed to set the passed argument");
     }
 
-    public function testDeclaringDependenciesWithObjects()
+    public function test_declaring_dependencies_with_objects()
     {
         $manager = new Manager();
 
@@ -262,7 +262,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $three->three, "failed to set the passed argument");
     }
 
-    public function testDeclaringDependenciesWithClosures()
+    public function test_declaring_dependencies_with_closures()
     {
         $manager = new Manager();
 
@@ -288,7 +288,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $three->three, "failed to set the passed argument");
     }
 
-    public function testGetAndSetItemsName()
+    public function test_get_and_set_items_name()
     {
         $manager = new Manager();
         $this->assertEquals("_diManifest", $manager->getDiItemsName(), "failed to retrieve default manifest name");
@@ -305,13 +305,13 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
      */
-    public function testThrowsExceptionForNoItemSet()
+    public function test_throws_exception_for_no_item_set()
     {
         $manager = new Manager();
         $manager->fetch('nothing_set');
     }
 
-    public function testComplexExample()
+    public function test_complex_example()
     {
         /* Create some managers */
         $firstManager = new Manager(

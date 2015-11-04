@@ -41,7 +41,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->defaultArray['yaml'] = $this->testData;
     }
 
-    public function testAddingFilesAsArray()
+    public function test_adding_files_as_array()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
@@ -49,7 +49,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
 
-    public function testAddingFileBag()
+    public function test_adding_file_bag()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
@@ -59,7 +59,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
 
-    public function testAddingADecoder()
+    public function test_adding_adecoder()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
         $goodCustomFileDirectory = realpath(__DIR__ . '/Fixtures/CustomFileWithGoodData');
@@ -77,7 +77,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->fileLoader->process());
     }
 
-    public function testAddDecoder()
+    public function test_add_decoder()
     {
         $customDecoder = new CustomXmlDecoder();
         $this->fileLoader->addDecoder($customDecoder);
@@ -90,7 +90,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $actual, "failed to add a single mime type");
     }
 
-    public function testAddDecoderTwice()
+    public function test_add_decoderTwice()
     {
         $customDecoder = new CustomXmlDecoder();
         $this->fileLoader->addDecoder($customDecoder);
@@ -107,7 +107,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Exception
      */
-    public function testErrorWhenDecodingEmptyFileBag()
+    public function test_error_when_decoding_empty_file_bag()
     {
         $fileLoader = new FileLoader();
         $fileLoader->decodeFileBagData(new FileBag());
@@ -116,7 +116,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\UnsupportedFilesException
      */
-    public function testErrorWhenDecodingInvalidFileTypes()
+    public function test_error_when_decoding_invalid_file_types()
     {
         $this->fileLoader->addFiles([
             new \SplFileInfo(realpath('/Fixtures/FilesWithBadNames/config.ini')),
@@ -129,7 +129,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\BadFileDataException
      */
-    public function testErrorWhenAddingInvalidFileBag()
+    public function test_error_when_adding_invalid_file_bag()
     {
         $fileLoader = new FileLoader();
         $fileLoader->addFiles('string');
