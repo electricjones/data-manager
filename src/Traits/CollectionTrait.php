@@ -2,6 +2,7 @@
 namespace Michaels\Manager\Traits;
 
 use Arrayzy\MutableArray;
+use Michaels\Manager\Helpers;
 
 /**
  * Access Deeply nested manager items through magic methods
@@ -28,8 +29,8 @@ trait CollectionTrait
      */
     public function toCollection($value)
     {
-        if ($this->wantsCollections() && $this->isArrayable($value)) {
-            return new MutableArray($this->getArrayableItems($value));
+        if ($this->wantsCollections() && Helpers::isArrayable($value)) {
+            return new MutableArray(Helpers::getArrayableItems($value));
         }
 
         return $value;
