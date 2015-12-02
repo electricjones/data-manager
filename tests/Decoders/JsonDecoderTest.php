@@ -35,14 +35,14 @@ class JsonDecoderTest extends \PHPUnit_Framework_TestCase
         $this->jsonDecoder = new JsonDecoder();
     }
 
-    public function testGettingMimeType()
+    public function test_getting_mime_type()
     {
         $expected = ['json'];
         $this->assertEquals($expected, $this->jsonDecoder->getMimeType());
 
     }
 
-    public function testJsonDecoding()
+    public function test_json_decoding()
     {
         $this->assertEquals($this->testArrayData, $this->jsonDecoder->decode($this->jsonData));
     }
@@ -51,7 +51,7 @@ class JsonDecoderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\JsonDecodingFailedException
      */
-    public function testInvalidJsonDecoding()
+    public function test_invalid_json_decoding()
     {
         $this->jsonDecoder->decode($this->testArrayData);
     }

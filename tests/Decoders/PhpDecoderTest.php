@@ -37,14 +37,14 @@ class PhpDecoderTest extends \PHPUnit_Framework_TestCase
         $this->phpData = $this->testArrayData;
     }
 
-    public function testGettingMimeType()
+    public function test_getting_mime_type()
     {
         $expected = ['php'];
         $this->assertEquals($expected, $this->phpDecoder->getMimeType());
 
     }
 
-    public function testPhpDecoding()
+    public function test_php_decoding()
     {
         $this->assertEquals($this->testArrayData, $this->phpDecoder->decode($this->phpData));
     }

@@ -1,6 +1,10 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
+# v0.8.7 - NEXT
+ - Moves helper methods to a static `Helpers` class
+ - Converts all test methods to `snake_case` not `camelCase`
+
 # v0.8.6 - 11-3-2015
  - Updates `ManagesItemsInterface`
  - Updates Readme documentation

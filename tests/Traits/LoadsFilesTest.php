@@ -45,7 +45,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
     }
 
     /* Unit Tests: Uses FileLoader mock */
-    public function testLoadFiles()
+    public function test_load_files()
     {
         $files = [
             new \SplFileInfo('sometest'),
@@ -65,7 +65,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $manager->loadFiles($files);
     }
 
-    public function testAddingDecoder()
+    public function test_adding_decoder()
     {
         $decoder = $this->getMockBuilder('Michaels\Manager\Contracts\DecoderInterface')
             ->getMock();
@@ -82,7 +82,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
     }
 
     /* Integration Tests: uses true FileLoader and tests output */
-    public function testLoadingFiles()
+    public function test_loading_files()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
@@ -92,7 +92,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->defaultArray, $manager->all());
     }
 
-    public function testWithDecoder()
+    public function test_with_decoder()
     {
         $goodCustomTestFileDirectory = realpath(__DIR__ . '/../Fixtures/CustomFileWithGoodData');
         $customDecoder = new CustomXmlDecoder();

@@ -10,7 +10,7 @@ use Michaels\Manager\Test\Stubs\CustomizedManagerStub;
  */
 class CustomizedManagerTest extends \PHPUnit_Framework_TestCase {
 
-    public function testInitManager()
+    public function test_init_manager()
     {
         $expectedItems = ['one' => 1, 'two' => 2];
         $expectedOther = 'other-field';
