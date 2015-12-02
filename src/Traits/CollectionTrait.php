@@ -1,7 +1,7 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Arrayzy\MutableArray;
+use Arrayzy\ArrayImitator;
 use Michaels\Manager\Helpers;
 
 /**
@@ -25,12 +25,12 @@ trait CollectionTrait
     /**
      * Converts an array to a collection if value is arrayable and config is set
      * @param $value
-     * @return MutableArray
+     * @return static
      */
     public function toCollection($value)
     {
         if ($this->wantsCollections() && Helpers::isArrayable($value)) {
-            return new MutableArray(Helpers::getArrayableItems($value));
+            return new ArrayImitator(Helpers::getArrayableItems($value));
         }
 
         return $value;
