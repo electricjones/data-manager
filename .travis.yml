@@ -16,7 +16,7 @@ matrix:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source --dev
-  - composer require bocharsky-bw/arrayzy:dev-master
+  - composer require bocharsky-bw/arrayzy:~0.5
   - composer require symfony/yaml:~2.7
 
 script:

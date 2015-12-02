@@ -1,7 +1,8 @@
 <?php
 namespace Michaels\Manager\Traits;
 
-use Arrayzy\MutableArray;
+use Arrayzy\ArrayImitator;
+use Michaels\Manager\Helpers;
 
 /**
  * Access Deeply nested manager items through magic methods
@@ -24,12 +25,12 @@ trait CollectionTrait
     /**
      * Converts an array to a collection if value is arrayable and config is set
      * @param $value
-     * @return MutableArray
+     * @return static
      */
     public function toCollection($value)
     {
-        if ($this->wantsCollections() && $this->isArrayable($value)) {
-            return new MutableArray($this->getArrayableItems($value));
+        if ($this->wantsCollections() && Helpers::isArrayable($value)) {
+            return new ArrayImitator(Helpers::getArrayableItems($value));
         }
 
         return $value;

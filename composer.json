@@ -29,7 +29,7 @@
   },
   "suggest": {
     "symfony/yaml": "If you are using the YAML decoder. ~2.7",
-    "bocharsky-bw/arrayzy": "If you are using the Collections feature, you will need to 'dev-master' until 0.3 is released."
+    "bocharsky-bw/arrayzy": "If you are using the Collections feature, you will need to '0.5.*"
   },
   "autoload": {
     "psr-4": {

@@ -23,14 +23,14 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->manager->initManager($this->testData);
     }
 
-    public function testGetSingleItem()
+    public function test_get_single_item()
     {
         $this->manager->add('key', 'value');
 
         $this->assertEquals('value', $this->manager->key, 'failed to return a single item through magic method');
     }
 
-    public function testGetThroughNestedMagicMethods()
+    public function test_get_through_nested_magic_methods()
     {
         $expectedA = $this->testData['one']['two']['three'];
         $actualA = $this->manager->one()->two()->three;
@@ -46,7 +46,7 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($expectedC, $actualC, 'failed to retrieve third nested value');
     }
 
-    public function testDoesntSetLevelForValidMethodCall() {
+    public function test_doesnt_set_level_for_valid_method_call() {
         $this->manager->someMethod();
         $this->manager->one = "one";
         $this->assertEquals("one", $this->manager->get('one'));
@@ -54,19 +54,19 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->manager->has('someMethod'));
     }
 
-    public function testAddTopLevelItemThroughMagicMethod(){
+    public function test_add_top_level_item_through_magic_method(){
         $this->manager->one = "one";
         $this->assertEquals("one", $this->manager->get('one'));
         $this->assertEquals("one", $this->manager->one);
     }
 
-    public function testAddNestedItemThroughMagicMethod() {
+    public function test_add_nested_item_through_magic_method() {
         $this->manager->one()->two()->three = "three";
         $this->assertEquals("three", $this->manager->get('one.two.three'));
         $this->assertEquals("three", $this->manager->one()->two()->three);
     }
 
-    public function testAddNestedItemToArrayThroughMagicMethod() {
+    public function test_add_nested_item_to_array_through_magic_method() {
         $this->manager->one()->two = [];
         $this->manager->one()->two()->three()->four = "four";
 
@@ -84,7 +84,7 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("nine", $this->manager->five()->six()->seven()->nine);
     }
 
-    public function testUpdateNestedItemThroughMagicMethod() {
+    public function test_update_nested_item_through_magic_method() {
         $this->manager->one()->two = [];
         $this->manager->one()->two()->three()->four = "four";
 
@@ -93,7 +93,7 @@ class ChainsNestedItemsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("new-four", $this->manager->get('one.two.three.four'), "failed to update property");
     }
 
-    public function testDeleteNestedItemThroughMagicMethod() {
+    public function test_delete_nested_item_through_magic_method() {
         $this->manager->one()->two = 'two';
         $this->manager->one()->three = 'three';
 

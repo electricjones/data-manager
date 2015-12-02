@@ -1,9 +1,11 @@
 <?php
 namespace Michaels\Manager\Traits;
 
+use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Exceptions\ItemNotFoundException;
 use Michaels\Manager\Exceptions\ModifyingProtectedValueException;
 use Michaels\Manager\Exceptions\NestingUnderNonArrayException;
+use Michaels\Manager\Helpers;
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Traversable;
 
@@ -51,7 +53,7 @@ trait ManagesItemsTrait
             return $this;
         }
 
-        $this->$repo = is_array($items) ? $items : $this->getArrayableItems($items);
+        $this->$repo = is_array($items) ? $items : Helpers::getArrayableItems($items);
 
         return $this;
     }
@@ -429,41 +431,6 @@ trait ManagesItemsTrait
                 }
             }
         }
-    }
-
-    /**
-     * Results array of items from Collection or Arrayable.
-     *
-     * @param  mixed $items
-     * @return array
-     */
-    protected function getArrayableItems($items)
-    {
-        if ($items instanceof self || $items instanceof ManagesItemsTrait) {
-            return $items->getAll();
-
-        } elseif ($items instanceof Traversable) {
-            return iterator_to_array($items);
-        }
-
-        return (array)$items;
-    }
-
-    /**
-     * Returns `true` if value can be used as array or traversed.
-     * @param $value
-     * @return bool
-     */
-    protected function isArrayable($value)
-    {
-        if ($value instanceof ManagesItemsTrait
-            || $value instanceof ManagesItemsInterface
-            || $value instanceof Traversable
-            || is_array($value)
-        ) {
-            return true;
-        }
-        return false;
     }
 
     /**
