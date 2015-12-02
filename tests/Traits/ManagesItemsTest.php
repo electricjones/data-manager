@@ -46,7 +46,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     }
 
     /** Begin Tests **/
-    public function testInitManagerFromArray()
+    public function test_init_manager_from_array()
     {
         $manager = new Manager();
         $manager->initManager($this->testData);
@@ -54,7 +54,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->testData, $manager->getAll(), "Failed to return identical values set at instantiation");
     }
 
-    public function testInitManagerFromSingle()
+    public function test_init_manager_from_single()
     {
         $manager = new Manager();
         $manager->initManager('foo');
@@ -62,7 +62,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo'], $manager->getAll());
     }
 
-    public function testInitManagerFromNull()
+    public function test_init_manager_from_null()
     {
         $manager = new Manager();
         $manager->initManager(null);
@@ -75,7 +75,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $manager->all());
     }
 
-    public function testInitManagerFromManager()
+    public function test_init_manager_from_manager()
     {
         $firstManager = new Manager();
         $firstManager->initManager(['foo' => 'bar']);
@@ -86,7 +86,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar'], $secondManager->all());
     }
 
-    public function testInitManagerFromObject()
+    public function test_init_manager_from_object()
     {
         $object = new stdClass();
         $object->foo = 'bar';
@@ -96,7 +96,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar'], $manager->getAll());
     }
 
-    public function testInitManagerFromTraversable()
+    public function test_init_manager_from_traversable()
     {
         $object = new TraversableStub();
         $object['foo'] = 'bar';
@@ -107,7 +107,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     }
 
     /* Now, to save time, we use $this->manager */
-    public function testAddAndGetSingleItem()
+    public function test_add_and_get_single_item()
     {
         $this->manager->add('alias', 'value');
 
@@ -115,7 +115,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value', $this->manager->get('alias'), 'Failed to get a single item');
     }
 
-    public function testAddMultipleItemsAtOnce()
+    public function test_add_multiple_items_at_once()
     {
         $this->manager->add([
             'objectTest' => new StdClass(),
@@ -132,7 +132,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('stringTest', $items, 'Failed to confirm that manager has key `stringTest`');
     }
 
-    public function testReturnTrueIfItemExists()
+    public function test_return_true_if_item_exists()
     {
         $this->manager->add('test', 'test-item');
         $this->manager->add('booleantest', false);
@@ -141,13 +141,13 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->manager->exists('booleantest'), "Failed to confirm that boolean false value exists");
     }
 
-    public function testReturnFalseIfItemDoesNotExist()
+    public function test_return_false_if_item_does_not_exist()
     {
         $this->assertFalse($this->manager->exists('test'));
     }
 
     /* has() is an alias of exists(), tested here for coverage */
-    public function testReturnTrueIfHasItem()
+    public function test_return_true_if_has_item()
     {
         $this->manager->add('test', 'test-item');
         $this->manager->add('booleantest', false);
@@ -156,12 +156,12 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->manager->has('booleantest'), "Failed to confirm that boolean false value exists");
     }
 
-    public function testReturnFalseIfDoesNotHaveItem()
+    public function test_return_false_if_does_not_have_item()
     {
         $this->assertFalse($this->manager->has('test'));
     }
 
-    public function testProvidesFallbackValue()
+    public function test_provides_fallback_value()
     {
         $this->manager->add('one', 'one-value');
 
@@ -173,12 +173,12 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
      */
-    public function testThrowsExceptionIfItemNotFound()
+    public function test_throws_exception_if_item_not_found()
     {
         $this->manager->get('doesntexist');
     }
 
-    public function testGetIfExistsReturnsItemIfExists()
+    public function test_get_if_exists_returns_item_if_exists()
     {
         $this->manager->add($this->simpleNestData);
 
@@ -188,7 +188,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, "failed to return an item that exists");
     }
 
-    public function testGetIfExistsReturnsMessageIfNoExists()
+    public function test_get_if_exists_returns_message_if_no_exists()
     {
         $actual = $this->manager->getIfExists('nope');
 
@@ -196,7 +196,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
     }
 
-    public function testDoesNotReturnNoItemFoundIfItemValueIsNull()
+    public function test_does_not_return_no_item_found_if_item_value_is_null()
     {
         // See https://github.com/chrismichaels84/data-manager/issues/17
         $manager = new Manager(['one' => ['two' => null]]);
@@ -206,7 +206,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $actual, "failed to return `null` as value");
     }
 
-    public function testGetIfHasReturnsItemIfExists()
+    public function test_get_if_has_returns_item_if_exists()
     {
         $this->manager->add($this->simpleNestData);
 
@@ -216,7 +216,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, "failed to return an item that exists");
     }
 
-    public function testGetIfHasReturnsMessageIfNoExists()
+    public function test_get_if_has_returns_message_if_no_exists()
     {
         $actual = $this->manager->getIfHas('nope');
 
@@ -224,7 +224,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct message');
     }
 
-    public function testUpdateSingleItem()
+    public function test_update_single_item()
     {
         $this->manager->add('item', 'original-value');
         $this->manager->set('item', 'new-value');
@@ -232,7 +232,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('new-value', $this->manager->get('item'), 'Failed to update a single item');
     }
 
-    public function testUpdateMultipleItems()
+    public function test_update_multiple_items()
     {
         $this->manager->add('item', 'original-value');
         $this->manager->add('item2', 'other-original-value');
@@ -242,7 +242,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('other-new-value', $this->manager->get('item2'), 'Failed to update second item');
     }
 
-    public function testRemoveSingleItem()
+    public function test_remove_single_item()
     {
         $this->manager->add([
             'one' => 'one',
@@ -257,7 +257,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('two', $items, 'failed to leave `two` intact');
     }
 
-    public function testClear()
+    public function test_clear()
     {
         $this->manager->add([
             'one' => 'one',
@@ -270,7 +270,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($items, "Failed to empty manager");
     }
 
-    public function testAddNestedItems()
+    public function test_add_nested_items()
     {
         $this->manager->add('one.two.three', 'three-value');
         $this->manager->add('one.two.four.five', 'five-value');
@@ -281,7 +281,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertFullManifest();
     }
 
-    public function testCheckExistenceOfNestedItems()
+    public function test_check_existence_of_nested_items()
     {
         $this->manager->add('one.two.three', 'three-value');
 
@@ -290,7 +290,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->exists('one.two.no'), 'failed to deny existence of a nested item');
     }
 
-    public function testGetNestedItems()
+    public function test_get_nested_items()
     {
         $this->manager->add('one.two.three', 'three-value');
 
@@ -298,7 +298,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('three-value', $this->manager->get('one.two.three'), 'failed to get a single item');
     }
 
-    public function testRemoveNestedItems()
+    public function test_remove_nested_items()
     {
         $this->manager->add('one.two.three', 'three-value');
         $this->manager->add('one.two.four', 'four-value');
@@ -311,7 +311,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->exists('one.two.three'), 'failed to remove nested item');
     }
 
-    public function testResetItems()
+    public function test_reset_items()
     {
         $this->manager->add($this->testData);
 
@@ -322,7 +322,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->manager->getAll(), "failed to reset manager");
     }
 
-    public function testToJson()
+    public function test_to_json()
     {
         $this->manager->add($this->testData);
 
@@ -331,7 +331,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->manager->toJson(), "failed to serialize json");
     }
 
-    public function testToString()
+    public function test_to_string()
     {
         $this->manager->add($this->testData);
 
@@ -340,7 +340,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, "$this->manager", "failed to return json when called as a string");
     }
 
-    public function testIsEmpty()
+    public function test_is_empty()
     {
         $this->assertTrue($this->manager->isEmpty(), "failed to confirm an empty manager");
 
@@ -351,7 +351,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
      */
-    public function testThrowExceptionIfTryingToNestUnderANonArray()
+    public function test_throw_exception_if_trying_to_nest_under_anon_array()
     {
         $manager = new Manager();
         $manager->initManager(['one' => 1, 'two' => 2]);
@@ -359,7 +359,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->add("one.two.three", "three-value");
     }
 
-    public function testCustomizeItemsRepoName()
+    public function test_customize_items_repo_name()
     {
         $manager = new Manager();
         $manager->setItemsName('thisIsJustATest');
@@ -378,7 +378,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
     }
 
-    public function testCustomizeItemsRepoNameInClass()
+    public function test_customize_items_repo_nameInClass()
     {
         $manager = new CustomizedItemsNameStub();
         $manager->add('one.two.three', 'three-value');
@@ -401,7 +401,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
      */
-    public function testProtectSingleItem()
+    public function test_protect_single_item()
     {
         $manager = new Manager([
             'some' => [
@@ -418,7 +418,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
      */
-    public function testProtectItemsUnderANest()
+    public function test_protect_items_under_anest()
     {
         $manager = new Manager([
             'some' => [
@@ -432,7 +432,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->set('some.data.here', 'new-value');
     }
 
-    public function testLoadDefaultsIntoEmptyManager()
+    public function test_load_defaults_into_empty_manager()
     {
         $manager = new Manager();
 
@@ -452,7 +452,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($defaults, $manager->getAll(), "failed to load defaults");
     }
 
-    public function testLoadDefaultsIntoNonEmptyManager()
+    public function test_load_defaults_into_non_empty_manager()
     {
         $defaults = [
             'one' => [
@@ -508,7 +508,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $manager->getAll(), "failed to load defaults");
     }
 
-    public function testPushSingleValueOntoIndexArray()
+    public function test_push_single_value_onto_index_array()
     {
         $manager = new Manager(['one' => ['two' => []]]);
         $manager->push('one.two', 'three');
@@ -516,7 +516,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
     }
 
-    public function testPushMultipleValuesOntoIndexArray()
+    public function test_push_multiple_values_onto_index_array()
     {
         $manager = new Manager(['one' => ['two' => []]]);
         $manager->push('one.two', 'three', 'four', 'five');
@@ -524,7 +524,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['three', 'four', 'five'], $manager->get('one.two'), "failed to push value onto array");
     }
 
-    public function testPushSingleValueOntoAssocArray()
+    public function test_push_single_value_onto_assoc_array()
     {
         $manager = new Manager(['one' => ['two' => ['three' => 'four']]]);
         $manager->push('one.two', 'five');
@@ -535,7 +535,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
      */
-    public function testPushSingleValueOntoString()
+    public function test_push_single_value_onto_string()
     {
         $manager = new Manager(['one' => ['two' => 'string']]);
         $manager->push('one.two', 'three');
@@ -546,7 +546,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
      */
-    public function testPushSingleValueOntoNothing()
+    public function test_push_single_value_onto_nothing()
     {
         $manager = new Manager(['one' => ['two']]);
         $manager->push('one.two', 'three');

@@ -38,14 +38,14 @@ class YamlDecoderTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testGettingMimeType()
+    public function test_getting_mime_type()
     {
         $expected = ['yaml','yml'];
         $this->assertEquals($expected, $this->yamlDecoder->getMimeType());
 
     }
 
-    public function testYamlDecoding()
+    public function test_yaml_decoding()
     {
         $this->assertEquals($this->testArrayData, $this->yamlDecoder->decode($this->yamlData));
     }
