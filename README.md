@@ -225,17 +225,30 @@ In this case, `walk()` is part of the collection and will apply the callback to 
 You may also disable this by `$manager->useCollections = false`
 
 ### Loading Files
-Manager also gives you the ability to load file data into the Manager. A good use case for this is loading configuration data out of different configuration files.
+Manager also gives you the ability to load file data into the Manager. 
+A good use case for this is loading configuration data out of different configuration files.
 
   1. `use LoadsFilesTrait`
-  2. Use `$manager->loadFiles($files)` to load a group of files. The `$files` argument can be either a `FileBag` object or an array of `\SplFileInfo` objects. Most likely you would use an array, like the return result of [Symfony's Finder Component](https://github.com/symfony/Finder), which can locate files in a directory tree and return them as `\SplFileInfo` objects.
+  2. Use `$manager->loadFiles($files)` to load a group of files. 
+  
+The `$files` argument can be a `FileBag` object or an array of:
+  1. `\SplFileInfo` objects
+  2. Valid paths (`__DIR__.'/some/path/here.json'`)
+  
+For more powerful uses (like loading entire directories or advanced filesystem searches), you may also us [Symfony's Finder Component](https://github.com/symfony/Finder).
+```php
+$finder = new Finder();
+$finder->files()->in(__DIR__);
+$manager->loadFiles($finder);
+```
 
 The data will be added to manager under the filename. So, if you load `config.json` you could `$manager->get('config.item')`;
 It is possible to set a custom namespace for each file:
 ```php
 $manager->loadFiles([
-  new \SplFileInfo('path/to/file'), // auto namespaces under filename
-  [new \SplFileInfo('path/to/file'), 'namespace'] // will namespace like ->get('namespace.item')
+  __DIR__.'/path/to/filename.json', // auto namespaces under filename
+  [new \SplFileInfo('path/to/file.yaml'), 'namespace'], // will namespace like ->get('namespace.item')
+  [__DIR__.'/path/to/another.php, 'another'] // will namespace like ->get('another.item')
 ]);
 ```
 

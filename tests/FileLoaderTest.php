@@ -150,12 +150,30 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $fileLoader = new FileLoader();
         $fileLoader->addFiles([
-            new \SplFileInfo(__DIR__.'./Fixtures/FilesWithGoodData/jsonConfig.json'),
-            [new \SplFileInfo(__DIR__.'./Fixtures/FilesWithGoodData/phpConfig.php'), 'customNs']
+            new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/jsonConfig.json'),
+            [new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/phpConfig.php'), 'customNs']
         ]);
 
         $expected['jsonConfig'] = $this->testData;
         $expected['customNs'] = $this->testData;
+
+        $actual = $fileLoader->process();
+
+        $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
+    }
+
+    public function test_loading_files_as_a_path()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->addFiles([
+            __DIR__.'/Fixtures/FilesWithGoodData/yamlConfig.yaml',
+            [__DIR__.'/Fixtures/FilesWithGoodData/phpConfig.php', 'customNs'],
+            new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/jsonConfig.json'),
+        ]);
+
+        $expected['yamlConfig'] = $this->testData;
+        $expected['customNs'] = $this->testData;
+        $expected['jsonConfig'] = $this->testData;
 
         $actual = $fileLoader->process();
 

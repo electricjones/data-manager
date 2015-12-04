@@ -1,9 +1,10 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# v0.8.7 - NEXT
+# v0.8.8 - NEXT
  - Auto namespaces FileLoader data under the file's name
  - Allows for custom namespacing as [fileObject, 'namespace']
+ - Allows for loading files using just a valid path
 
 # v0.8.7 - 12-2-2015
  - Moves helper methods to a static `Helpers` class

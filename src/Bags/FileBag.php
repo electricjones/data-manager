@@ -53,26 +53,40 @@ class FileBag
     {
         if (!empty($splFileInfoObjects)) {
             foreach ($splFileInfoObjects as $object) {
-                if ($this->isSplFileInfoObject($object)) {
-                    array_push($this->fileObjects, $object);
-                } else {
-                    throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
-                }
+                array_push($this->fileObjects, $this->createSplFileInfoObject($object));
             }
         }
     }
 
     /**
      * Check for an \SplFileInfo object or a custom namespaces object
-     * @param $object
+     * @param $entity
      * @return bool
      */
-    protected function isSplFileInfoObject($object)
+    protected function createSplFileInfoObject($entity)
     {
-        if (is_array($object)) {
-            return ($object[0] instanceof \SplFileInfo);
+        // This is already a valid object
+        if ($entity instanceof \SplFileInfo) {
+            return $entity;
         }
 
-        return ($object instanceof \SplFileInfo);
+        // This is a valid path
+        if (is_string($entity) && file_exists($entity)) {
+            return new \SplFileInfo($entity);
+        }
+
+        // This is an array with a valid object
+        $isArray = is_array($entity);
+        if ($isArray && $entity[0] instanceof \SplFileInfo) {
+            return $entity;
+        }
+
+        // This is an array with a valid path
+        if ($isArray && is_string($entity[0]) && file_exists($entity[0])) {
+            return [new \SplFileInfo($entity[0]), $entity[1]];
+        }
+
+        // We've run out of options
+        throw new BadFileInfoObjectException('The input array does not hold proper SplFileInfo objects.');
     }
 }
