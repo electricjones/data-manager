@@ -2,6 +2,10 @@
 All Notable changes to `Manager` will be documented in this file
 
 # v0.8.7 - NEXT
+ - Auto namespaces FileLoader data under the file's name
+ - Allows for custom namespacing as [fileObject, 'namespace']
+
+# v0.8.7 - 12-2-2015
  - Moves helper methods to a static `Helpers` class
  - Converts all test methods to `snake_case` not `camelCase`
 

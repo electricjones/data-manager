@@ -227,13 +227,26 @@ You may also disable this by `$manager->useCollections = false`
 ### Loading Files
 Manager also gives you the ability to load file data into the Manager. A good use case for this is loading configuration data out of different configuration files.
 
-  1. Use `$manager->loadFiles($files)` to load a group of files. The `$files` argument can be either a `\FileBag` object or an array of `\SplFileInfo` objects. Most likely you would use an array, like the return result of [Symfony's Finder Component](https://github.com/symfony/Finder), which can locate files in a directory tree and return them as `\SplFileInfo` objects.
-  2. If you have created your own type of config file, you can also create a decoder for those types of files. All you need to do is follow the `\DecoderInterface` interface and return a php array of data through the `decode()` method. Then, once you have a decoder, you can add the decoder to the file loader with `$manager->addDecoder($decoder);` Once the decoder is added, you can then load your custom config files to the Manager, as in the previous step. 
+  1. `use LoadsFilesTrait`
+  2. Use `$manager->loadFiles($files)` to load a group of files. The `$files` argument can be either a `FileBag` object or an array of `\SplFileInfo` objects. Most likely you would use an array, like the return result of [Symfony's Finder Component](https://github.com/symfony/Finder), which can locate files in a directory tree and return them as `\SplFileInfo` objects.
 
-NOTE: Currently Manager supports Yaml, Json and PHP file formats out of the box. To use the Yaml decoder, you must require the Symfony Yaml Component in your composer.json file.
+The data will be added to manager under the filename. So, if you load `config.json` you could `$manager->get('config.item')`;
+It is possible to set a custom namespace for each file:
+```php
+$manager->loadFiles([
+  new \SplFileInfo('path/to/file'), // auto namespaces under filename
+  [new \SplFileInfo('path/to/file'), 'namespace'] // will namespace like ->get('namespace.item')
+]);
+```
 
 #### Adding a Decoder
-If you have special files not covered by the default decoders available in Manager, you can also create your own and add it to the Manager prior to decoding the files with the `$manager->loadFiles()` method. For an example custom decoder, have a look at the `\CustomXmlDecoder` class in the `/Decoders` directory. Once you've created your custom decoder, you can add it with the `$manager->addDecoder()` method. Again, you must add the decoder prior to loading any file data. 
+Manager supports Yaml, Json and PHP file formats out of the box. To use the Yaml decoder, you must require the Symfony Yaml Component in your composer.json file.
+
+If you have special files not covered by the decoders available in Manager, you can also create your own and add it to the Manager prior to decoding the files.
+Simply implement the `Contracts\DecoderInterface` and return an array of data (not namespaced).
+For an example custom decoder, have a look at the `\CustomXmlDecoder` class in the `/Decoders` directory. 
+
+Once you've created your custom decoder, you can add it with the `$manager->addDecoder()` method *before* loading any file data. 
 
 ### Managing Dependencies
 Please see [ioc.md](ioc.md) for details.

@@ -114,10 +114,11 @@ class FileLoader
         }
 
         foreach ($files as $file) {
+            list($namespace, $file) = $this->getFilesNamespace($file);
+
+            // Decode the actual file and save data
             $fileData = $this->decodeFile($file);
             if ($fileData) {
-                $filename = rtrim($file->getBasename(), '.'.$file->getExtension());
-                $namespace = $this->sanitizeNamespace($filename);
                 foreach ($fileData as $k => $v) {
                     $decodedData[$namespace][$k] = $v;
                 }
@@ -223,6 +224,11 @@ class FileLoader
         return $this->supportedMimeTypes;
     }
 
+    /**
+     * Cleans up a file name for use as a namespace
+     * @param $ns
+     * @return mixed
+     */
     public function sanitizeNamespace($ns)
     {
         // dots to underscores
@@ -238,5 +244,28 @@ class FileLoader
         $ns = preg_replace("/[^A-Za-z0-9\.\_\- ]/", '', $ns);
 
         return $ns;
+    }
+
+    /**
+     * Gets or creates the file's namespace
+     * @param $file
+     * @return array with the namespace and fileobject
+     */
+    protected function getFilesNamespace($file)
+    {
+        $namespace = null;
+
+        if (is_array($file)) {
+            // We are using a custom namespace
+            $namespace = $this->sanitizeNamespace($file[1]);
+            $file = $file[0];
+            return [$namespace, $file];
+
+        } else {
+            // We are namespacing using the file's name
+            $filename = rtrim($file->getBasename(), '.' . $file->getExtension());
+            $namespace = $this->sanitizeNamespace($filename);
+            return [$namespace, $file];
+        }
     }
 }

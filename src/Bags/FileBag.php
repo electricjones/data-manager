@@ -63,12 +63,16 @@ class FileBag
     }
 
     /**
-     * Check for an \SplFileInfo object
+     * Check for an \SplFileInfo object or a custom namespaces object
      * @param $object
      * @return bool
      */
     protected function isSplFileInfoObject($object)
     {
+        if (is_array($object)) {
+            return ($object[0] instanceof \SplFileInfo);
+        }
+
         return ($object instanceof \SplFileInfo);
     }
 }

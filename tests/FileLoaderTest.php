@@ -91,7 +91,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $actual, "failed to add a single mime type");
     }
 
-    public function test_add_decoderTwice()
+    public function test_add_decoder_twice()
     {
         $customDecoder = new CustomXmlDecoder();
         $this->fileLoader->addDecoder($customDecoder);
@@ -144,5 +144,21 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $fileLoader = new FileLoader();
 
         $this->assertEquals($correctedName, $fileLoader->sanitizeNamespace($badName), "failed to sanitize name");
+    }
+
+    public function test_using_explicit_namespaces()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->addFiles([
+            new \SplFileInfo(__DIR__.'./Fixtures/FilesWithGoodData/jsonConfig.json'),
+            [new \SplFileInfo(__DIR__.'./Fixtures/FilesWithGoodData/phpConfig.php'), 'customNs']
+        ]);
+
+        $expected['jsonConfig'] = $this->testData;
+        $expected['customNs'] = $this->testData;
+
+        $actual = $fileLoader->process();
+
+        $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
     }
 }
