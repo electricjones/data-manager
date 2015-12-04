@@ -116,8 +116,10 @@ class FileLoader
         foreach ($files as $file) {
             $fileData = $this->decodeFile($file);
             if ($fileData) {
+                $filename = rtrim($file->getBasename(), '.'.$file->getExtension());
+                $namespace = $this->sanitizeNamespace($filename);
                 foreach ($fileData as $k => $v) {
-                    $decodedData[$k] = $v;
+                    $decodedData[$namespace][$k] = $v;
                 }
             }
         }
@@ -219,5 +221,22 @@ class FileLoader
     public function getMimeTypes()
     {
         return $this->supportedMimeTypes;
+    }
+
+    public function sanitizeNamespace($ns)
+    {
+        // dots to underscores
+        $ns = str_replace(".", "_", $ns);
+
+        // spaces to underscores
+        $ns = str_replace(" ", "_", $ns);
+
+        // dashes to underscores
+        $ns = str_replace("-", "_", $ns);
+
+        // Alpha numeric
+        $ns = preg_replace("/[^A-Za-z0-9\.\_\- ]/", '', $ns);
+
+        return $ns;
     }
 }
