@@ -33,7 +33,7 @@ They are not documented here, but see other readmes for:
     * Fallbacks, preparing objects, and more.
   * Use Manager as a configuration bank, complete with defaults.
   * Load configuration files (php, yaml, json, xml, and custom)
-  * Collections for extra array-helper methods (based on [Arrayzy](https://github.com/bocharsky-bw/Arrayzy))
+  * [Collections](collections.md) for extra array-helper methods (based on [Arrayzy](https://github.com/bocharsky-bw/Arrayzy))
     
 ## Install
 Via Composer
