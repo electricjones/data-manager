@@ -10,6 +10,7 @@ There should be little or no difference in the behavior.
 
 ## Setup and Usage
 Simply include the `Michaels\Manager\Collections` in your class.
+
 **NOTE THAT** `ManagesIocTrait` depends on ManagesItemsTrait. 
 If you to use `ManagesIocTrait` without `ManagesItemsTrait`, you will get all sorts of errors.
 
