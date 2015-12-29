@@ -69,44 +69,24 @@ trait CollectionTrait
         if (in_array($method, $this->collectionApi)) {
             /* Setup the arguments */
             $subject = array_shift($arguments);
-            $collection = $this->toCollection($this->get($subject));
+            $collectionInstance = $this->toCollection($this->get($subject));
 
-            /* Perform the action and return the value */
-            switch (end($arguments)) {
-                case (static::$RETURN_COLLECTION):
-                    return $this->callArrayzy(
-                        $method,
-                        $this->removeReturnFlag($arguments),
-                        $collection
-                    );
+            // Is the last argument one of our flags?
+            if (in_array(end($arguments), [
+                static::$RETURN_ARRAY,
+                static::$RETURN_COLLECTION,
+                static::$MODIFY_MANIFEST,
+            ])) {
+                // Yes, pop it off and set it
+                $flag = array_pop($arguments);
 
-                case (static::$MODIFY_MANIFEST):
-                    $value = $this->callArrayzy(
-                        $method,
-                        $this->removeReturnFlag($arguments),
-                        $collection
-                    );
-                    $this->set($subject, $value->toArray());
-                    return $this;
-
-                case (static::$RETURN_ARRAY):
-                    return $this
-                        ->callArrayzy(
-                            $method,
-                            $this->removeReturnFlag($arguments),
-                            $collection
-                        )
-                        ->toArray();
-
-                default: // No flag was given
-                    return $this
-                        ->callArrayzy(
-                            $method,
-                            $arguments,
-                            $collection
-                        )
-                        ->toArray();
+            } else {
+                // No, leave the arguments alone and flag as an ARRAY by default
+                $flag = static::$RETURN_ARRAY;
             }
+
+            /* Perform the Action */
+            return $this->callArrayzy($method, $arguments, $collectionInstance, $flag, $subject);
         }
 
         /* ToDo: A better exception */
@@ -119,20 +99,25 @@ trait CollectionTrait
      * @param $method
      * @param $arguments
      * @param $instance
+     * @param $flag
+     * @param $subject
      * @return mixed
      */
-    protected function callArrayzy($method, $arguments, $instance)
+    protected function callArrayzy($method, $arguments, $instance, $flag, $subject)
     {
-        return call_user_func_array([$instance, $method], $arguments);
-    }
+        $value = call_user_func_array([$instance, $method], $arguments);
 
-    /**
-     * Removes the user-supplied return value flag
-     * @param $arguments
-     * @return array
-     */
-    protected function removeReturnFlag($arguments)
-    {
-        return array_slice($arguments, 0, -1);
+        switch ($flag) {
+            case (static::$RETURN_COLLECTION):
+                return $value;
+
+            case (static::$MODIFY_MANIFEST):
+                $this->set($subject, $value->toArray());
+                return $this;
+
+            default:
+            case (static::$RETURN_ARRAY):
+                return $value->toArray();
+        }
     }
 }
