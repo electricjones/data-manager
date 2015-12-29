@@ -3,7 +3,7 @@ namespace Michaels\Manager\Test\Traits;
 
 use Arrayzy\ArrayImitator;
 use Michaels\Manager\Test\Stubs\CollectionStub;
-use Michaels\Manager\Test\Stubs\NestedCollectionsStub;
+use Michaels\Manager\Test\Stubs\NestedAndCollectionsStub;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -159,7 +159,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /* Test Using Both Collections and ChainsNestedItems */
     public function test_chains_and_collections_standard()
     {
-        $stub = new NestedCollectionsStub();
+        $stub = new NestedAndCollectionsStub();
         $stub->set('a', 'b');
 
         $this->assertEquals('b', $stub->get('a'), "failed");
@@ -167,7 +167,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_chains_nested_items_by_itself()
     {
-        $stub = new NestedCollectionsStub();
+        $stub = new NestedAndCollectionsStub();
         $stub->initManager($this->testData);
 
         $expectedA = $this->testData['one']['two']['three'];
@@ -186,7 +186,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_chains_and_collections_get_returns_collection()
     {
-        $manager = new NestedCollectionsStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = new NestedAndCollectionsStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->get('one.two');
 
         $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
@@ -195,7 +195,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function test_chains_and_collections_with_fluent_methods()
     {
-        $manager = new NestedCollectionsStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = new NestedAndCollectionsStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->get('one.two')->push('d', 'e');
 
         $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
