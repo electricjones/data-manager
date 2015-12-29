@@ -3,30 +3,19 @@ namespace Michaels\Manager\Test\Traits;
 
 use Arrayzy\ArrayImitator;
 use Michaels\Manager\Test\Stubs\CollectionStub;
-use StdClass;
+use Michaels\Manager\Test\Stubs\NestedCollectionsStub;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
-    public $manager;
-    public $testData;
+    protected $testData = [
+        'one' => [
+            'two' => [
+                'three' => 'three-value'
+            ],
+            'two_b' => 'two_b-value'
+        ]
+    ];
 
-    public function setUp()
-    {
-        $object = new stdClass();
-        $object->type = 'object';
-
-        $this->testData = [
-            'string' => '\SplObjectStorage', // Used here for overhead
-            'callable' => function () {
-                $return = new stdClass();
-                $return->type = 'callable';
-                return $return;
-            },
-            'object' => $object
-        ];
-    }
-
-    /** Begin Tests **/
     public function test_to_collection_returns_mutable_array()
     {
         $manager = new CollectionStub(['a', 'b', 'c']);
@@ -87,8 +76,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('two-value', $actual, "failed to return raw value");
     }
 
-    /* Test using Arrayzy API directly */
-    public function test_arrayzy_walk_return_array_by_default()
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function test_throws_exception_for_undefined_collection_method()
+    {
+        $manager = new CollectionStub();
+        $manager->doesNotExist();
+    }
+
+    /* Integration Test using Arrayzy API directly */
+    /* ToDo: decouple these methods from the Collection object */
+    public function test_return_array_by_default()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
 
@@ -100,7 +99,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a-new', 'b-new', 'c-new'], $actual, "failed to walk array");
     }
 
-    public function test_arrayzy_walk_return_array_explicitly()
+    public function test_return_array_explicitly()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
 
@@ -112,7 +111,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a-new', 'b-new', 'c-new'], $actual, "failed to walk array");
     }
 
-    public function test_arrayzy_walk_modify_manifest()
+    public function test_modify_manifest()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
         $manager->add('b', 'c');
@@ -126,7 +125,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a-new', 'b-new', 'c-new'], $actual->get('one.two')->toArray(), "failed to walk array");
     }
 
-    public function test_arrayzy_walk_modify_return_collection()
+    public function test_return_collection()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
 
@@ -138,7 +137,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['a-new', 'b-new', 'c-new'], $actual->toArray(), "failed to walk array");
     }
 
-    /* The rest of the Arrayzy tests return defaults */
+    /* Integration tests for a couple Arrayzy methods, just for completeness */
     public function test_arrayzy_unique()
     {
         $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'b', 'c']]]);
@@ -155,5 +154,52 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $actual = $manager->unshift('one.two', 'y', 'z');
 
         $this->assertEquals(['y', 'z', 'a', 'b', 'c'], $actual, "failed to unshift array");
+    }
+
+    /* Test Using Both Collections and ChainsNestedItems */
+    public function test_chains_and_collections_standard()
+    {
+        $stub = new NestedCollectionsStub();
+        $stub->set('a', 'b');
+
+        $this->assertEquals('b', $stub->get('a'), "failed");
+    }
+
+    public function test_chains_nested_items_by_itself()
+    {
+        $stub = new NestedCollectionsStub();
+        $stub->initManager($this->testData);
+
+        $expectedA = $this->testData['one']['two']['three'];
+        $actualA = $stub->one()->two()->three;
+
+        $expectedB = $this->testData['one']['two_b'];
+        $actualB = $stub->one()->two_b;
+
+        $expectedC = $this->testData['one'];
+        $actualC = $stub->one;
+
+        $this->assertEquals($expectedA, $actualA, 'failed to retrieve first nested value');
+        $this->assertEquals($expectedB, $actualB, 'failed to retrieve second nested value');
+        $this->assertEquals($expectedC, $actualC->toArray(), 'failed to retrieve third nested value');
+    }
+
+    public function test_chains_and_collections_get_returns_collection()
+    {
+        $manager = new NestedCollectionsStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $actual = $manager->get('one.two');
+
+        $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
+        $this->assertEquals(3, $actual->count(), "failed to return a working copy of `ArrayImitator`");
+    }
+
+    public function test_chains_and_collections_with_fluent_methods()
+    {
+        $manager = new NestedCollectionsStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $actual = $manager->get('one.two')->push('d', 'e');
+
+        $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
+        $this->assertEquals(5, $actual->count(), "failed to return a working copy of `ArrayImitator`");
+        $this->assertEquals(['a', 'b', 'c', 'd', 'e'], $actual->toArray(), "failed to push items onto an array");
     }
 }

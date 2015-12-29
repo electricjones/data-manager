@@ -27,13 +27,6 @@ trait CollectionTrait
      */
     public $useCollections = true;
 
-    protected $collectionApi = [
-        'walk',
-        'unique',
-        'unshift'
-        // ToDo: Add more, all of them should work (where there isn't a conflict)
-    ];
-
     /**
      * Converts an array to a collection if value is arrayable and config is set
      * @param $value
@@ -58,64 +51,103 @@ trait CollectionTrait
     }
 
     /**
-     * Pass along Arrayzy API to Arrayzy ArrayImitator Class
-     * @param $method
-     * @param $arguments
+     * Invokes when calling a method on the Collection API
+     *
+     * This method simply decides how to handle the method call.
+     *   1. The class is using the ChainsNestedItemsTrait and Collection API does NOT contain the method
+     *      Let `ChainsNestedItemsTrait` do its thing
+     *   2. The Collection API DOES contain the method
+     *      Pass the method call along to the third party Collection API
+     *   3. The method does not exist on the class or in the Collection API
+     *      Throw an Exception
+     * @param string $method Name of the method
+     * @param array $arguments Arguments passed along
      * @return mixed
-     * @throws \Exception
+     * @throws \BadMethodCallException
      */
     public function __call($method, $arguments)
     {
-        // Are we using this with ChainsNestedItems?
-        if (in_array('Michaels\Manager\Traits\ChainsNestedItemsTrait', class_uses($this))) {
-            // Yes, is this a Collection method or another link in the chain?
-            if (!in_array($method, $this->collectionApi)) {
-                // Another link in the chain. That's all we need to do.
-                return $this->addToChain($method);
-            }
-        }
-
-        // We are not using the ChainsNestedItemsTrait
-        // Is this a Collection API method?
-        if (in_array($method, $this->collectionApi)) {
-            /* Setup the arguments */
-            $subject = array_shift($arguments);
-            $collectionInstance = $this->toCollection($this->get($subject));
-
-            // Is the last argument one of our flags?
-            if (in_array(end($arguments), [
-                static::$RETURN_ARRAY,
-                static::$RETURN_COLLECTION,
-                static::$MODIFY_MANIFEST,
-            ])) {
-                // Yes, pop it off and set it
-                $flag = array_pop($arguments);
-
+        /* Decide how to handle this method call */
+        if (!$this->collectionApiHasMethod($method)) {
+            // Are we using the Nested Items trait?
+            if ($this->usingNestedItemsTrait()) {
+                // Yes, so we simply add it to the chain
+                return $this->addToChain($method); // in ChainsNestedItemsTrait
+                // No, so we are calling a method that simply does not exist
             } else {
-                // No, leave the arguments alone and flag as an ARRAY by default
-                $flag = static::$RETURN_ARRAY;
+                throw new \BadMethodCallException(
+                    "Call to undefined method. `$method` does not exist in "
+                    . get_called_class() . " and it is not part of the Collection API"
+                );
             }
-
-            /* Perform the Action */
-            return $this->callArrayzy($method, $arguments, $collectionInstance, $flag, $subject);
         }
 
-        throw new \BadMethodCallException(
-            "Call to undefined method. `$method` does not exist in "
-            . get_called_class() . " and it is not part of the Collection API"
-        );
+        /* Since we are calling a Collection API method, pass it along */
+        return $this->passToCollectionApi($method, $arguments);
     }
 
     /**
-     * Calls the actual method on the Arrayzy Instance
-     * @param $method
-     * @param $arguments
-     * @param $instance
-     * @param $flag
-     * @param $subject
+     * Checks to see if the Collection API contains a specific method
+     * @param string $method name
+     * @return bool
+     */
+    protected function collectionApiHasMethod($method)
+    {
+        return method_exists(new ArrayImitator(), $method);
+    }
+
+    /**
+     * Checks to see if the current Manager class is using `ChainsNestedItemsTrait`
+     * @return bool
+     */
+    protected function usingNestedItemsTrait()
+    {
+        return in_array('Michaels\Manager\Traits\ChainsNestedItemsTrait', class_uses($this));
+    }
+
+    /**
+     * Passes the method call along to the Collection API (currently Arrayzy)
+     * Also checks for any flags that determine how return data should be formatted
+     *
+     * @param string $method name
+     * @param array $arguments to be passed along (including return type flags if exists)
      * @return mixed
      */
-    protected function callArrayzy($method, $arguments, $instance, $flag, $subject)
+    protected function passToCollectionApi($method, $arguments)
+    {
+        /* Setup the arguments */
+        $subject = array_shift($arguments);
+        $collectionInstance = $this->toCollection($this->get($subject));
+
+        // Is the last argument one of our flags?
+        if (in_array(end($arguments), [
+            static::$RETURN_ARRAY,
+            static::$RETURN_COLLECTION,
+            static::$MODIFY_MANIFEST,
+        ])) {
+            // Yes, pop it off and set it
+            $flag = array_pop($arguments);
+
+        } else {
+            // No, leave the arguments alone and flag as an ARRAY by default
+            $flag = static::$RETURN_ARRAY;
+        }
+
+        /* Perform the Action */
+        return $this->callCollectionMethod($method, $arguments, $collectionInstance, $flag, $subject);
+    }
+
+    /**
+     * Calls the actual method on the Collection Instance (currently Arrayzy)
+     *
+     * @param string $method name
+     * @param array $arguments to be passed along
+     * @param object $instance of the Collection
+     * @param string $flag corresponding to the properties above
+     * @param string $subject Alias of data in Manager
+     * @return mixed
+     */
+    protected function callCollectionMethod($method, $arguments, $instance, $flag, $subject)
     {
         $value = call_user_func_array([$instance, $method], $arguments);
 

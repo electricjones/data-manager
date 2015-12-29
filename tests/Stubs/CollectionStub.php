@@ -12,7 +12,7 @@ class CollectionStub
 {
     use ManagesItemsTrait, CollectionTrait;
 
-    public function __construct($items)
+    public function __construct($items = null)
     {
         $this->initManager($items);
     }
