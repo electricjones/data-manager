@@ -66,6 +66,17 @@ trait CollectionTrait
      */
     public function __call($method, $arguments)
     {
+        // Are we using this with ChainsNestedItems?
+        if (in_array('Michaels\Manager\Traits\ChainsNestedItemsTrait', class_uses($this))) {
+            // Yes, is this a Collection method or another link in the chain?
+            if (!in_array($method, $this->collectionApi)) {
+                // Another link in the chain. That's all we need to do.
+                return $this->addToChain($method);
+            }
+        }
+
+        // We are not using the ChainsNestedItemsTrait
+        // Is this a Collection API method?
         if (in_array($method, $this->collectionApi)) {
             /* Setup the arguments */
             $subject = array_shift($arguments);
@@ -89,9 +100,10 @@ trait CollectionTrait
             return $this->callArrayzy($method, $arguments, $collectionInstance, $flag, $subject);
         }
 
-        /* ToDo: A better exception */
-        /* ToDo: How to handle conflict with ChainsNestedItems */
-        throw new \Exception("No method found");
+        throw new \BadMethodCallException(
+            "Call to undefined method. `$method` does not exist in "
+            . get_called_class() . " and it is not part of the Collection API"
+        );
     }
 
     /**

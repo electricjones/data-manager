@@ -54,10 +54,7 @@ trait ChainsNestedItemsTrait
      */
     public function __call($name, $arguments)
     {
-        $dot = ($this->currentLevel === false) ? '' : '.';
-        $this->currentLevel .= $dot . $name;
-
-        return $this;
+        return $this->addToChain($name);
     }
 
     /**
@@ -90,5 +87,18 @@ trait ChainsNestedItemsTrait
 
             return $prefix . ".";
         }
+    }
+
+    /**
+     * Adds to the chain
+     * @param $name
+     * @return $this
+     */
+    protected function addToChain($name)
+    {
+        $dot = ($this->currentLevel === false) ? '' : '.';
+        $this->currentLevel .= $dot . $name;
+
+        return $this;
     }
 }
