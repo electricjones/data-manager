@@ -18,10 +18,16 @@ use Traversable;
 trait ManagesItemsTrait
 {
     /**
+     * The items stored in the manager
+     * @var array $items Items governed by manager
+     */
+    protected $_items;
+
+    /**
      * Name of the property to hold the data items. Internal use only
      * @var string
      */
-    protected $nameOfItemsRepository = 'items';
+    protected $nameOfItemsRepository = '_items';
 
     /** @var array Array of protected aliases */
     protected $protectedItems = [];
