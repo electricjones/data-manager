@@ -1,7 +1,17 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# v0.8.7 - NEXT
+# v0.8.9 - NEXT
+
+# v0.8.8 - 12-29-2015
+ - Auto namespaces FileLoader data under the file's name
+ - Allows for custom namespacing as [fileObject, 'namespace']
+ - Allows for loading files using just a valid path
+ - Reproduces Arrayzy API inside CollectionsTrait
+ - Deals with collisions between ChainsNestedItemsTrait and CollectionsTrait
+ - Moves and rename $_items into ManagesItemsTrait
+
+# v0.8.7 - 12-2-2015
  - Moves helper methods to a static `Helpers` class
  - Converts all test methods to `snake_case` not `camelCase`
 

@@ -36,9 +36,9 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->defaultArray = [];
-        $this->defaultArray['json'] = $this->testData;
-        $this->defaultArray['php'] = $this->testData;
-        $this->defaultArray['yaml'] = $this->testData;
+        $this->defaultArray['jsonConfig'] = $this->testData;
+        $this->defaultArray['phpConfig'] = $this->testData;
+        $this->defaultArray['yamlConfig'] = $this->testData;
     }
 
     public function test_adding_files_as_array()
@@ -59,7 +59,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->defaultArray, $this->fileLoader->process());
     }
 
-    public function test_adding_adecoder()
+    public function test_adding_a_custom_decoder_and_processing()
     {
         $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
         $goodCustomFileDirectory = realpath(__DIR__ . '/Fixtures/CustomFileWithGoodData');
@@ -67,12 +67,13 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $goodCustomFile = $this->setFilesToSplInfoObjects($goodCustomFileDirectory);
         $goodFiles = array_merge($goodFiles, $goodCustomFile);
         $customDecoder = new CustomXmlDecoder();
+
         $fileBag = new FileBag($goodFiles);
         $this->fileLoader->addDecoder($customDecoder);
         $this->fileLoader->addFiles($fileBag);
 
         $expected = $this->defaultArray;
-        $expected['xml'] = $this->testData;
+        $expected['xmlConfig'] = $this->testData;
 
         $this->assertEquals($expected, $this->fileLoader->process());
     }
@@ -90,7 +91,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $actual, "failed to add a single mime type");
     }
 
-    public function test_add_decoderTwice()
+    public function test_add_decoder_twice()
     {
         $customDecoder = new CustomXmlDecoder();
         $this->fileLoader->addDecoder($customDecoder);
@@ -133,5 +134,49 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $fileLoader = new FileLoader();
         $fileLoader->addFiles('string');
+    }
+
+    public function test_sanitizing_filename_for_namespacing()
+    {
+        $badName = "This.is-a bad name&@$3";
+        $correctedName = "This_is_a_bad_name3";
+
+        $fileLoader = new FileLoader();
+
+        $this->assertEquals($correctedName, $fileLoader->sanitizeNamespace($badName), "failed to sanitize name");
+    }
+
+    public function test_using_explicit_namespaces()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->addFiles([
+            new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/jsonConfig.json'),
+            [new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/phpConfig.php'), 'customNs']
+        ]);
+
+        $expected['jsonConfig'] = $this->testData;
+        $expected['customNs'] = $this->testData;
+
+        $actual = $fileLoader->process();
+
+        $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
+    }
+
+    public function test_loading_files_as_a_path()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->addFiles([
+            __DIR__.'/Fixtures/FilesWithGoodData/yamlConfig.yaml',
+            [__DIR__.'/Fixtures/FilesWithGoodData/phpConfig.php', 'customNs'],
+            new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/jsonConfig.json'),
+        ]);
+
+        $expected['yamlConfig'] = $this->testData;
+        $expected['customNs'] = $this->testData;
+        $expected['jsonConfig'] = $this->testData;
+
+        $actual = $fileLoader->process();
+
+        $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
     }
 }

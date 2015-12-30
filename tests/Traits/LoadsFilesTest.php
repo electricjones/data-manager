@@ -31,9 +31,9 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->defaultArray = [];
-        $this->defaultArray['json'] = $this->testData;
-        $this->defaultArray['php'] = $this->testData;
-        $this->defaultArray['yaml'] = $this->testData;
+        $this->defaultArray['jsonConfig'] = $this->testData;
+        $this->defaultArray['phpConfig'] = $this->testData;
+        $this->defaultArray['yamlConfig'] = $this->testData;
     }
 
     protected function createFileLoaderMock()
@@ -101,7 +101,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $manager->addDecoder($customDecoder);
         $manager->loadFiles($goodFiles);
 
-        $expected['xml'] = $this->testData;
+        $expected['xmlConfig'] = $this->testData;
 
         $this->assertEquals($expected, $manager->all());
     }
