@@ -21,8 +21,7 @@
   ],
   "require": {
     "php" : ">=5.4.0",
-    "container-interop/container-interop": "1.1.0",
-    "bocharsky-bw/arrayzy": "0.5.*"
+    "container-interop/container-interop": "1.1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "4.*",
