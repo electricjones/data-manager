@@ -1,14 +1,13 @@
 <?php
-namespace Michaels\Manager\Test;
-
+namespace Michaels\Manager\Test\Scenarios;
 use Michaels\Manager\Manager;
 
 /**
- * Tests customized implementations of Manager.
+ * Tests Array Access, JSON, and Iterator for Manager.
  * Does NOT test ManagesItemsTrait api.
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase {
-
+trait InitManagerScenario
+{
     public function test_init_manager()
     {
         $expectedItems = ['one' => 1, 'two' => 2];

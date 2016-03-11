@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager\Test\Traits;
+namespace Michaels\Manager\Test\Unit\Traits;
 use Michaels\Manager\Test\Scenarios\ArrayableScenario;
 
 /**
