@@ -2,6 +2,7 @@
 namespace Michaels\Manager\Test\Traits;
 
 use Michaels\Manager\Decoders\CustomXmlDecoder;
+use Michaels\Manager\FileLoader;
 use Michaels\Manager\Test\Stubs\LoadsFilesTraitStub;
 use Michaels\Manager\Test\Utilities\FileBagTestTrait;
 
@@ -104,5 +105,14 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $expected['xmlConfig'] = $this->testData;
 
         $this->assertEquals($expected, $manager->all());
+    }
+
+    public function test_get_fileloader()
+    {
+        $manager = new LoadsFilesTraitStub();
+        $manager->setFileLoader(new FileLoader());
+        $loader = $manager->getFileLoader();
+
+        $this->assertInstanceOf('Michaels\Manager\FileLoader', $loader, "failed to return the file loader");
     }
 }

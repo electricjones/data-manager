@@ -179,4 +179,15 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function test_throws_exception_for_invalid_file_load()
+    {
+        $fileLoader = new FileLoader();
+        $file = new \SplFileInfo('nogo.nope');
+
+        $fileLoader->getFileContents($file);
+    }
 }

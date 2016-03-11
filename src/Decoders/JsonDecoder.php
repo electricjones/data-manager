@@ -25,13 +25,13 @@ class JsonDecoder implements DecoderInterface
     {
         if (is_string($data)) {
             $this->arrayData = json_decode($data, true); // true gives us associative arrays
-
-            if ($this->isValidJson()) {
-                return $this->arrayData;
-            }
         }
 
-        throw new JsonDecodingFailedException('The data provided was not proper JSON');
+        if (!is_string($data) || !$this->isValidJson()) {
+            throw new JsonDecodingFailedException('The data provided was not proper JSON');
+        }
+
+        return $this->arrayData;
     }
 
     /**

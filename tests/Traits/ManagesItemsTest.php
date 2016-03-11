@@ -553,4 +553,18 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
     }
+
+    public function test_hydrate_append()
+    {
+        $manager = new Manager(['one' => ['two']]);
+        $hydrate = ['three' => ['three' => 'four']];
+        $manager->hydrate($hydrate, true);
+
+        $expected = [
+            'one' => ['two'],
+            'three' => ['three' => 'four']
+        ];
+
+        $this->assertEquals($expected, $manager->all(), "failed to append while hydrating");
+    }
 }

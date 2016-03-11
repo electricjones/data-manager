@@ -73,11 +73,12 @@ trait ManagesItemsTrait
      */
     public function hydrate($data, $append = false)
     {
-        if ($append === false) {
-            $this->reset($data);
-        } else {
+        if ($append) {
             $this->add($data);
+        } else {
+            $this->reset($data);
         }
+
         return $this;
     }
 

@@ -148,10 +148,10 @@ class FileLoader
     /**
      * Returns the contents of the file.
      *
+     * @param \SplFileInfo $file
      * @return string the contents of the file
-     * @throws \RuntimeException
      */
-    protected function getFileContents($file)
+    public function getFileContents($file)
     {
         if ($file->getExtension() === 'php') {
             $content = include $file->getPathname();
