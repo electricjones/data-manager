@@ -25,7 +25,7 @@ interface IocManagerInterface extends IocContainerInterface
      *
      * @param string $alias
      * @param callable|string|object $factory
-     * @return object
+     * @return $this
      */
     public function di($alias, $factory);
 
