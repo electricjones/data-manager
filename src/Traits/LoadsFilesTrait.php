@@ -48,6 +48,11 @@ trait LoadsFilesTrait
         $this->hydrate($data, $append);
     }
 
+    public function loadFile($file, $append = false)
+    {
+        return $this->loadFiles([$file], $append);
+    }
+
     /**
      * Allows for the addition of a custom decoder to the manager load files system.
      *
