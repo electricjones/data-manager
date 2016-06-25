@@ -21,7 +21,7 @@ trait ManagesItemsTrait
      * The items stored in the manager
      * @var array $items Items governed by manager
      */
-    protected $_items;
+    protected $_items = [];
 
     /**
      * Name of the property to hold the data items. Internal use only

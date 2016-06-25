@@ -1,9 +1,15 @@
 <?php
 namespace Michaels\Manager\Test\Unit\Traits;
 
-use Michaels\Manager\Test\Scenarios\ManagesIocScenario;
+use Michaels\Manager\Manager;
+use Michaels\Manager\Test\Scenarios\ManagesItemsScenario;
 
 class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 {
-    use ManagesIocScenario;
+    use ManagesItemsScenario;
+
+    public function getManager($items = [])
+    {
+        return new Manager($items);
+    }
 }

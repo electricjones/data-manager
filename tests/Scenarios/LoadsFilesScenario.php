@@ -11,26 +11,24 @@ trait LoadsFilesScenario
     use FileBagTestTrait;
 
     protected $defaultArray = [];
-    protected $testData;
-
-    public function setup()
-    {
-        $this->testData = [
-            'one' => [
-                'two' => [
-                    'three' => 'three-value',
-                    'four' => [
-                        'five' => 'five-value'
-                    ],
+    protected $testData = [
+        'one' => [
+            'two' => [
+                'three' => 'three-value',
+                'four' => [
+                    'five' => 'five-value'
                 ],
-                'six' => [
-                    'seven' => 'seven-value',
-                    'eight' => 'eight-value'
-                ]
             ],
-            'top' => 'top-value',
-        ];
+            'six' => [
+                'seven' => 'seven-value',
+                'eight' => 'eight-value'
+            ]
+        ],
+        'top' => 'top-value',
+    ];
 
+    public function setupDefaultArray()
+    {
         $this->defaultArray = [];
         $this->defaultArray['jsonConfig'] = $this->testData;
         $this->defaultArray['phpConfig'] = $this->testData;
@@ -60,7 +58,7 @@ trait LoadsFilesScenario
         $fileLoader->expects($this->once())
             ->method('process');
 
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->setFileLoader($fileLoader);
 
         $manager->loadFiles($files);
@@ -76,7 +74,7 @@ trait LoadsFilesScenario
             ->method('addDecoder')
             ->with($this->equalTo($decoder));
 
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->setFileLoader($fileLoader);
 
         $manager->addDecoder($decoder);
@@ -85,9 +83,10 @@ trait LoadsFilesScenario
     /* Integration Tests: uses true FileLoader and tests output */
     public function test_loading_files()
     {
+        $this->setupDefaultArray();
         $goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->loadFiles($goodFiles);
 
         $this->assertEquals($this->defaultArray, $manager->all());
@@ -98,7 +97,7 @@ trait LoadsFilesScenario
         $goodCustomTestFileDirectory = realpath(__DIR__ . '/../Fixtures/CustomFileWithGoodData');
         $customDecoder = new CustomXmlDecoder();
         $goodFiles =  $this->setFilesToSplInfoObjects($goodCustomTestFileDirectory);
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->addDecoder($customDecoder);
         $manager->loadFiles($goodFiles);
 
@@ -109,7 +108,7 @@ trait LoadsFilesScenario
 
     public function test_get_fileloader()
     {
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->setFileLoader(new FileLoader());
         $loader = $manager->getFileLoader();
 

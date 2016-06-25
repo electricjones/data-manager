@@ -35,7 +35,7 @@ trait FileBagTestTrait
     public function setFilesToBadObjects()
     {
         $objects = array();
-        $object = new StdClass();
+        $object = new stdClass();
         for($i=0; $i <= 3; $i++) {
             array_push($objects, $object);
         }

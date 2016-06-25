@@ -1,6 +1,9 @@
 <?php
 namespace Michaels\Manager\Test\Managers\Integration;
 
+use Michaels\Manager\Manager;
+use Michaels\Manager\Test\Scenarios\ArrayableScenario;
+use Michaels\Manager\Test\Scenarios\ChainsNestedItemsScenario;
 use Michaels\Manager\Test\Scenarios\InitManagerScenario;
 use Michaels\Manager\Test\Scenarios\ManagesItemsScenario;
 
@@ -10,5 +13,10 @@ use Michaels\Manager\Test\Scenarios\ManagesItemsScenario;
  */
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
-    use ManagesItemsScenario, InitManagerScenario; // Pull in all the tests for ManagesItemsTrait, for integration testing
+    use ManagesItemsScenario, InitManagerScenario, ChainsNestedItemsScenario, ArrayableScenario; // Pull in all the tests for ManagesItemsTrait, for integration testing
+
+    public function getManager($items = [])
+    {
+        return new Manager($items);
+    }
 }

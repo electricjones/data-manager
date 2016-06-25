@@ -18,7 +18,7 @@ trait CollectionScenario
 
     public function test_to_collection_returns_mutable_array()
     {
-        $manager = new CollectionStub(['a', 'b', 'c']);
+        $manager = $this->getManager(['a', 'b', 'c']);
         $actual = $manager->getAll();
 
         $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
@@ -26,7 +26,7 @@ trait CollectionScenario
 
     public function test_using_collection_from_get()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->get('one.two');
 
         $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
@@ -35,7 +35,7 @@ trait CollectionScenario
 
     public function test_using_collection_from_getAll()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->all();
         $actual->push('d', 'e');
 
@@ -46,7 +46,7 @@ trait CollectionScenario
 
     public function test_using_collection_with_chained_methods()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
         $actual = $manager->get('one.two')->push('d', 'e');
 
         $this->assertInstanceOf(get_class(new ArrayImitator()), $actual, "failed to return an instance of `ArrayImitator`");
@@ -56,7 +56,7 @@ trait CollectionScenario
 
     public function test_does_not_want_collections()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
         $manager->useCollections = false;
         $actual = $manager->get('one.two');
 
@@ -67,7 +67,7 @@ trait CollectionScenario
 
     public function test_return_raw_for_not_arrayble_item()
     {
-        $manager = new CollectionStub(['one' => ['two' => 'two-value']]);
+        $manager = $this->getManager(['one' => ['two' => 'two-value']]);
         $manager->useCollections = false;
         $actual = $manager->get('one.two');
 
@@ -81,7 +81,7 @@ trait CollectionScenario
      */
     public function test_throws_exception_for_undefined_collection_method()
     {
-        $manager = new CollectionStub();
+        $manager = $this->getManager();
         $manager->doesNotExist();
     }
 
@@ -89,7 +89,7 @@ trait CollectionScenario
     /* ToDo: decouple these methods from the Collection object */
     public function test_return_array_by_default()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
 
         $actual = $manager->walk('one.two', function(&$value, $key) {
             $value = "$value-new";
@@ -101,7 +101,7 @@ trait CollectionScenario
 
     public function test_return_array_explicitly()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
 
         $actual = $manager->walk('one.two', function(&$value, $key) {
             $value = "$value-new";
@@ -113,7 +113,7 @@ trait CollectionScenario
 
     public function test_modify_manifest()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
         $manager->add('b', 'c');
 
         $actual = $manager->walk('one.two', function(&$value, $key) {
@@ -127,7 +127,7 @@ trait CollectionScenario
 
     public function test_return_collection()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
 
         $actual = $manager->walk('one.two', function(&$value, $key) {
             $value = "$value-new";
@@ -140,7 +140,7 @@ trait CollectionScenario
     /* Integration tests for a couple Arrayzy methods, just for completeness */
     public function test_arrayzy_unique()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'b', 'c']]]);
 
         $actual = $manager->unique('one.two');
 
@@ -149,7 +149,7 @@ trait CollectionScenario
 
     public function test_arrayzy_unshift()
     {
-        $manager = new CollectionStub(['one' => ['two' => ['a', 'b', 'c']]]);
+        $manager = $this->getManager(['one' => ['two' => ['a', 'b', 'c']]]);
 
         $actual = $manager->unshift('one.two', 'y', 'z');
 

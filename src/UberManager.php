@@ -7,9 +7,8 @@ use Interop\Container\ContainerInterface;
 use IteratorAggregate;
 use JsonSerializable;
 use Michaels\Manager\Contracts\ChainsNestedItemsInterface;
-use Michaels\Manager\Contracts\IocContainerInterface;
-use Michaels\Manager\Contracts\IocManagerInterface;
 use Michaels\Manager\Contracts\LoadsFilesInterface;
+use Michaels\Manager\Contracts\ManagesIocInterface;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Traits\ArrayableTrait;
 use Michaels\Manager\Traits\ChainsNestedItemsTrait;
@@ -28,7 +27,7 @@ use Michaels\Manager\Traits\ManagesItemsTrait;
 class UberManager implements
     ManagesItemsInterface,
     ChainsNestedItemsInterface,
-    IocManagerInterface,
+    ManagesIocInterface,
     LoadsFilesInterface,
 
     // Array Access

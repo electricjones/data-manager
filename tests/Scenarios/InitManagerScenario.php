@@ -1,6 +1,5 @@
 <?php
 namespace Michaels\Manager\Test\Scenarios;
-use Michaels\Manager\Manager;
 
 /**
  * Tests Array Access, JSON, and Iterator for Manager.
@@ -12,7 +11,7 @@ trait InitManagerScenario
     {
         $expectedItems = ['one' => 1, 'two' => 2];
 
-        $manager = new Manager($expectedItems);
+        $manager = $this->getManager($expectedItems);
 
         $this->assertEquals($expectedItems, $manager->getAll(), "failed to return the items from initManager");
     }
