@@ -125,4 +125,4 @@ If you pass a value that is not a registered dependency, then the value itself i
 
 NOTE: For the moment, you cannot prepare dependencies that are instances of containers.
 
-Any feedback here would be appreciated. Take a look at `ManagesIocInterface` for future plans.
+Any feedback here would be appreciated. Take a look at `IocManagerInterface` for future plans.

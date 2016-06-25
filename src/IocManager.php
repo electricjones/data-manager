@@ -2,7 +2,7 @@
 namespace Michaels\Manager;
 
 use Interop\Container\ContainerInterface;
-use Michaels\Manager\Contracts\ManagesIocInterface;
+use Michaels\Manager\Contracts\IocManagerInterface;
 use Michaels\Manager\Contracts\ManagesItemsInterface;
 use Michaels\Manager\Traits\ManagesIocTrait;
 use Michaels\Manager\Traits\ManagesItemsTrait;
@@ -15,7 +15,7 @@ use Michaels\Manager\Traits\ManagesItemsTrait;
  *
  * @package Michaels\Manager
  */
-class IocManager implements ManagesItemsInterface, ContainerInterface, ManagesIocInterface
+class IocManager implements ManagesItemsInterface, ContainerInterface, IocManagerInterface
 {
     use ManagesItemsTrait, ManagesIocTrait;
 

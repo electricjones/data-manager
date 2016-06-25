@@ -5,7 +5,7 @@ namespace Michaels\Manager\Contracts;
  * Contract for Manager instances that manage dependencies
  * @package Michaels\Manager
  */
-interface ManagesIocInterface extends IocContainerInterface
+interface IocManagerInterface extends IocContainerInterface
 {
 
     /**
