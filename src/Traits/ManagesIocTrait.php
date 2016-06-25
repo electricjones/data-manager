@@ -21,12 +21,14 @@ trait ManagesIocTrait
     /**
      * Initializes IoC Container
      * @param array $components
-     * @return void
+     * @return $this
      */
     public function initDi(array $components = [])
     {
         $this->initManager();
         $this->add($this->nameOfIocManifest, $components);
+
+        return $this;
     }
 
     /**
@@ -84,7 +86,7 @@ trait ManagesIocTrait
      * @param string $alias
      * @param callable|string|object $factory
      * @param array $declared
-     * @return void
+     * @return $this
      */
     public function di($alias, $factory, array $declared = null)
     {
@@ -94,6 +96,8 @@ trait ManagesIocTrait
         if ($declared) {
             $this->set($this->nameOfIocManifest . "._declarations.$alias", $declared);
         }
+
+        return $this;
     }
 
     /**
@@ -104,16 +108,19 @@ trait ManagesIocTrait
     public function share($alias)
     {
         $this->add($this->nameOfIocManifest . "._singletons.$alias", true);
+        return $this;
     }
 
     /**
      * Add a pipeline to to the que
      * @param $alias
      * @param $pipeline
+     * @return $this
      */
     public function setup($alias, $pipeline)
     {
         $this->add($this->nameOfIocManifest . "._pipelines.$alias", $pipeline);
+        return $this;
     }
 
     /**
