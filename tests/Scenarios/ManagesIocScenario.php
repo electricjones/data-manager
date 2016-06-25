@@ -7,15 +7,14 @@ use StdClass;
 
 trait ManagesIocScenario
 {
-    public $manager;
-    public $testData;
+    public $iocTestData;
 
     public function setupTestData()
     {
         $object = new stdClass();
         $object->type = 'object';
 
-        $this->testData = [
+        $this->iocTestData = [
             'string' => '\SplObjectStorage', // Used here for overhead
             'callable' => function () {
                 $return = new stdClass();
@@ -31,26 +30,26 @@ trait ManagesIocScenario
     {
         $this->setupTestData();
         $manager = $this->getManager();
-        $manager->initDi($this->testData);
+        $manager->initDi($this->iocTestData);
 
-        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
+        $this->assertEquals($this->iocTestData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
 
     // THIS IS NOT PART OF THE TRAIT, ONLY THE CONCRETE CLASS. Tested here to save time.
     public function test_init_via_constructor()
     {
         $this->setupTestData();
-        $manager = new Manager($this->testData, ['other' => ['items' => true]]);
+        $manager = new Manager($this->iocTestData, ['other' => ['items' => true]]);
         $this->assertTrue($manager->get("other.items"), "failed to set generic items");
-        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
+        $this->assertEquals($this->iocTestData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
 
     public function test_get_ioc_manifest()
     {
         $this->setupTestData();
-        $manager = new Manager($this->testData);
+        $manager = new Manager($this->iocTestData);
 
-        $this->assertEquals($this->testData, $manager->getIocManifest(), "Failed to return di manifest");
+        $this->assertEquals($this->iocTestData, $manager->getIocManifest(), "Failed to return di manifest");
     }
 
     public function test_get_empty_manifest_if_uninitialized()
@@ -65,11 +64,11 @@ trait ManagesIocScenario
         $this->setupTestData();
         $manager = $this->getManager();
 
-        foreach ($this->testData as $key => $value) {
+        foreach ($this->iocTestData as $key => $value) {
             $manager->di($key, $value);
         }
 
-        $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
+        $this->assertEquals($this->iocTestData, $manager->get('_diManifest'), "Failed to return di manifest");
     }
 
     public function test_fetch_dependencies()
@@ -77,7 +76,7 @@ trait ManagesIocScenario
         $this->setupTestData();
         $manager = $this->getManager();
 
-        $manager->initDi($this->testData);
+        $manager->initDi($this->iocTestData);
 
         $string = $manager->fetch('string'); // Should return Manager
         $callable = $manager->fetch('callable'); // Should return stdClass::type = callable
@@ -328,7 +327,7 @@ trait ManagesIocScenario
         $secondManager = $this->getManager();
         $secondManager->setDiItemsName("test");
 
-        foreach ($this->testData as $key => $value) {
+        foreach ($this->iocTestData as $key => $value) {
             $secondManager->di($key, $value);
         }
         $secondManager->di('first', $firstManager);

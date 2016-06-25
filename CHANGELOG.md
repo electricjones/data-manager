@@ -1,8 +1,13 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# v0.8.9 - NEXT
+# v0.9 - NEXT
  - Move to a new testing structure
+ - Add integration tests
+ - Cleanup and refactor
+ 
+# v0.8.9 - 3-11-2016
+ - Add full composer.json
 
 # v0.8.8 - 12-29-2015
  - Auto namespaces FileLoader data under the file's name

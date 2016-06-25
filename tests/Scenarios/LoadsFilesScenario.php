@@ -11,7 +11,7 @@ trait LoadsFilesScenario
     use FileBagTestTrait;
 
     protected $defaultArray = [];
-    protected $testData = [
+    protected $testLoadFileData = [
         'one' => [
             'two' => [
                 'three' => 'three-value',
@@ -30,9 +30,9 @@ trait LoadsFilesScenario
     public function setupDefaultArray()
     {
         $this->defaultArray = [];
-        $this->defaultArray['jsonConfig'] = $this->testData;
-        $this->defaultArray['phpConfig'] = $this->testData;
-        $this->defaultArray['yamlConfig'] = $this->testData;
+        $this->defaultArray['jsonConfig'] = $this->testLoadFileData;
+        $this->defaultArray['phpConfig'] = $this->testLoadFileData;
+        $this->defaultArray['yamlConfig'] = $this->testLoadFileData;
     }
 
     protected function createFileLoaderMock()
@@ -101,7 +101,7 @@ trait LoadsFilesScenario
         $manager->addDecoder($customDecoder);
         $manager->loadFiles($goodFiles);
 
-        $expected['xmlConfig'] = $this->testData;
+        $expected['xmlConfig'] = $this->testLoadFileData;
 
         $this->assertEquals($expected, $manager->all());
     }

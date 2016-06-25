@@ -7,7 +7,7 @@ use Michaels\Manager\Test\Stubs\NestedAndCollectionsStub;
 
 trait CollectionScenario
 {
-    protected $testData = [
+    protected $collectionTestData = [
         'one' => [
             'two' => [
                 'three' => 'three-value'
@@ -168,15 +168,15 @@ trait CollectionScenario
     public function test_chains_nested_items_by_itself()
     {
         $stub = new NestedAndCollectionsStub();
-        $stub->initManager($this->testData);
+        $stub->initManager($this->collectionTestData);
 
-        $expectedA = $this->testData['one']['two']['three'];
+        $expectedA = $this->collectionTestData['one']['two']['three'];
         $actualA = $stub->one()->two()->three;
 
-        $expectedB = $this->testData['one']['two_b'];
+        $expectedB = $this->collectionTestData['one']['two_b'];
         $actualB = $stub->one()->two_b;
 
-        $expectedC = $this->testData['one'];
+        $expectedC = $this->collectionTestData['one'];
         $actualC = $stub->one;
 
         $this->assertEquals($expectedA, $actualA, 'failed to retrieve first nested value');

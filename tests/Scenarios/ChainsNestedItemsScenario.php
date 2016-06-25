@@ -4,7 +4,7 @@ namespace Michaels\Manager\Test\Scenarios;
 trait ChainsNestedItemsScenario {
 
     private $chainsManager;
-    private $testData = [
+    private $chainsNestedTestData = [
         'one' => [
             'two' => [
                 'three' => 'three-value'
@@ -16,7 +16,7 @@ trait ChainsNestedItemsScenario {
     public function setupChainsNestedItemsSetupManager()
     {
         $this->chainsManager = $this->getManager();
-        $this->chainsManager->initManager($this->testData);
+        $this->chainsManager->initManager($this->chainsNestedTestData);
     }
 
     public function test_standard_use()
@@ -46,13 +46,13 @@ trait ChainsNestedItemsScenario {
     public function test_get_through_nested_magic_methods()
     {
         $this->setupChainsNestedItemsSetupManager();
-        $expectedA = $this->testData['one']['two']['three'];
+        $expectedA = $this->chainsNestedTestData['one']['two']['three'];
         $actualA = $this->chainsManager->one()->two()->three;
 
-        $expectedB = $this->testData['one']['two_b'];
+        $expectedB = $this->chainsNestedTestData['one']['two_b'];
         $actualB = $this->chainsManager->one()->two_b;
 
-        $expectedC = $this->testData['one'];
+        $expectedC = $this->chainsNestedTestData['one'];
         $actualC = $this->chainsManager->one;
 
         $this->assertEquals($expectedA, $actualA, 'failed to retrieve first nested value');
