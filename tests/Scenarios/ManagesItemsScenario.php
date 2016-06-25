@@ -1,62 +1,55 @@
 <?php
-namespace Michaels\Manager\Test\Traits;
+namespace Michaels\Manager\Test\Scenarios;
 
 use Michaels\Manager\Messages\NoItemFoundMessage;
 use Michaels\Manager\Test\Stubs\CustomizedItemsNameStub;
 use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub as Manager;
+use Michaels\Manager\Test\Stubs\ManagesItemsTraitStub;
 use Michaels\Manager\Test\Stubs\TraversableStub;
+use Michaels\Manager\Test\Unit\Traits\ManagesItemsTest;
 use StdClass;
 
-class ManagesItemsTest extends \PHPUnit_Framework_TestCase
+trait ManagesItemsScenario
 {
-    public $manager;
-    public $testData;
-    private $simpleNestData;
-
-    public function setup()
-    {
-        $this->testData = [
-            'one' => [
-                'two' => [
-                    'three' => 'three-value',
-                    'four' => [
-                        'five' => 'five-value'
-                    ],
+    public $managesItemsTestData = [
+        'one' => [
+            'two' => [
+                'three' => 'three-value',
+                'four' => [
+                    'five' => 'five-value'
                 ],
-                'six' => [
-                    'seven' => 'seven-value',
-                    'eight' => 'eight-value'
-                ]
             ],
-            'top' => 'top-value',
-        ];
+            'six' => [
+                'seven' => 'seven-value',
+                'eight' => 'eight-value'
+            ]
+        ],
+        'top' => 'top-value',
+    ];
 
-        $this->simpleNestData = ['one' => ['two' => ['three' => 'three-value']]];
+    private $simpleNestData = ['one' => ['two' => ['three' => 'three-value']]];
 
-        $this->manager = new Manager();
-    }
-
-    private function assertFullManifest($manifest = null, $message = false)
+    private function assertFullManifest($manager, $manifest = null, $message = false)
     {
-        $expected = ($manifest) ? $manifest : $this->testData;
+        $expected = ($manifest) ? $manifest : $this->managesItemsTestData;
         $message = ($message) ? $message : 'failed to add nested items';
 
-        $actual = $this->manager->getAll();
+        $actual = $manager->getAll();
         $this->assertEquals($expected, $actual, $message);
     }
 
     /** Begin Tests **/
     public function test_init_manager_from_array()
     {
-        $manager = new Manager();
-        $manager->initManager($this->testData);
+        $manager = $this->getManager();
+        $manager->initManager($this->managesItemsTestData);
 
-        $this->assertEquals($this->testData, $manager->getAll(), "Failed to return identical values set at instantiation");
+        $this->assertEquals($this->managesItemsTestData, $manager->getAll(), "Failed to return identical values set at instantiation");
     }
 
     public function test_init_manager_from_single()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initManager('foo');
 
         $this->assertEquals(['foo'], $manager->getAll());
@@ -64,12 +57,12 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_init_manager_from_null()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initManager(null);
 
         $this->assertEquals([], $manager->all());
 
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initManager();
 
         $this->assertEquals([], $manager->all());
@@ -77,10 +70,10 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_init_manager_from_manager()
     {
-        $firstManager = new Manager();
+        $firstManager = $this->getManager();
         $firstManager->initManager(['foo' => 'bar']);
 
-        $secondManager = new Manager();
+        $secondManager = $this->getManager();
         $secondManager->initManager($firstManager);
 
         $this->assertEquals(['foo' => 'bar'], $secondManager->all());
@@ -90,7 +83,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     {
         $object = new stdClass();
         $object->foo = 'bar';
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initManager($object);
 
         $this->assertEquals(['foo' => 'bar'], $manager->getAll());
@@ -100,24 +93,26 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
     {
         $object = new TraversableStub();
         $object['foo'] = 'bar';
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initManager($object);
 
         $this->assertEquals(['foo' => 'bar'], $manager->getAll());
     }
 
-    /* Now, to save time, we use $this->manager */
+    /* Now, to save time, we use $this->getManager() */
     public function test_add_and_get_single_item()
     {
-        $this->manager->add('alias', 'value');
+        $manager = $this->getManager();
+        $manager->add('alias', 'value');
 
-        $this->assertArrayHasKey('alias', $this->manager->getAll(), 'Failed to confirm that manager has item `alias`');
-        $this->assertEquals('value', $this->manager->get('alias'), 'Failed to get a single item');
+        $this->assertArrayHasKey('alias', $manager->getAll(), 'Failed to confirm that manager has item `alias`');
+        $this->assertEquals('value', $manager->get('alias'), 'Failed to get a single item');
     }
 
     public function test_add_multiple_items_at_once()
     {
-        $this->manager->add([
+        $manager = $this->getManager();
+        $manager->add([
             'objectTest' => new StdClass(),
             'closureTest' => function () {
                 return true;
@@ -125,7 +120,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
             'stringTest' => 'value'
         ]);
 
-        $items = $this->manager->getAll();
+        $items = $manager->getAll();
 
         $this->assertArrayHasKey('objectTest', $items, 'Failed to confirm that manager has key `objectTest`');
         $this->assertArrayHasKey('closureTest', $items, 'Failed to confirm that manager has key `closureTest`');
@@ -134,38 +129,40 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_return_true_if_item_exists()
     {
-        $this->manager->add('test', 'test-item');
-        $this->manager->add('booleantest', false);
+        $manager = $this->getManager();
+        $manager->add('test', 'test-item');
+        $manager->add('booleantest', false);
 
-        $this->assertTrue($this->manager->exists('test'), "Failed to confirm that `test` exists");
-        $this->assertTrue($this->manager->exists('booleantest'), "Failed to confirm that boolean false value exists");
+        $this->assertTrue($manager->exists('test'), "Failed to confirm that `test` exists");
+        $this->assertTrue($manager->exists('booleantest'), "Failed to confirm that boolean false value exists");
     }
 
     public function test_return_false_if_item_does_not_exist()
     {
-        $this->assertFalse($this->manager->exists('test'));
+        $this->assertFalse($this->getManager()->exists('test'));
     }
 
     /* has() is an alias of exists(), tested here for coverage */
     public function test_return_true_if_has_item()
     {
-        $this->manager->add('test', 'test-item');
-        $this->manager->add('booleantest', false);
+        $manager = $this->getManager();
+        $manager->add('test', 'test-item');
+        $manager->add('booleantest', false);
 
-        $this->assertTrue($this->manager->has('test'), "Failed to confirm that `test` exists");
-        $this->assertTrue($this->manager->has('booleantest'), "Failed to confirm that boolean false value exists");
+        $this->assertTrue($manager->has('test'), "Failed to confirm that `test` exists");
+        $this->assertTrue($manager->has('booleantest'), "Failed to confirm that boolean false value exists");
     }
 
     public function test_return_false_if_does_not_have_item()
     {
-        $this->assertFalse($this->manager->has('test'));
+        $this->assertFalse($this->getManager()->has('test'));
     }
 
     public function test_provides_fallback_value()
     {
-        $this->manager->add('one', 'one-value');
+        $this->getManager()->add('one', 'one-value');
 
-        $actual = $this->manager->get('two', 'default-value');
+        $actual = $this->getManager()->get('two', 'default-value');
 
         $this->assertEquals('default-value', $actual, 'failed to return a fallback value');
     }
@@ -175,14 +172,15 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_throws_exception_if_item_not_found()
     {
-        $this->manager->get('doesntexist');
+        $this->getManager()->get('doesntexist');
     }
 
     public function test_get_if_exists_returns_item_if_exists()
     {
-        $this->manager->add($this->simpleNestData);
+        $manager = $this->getManager();
+        $manager->add($this->simpleNestData);
 
-        $actual = $this->manager->getIfExists('one.two');
+        $actual = $manager->getIfExists('one.two');
         $expected = $this->simpleNestData['one']['two'];
 
         $this->assertEquals($expected, $actual, "failed to return an item that exists");
@@ -190,7 +188,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_if_exists_returns_message_if_no_exists()
     {
-        $actual = $this->manager->getIfExists('nope');
+        $actual = $this->getManager()->getIfExists('nope');
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct mesage');
@@ -208,9 +206,10 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_if_has_returns_item_if_exists()
     {
-        $this->manager->add($this->simpleNestData);
+        $manager = $this->getManager();
+        $manager->add($this->simpleNestData);
 
-        $actual = $this->manager->getIfHas('one.two');
+        $actual = $manager->getIfHas('one.two');
         $expected = $this->simpleNestData['one']['two'];
 
         $this->assertEquals($expected, $actual, "failed to return an item that exists");
@@ -218,7 +217,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_if_has_returns_message_if_no_exists()
     {
-        $actual = $this->manager->getIfHas('nope');
+        $actual = $this->getManager()->getIfHas('nope');
 
         $this->assertInstanceOf('Michaels\Manager\Messages\NoItemFoundMessage', $actual, 'failed to return an instance of NoItemFoundMessage');
         $this->assertEquals("`nope` was not found", $actual->getMessage(), 'failed to return the correct message');
@@ -226,32 +225,35 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_update_single_item()
     {
-        $this->manager->add('item', 'original-value');
-        $this->manager->set('item', 'new-value');
+        $manager = $this->getManager();
+        $manager->add('item', 'original-value');
+        $manager->set('item', 'new-value');
 
-        $this->assertEquals('new-value', $this->manager->get('item'), 'Failed to update a single item');
+        $this->assertEquals('new-value', $manager->get('item'), 'Failed to update a single item');
     }
 
     public function test_update_multiple_items()
     {
-        $this->manager->add('item', 'original-value');
-        $this->manager->add('item2', 'other-original-value');
-        $this->manager->set(['item' => 'new-value', 'item2' => 'other-new-value']);
+        $manager = $this->getManager();
+        $manager->add('item', 'original-value');
+        $manager->add('item2', 'other-original-value');
+        $manager->set(['item' => 'new-value', 'item2' => 'other-new-value']);
 
-        $this->assertEquals('new-value', $this->manager->get('item'), 'Failed to update first item');
-        $this->assertEquals('other-new-value', $this->manager->get('item2'), 'Failed to update second item');
+        $this->assertEquals('new-value', $manager->get('item'), 'Failed to update first item');
+        $this->assertEquals('other-new-value', $manager->get('item2'), 'Failed to update second item');
     }
 
     public function test_remove_single_item()
     {
-        $this->manager->add([
+        $manager = $this->getManager();
+        $manager->add([
             'one' => 'one',
             'two' => 'two'
         ]);
 
-        $this->manager->remove('one');
+        $manager->remove('one');
 
-        $items = $this->manager->getAll();
+        $items = $manager->getAll();
 
         $this->assertArrayNotHasKey('one', $items, 'failed to remove `one`');
         $this->assertArrayHasKey('two', $items, 'failed to leave `two` intact');
@@ -259,93 +261,101 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_clear()
     {
-        $this->manager->add([
+        $this->getManager()->add([
             'one' => 'one',
             'two' => 'two'
         ]);
 
-        $this->manager->clear();
-        $items = $this->manager->getAll();
+        $this->getManager()->clear();
+        $items = $this->getManager()->getAll();
 
         $this->assertEmpty($items, "Failed to empty manager");
     }
 
     public function test_add_nested_items()
     {
-        $this->manager->add('one.two.three', 'three-value');
-        $this->manager->add('one.two.four.five', 'five-value');
-        $this->manager->add('one.six', ['seven' => 'seven-value']);
-        $this->manager->add('one.six.eight', 'eight-value');
-        $this->manager->add('top', 'top-value');
+        $manager = $this->getManager();
 
-        $this->assertFullManifest();
+        $manager->add('one.two.three', 'three-value');
+        $manager->add('one.two.four.five', 'five-value');
+        $manager->add('one.six', ['seven' => 'seven-value']);
+        $manager->add('one.six.eight', 'eight-value');
+        $manager->add('top', 'top-value');
+
+        $this->assertFullManifest($manager);
     }
 
     public function test_check_existence_of_nested_items()
     {
-        $this->manager->add('one.two.three', 'three-value');
+        $manager = $this->getManager();
+        $manager->add('one.two.three', 'three-value');
 
-        $this->assertFullManifest($this->simpleNestData);
-        $this->assertTrue($this->manager->exists('one.two.three'), 'failed to confirm existence of a nested item');
-        $this->assertFalse($this->manager->exists('one.two.no'), 'failed to deny existence of a nested item');
+        $this->assertFullManifest($manager, $this->simpleNestData);
+        $this->assertTrue($manager->exists('one.two.three'), 'failed to confirm existence of a nested item');
+        $this->assertFalse($manager->exists('one.two.no'), 'failed to deny existence of a nested item');
     }
 
     public function test_get_nested_items()
     {
-        $this->manager->add('one.two.three', 'three-value');
+        $manager = $this->getManager();
+        $manager->add('one.two.three', 'three-value');
 
-        $this->assertFullManifest($this->simpleNestData);
-        $this->assertEquals('three-value', $this->manager->get('one.two.three'), 'failed to get a single item');
+        $this->assertFullManifest($manager, $this->simpleNestData);
+        $this->assertEquals('three-value', $manager->get('one.two.three'), 'failed to get a single item');
     }
 
     public function test_remove_nested_items()
     {
-        $this->manager->add('one.two.three', 'three-value');
-        $this->manager->add('one.two.four', 'four-value');
+        $manager = $this->getManager();
+        $manager->add('one.two.three', 'three-value');
+        $manager->add('one.two.four', 'four-value');
 
-        $this->manager->remove('one.two.three');
-        $this->manager->remove('does.not.exist');
+        $manager->remove('one.two.three');
+        $manager->remove('does.not.exist');
 
-        $this->assertFullManifest(['one' => ['two' => ['four' => 'four-value']]]);
-        $this->assertTrue($this->manager->exists('one.two.four'), 'failed to leave nested item in tact');
-        $this->assertFalse($this->manager->exists('one.two.three'), 'failed to remove nested item');
+        $this->assertFullManifest($manager, ['one' => ['two' => ['four' => 'four-value']]]);
+        $this->assertTrue($manager->exists('one.two.four'), 'failed to leave nested item in tact');
+        $this->assertFalse($manager->exists('one.two.three'), 'failed to remove nested item');
     }
 
     public function test_reset_items()
     {
-        $this->manager->add($this->testData);
+        $manager = $this->getManager();
+        $manager->add($this->managesItemsTestData);
 
         $expected = ['reset' => ['me' => ['now']]];
 
-        $this->manager->reset($expected);
+        $manager->reset($expected);
 
-        $this->assertEquals($expected, $this->manager->getAll(), "failed to reset manager");
+        $this->assertEquals($expected, $manager->getAll(), "failed to reset manager");
     }
 
     public function test_to_json()
     {
-        $this->manager->add($this->testData);
+        $manager = $this->getManager();
+        $manager->add($this->managesItemsTestData);
 
-        $expected = json_encode($this->testData);
+        $expected = json_encode($this->managesItemsTestData);
 
-        $this->assertEquals($expected, $this->manager->toJson(), "failed to serialize json");
+        $this->assertEquals($expected, $manager->toJson(), "failed to serialize json");
     }
 
     public function test_to_string()
     {
-        $this->manager->add($this->testData);
+        $manager = $this->getManager()->add($this->managesItemsTestData);
 
-        $expected = json_encode($this->testData);
+        $expected = json_encode($this->managesItemsTestData);
 
-        $this->assertEquals($expected, "$this->manager", "failed to return json when called as a string");
+        $this->assertEquals($expected, "$manager", "failed to return json when called as a string");
     }
 
     public function test_is_empty()
     {
-        $this->assertTrue($this->manager->isEmpty(), "failed to confirm an empty manager");
+        $manager = $this->getManager();
+        $this->assertTrue($this->getManager()->isEmpty(), "failed to confirm an empty manager");
 
-        $this->manager->add($this->testData);
-        $this->assertFalse($this->manager->isEmpty(), "failed to deny an empty manager");
+        $manager->add($this->managesItemsTestData);
+        $this->assertFalse($manager->isEmpty(), "failed to deny an empty manager");
     }
 
     /**
@@ -353,7 +363,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_throw_exception_if_trying_to_nest_under_anon_array()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initManager(['one' => 1, 'two' => 2]);
 
         $manager->add("one.two.three", "three-value");
@@ -361,7 +371,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_customize_items_repo_name()
     {
-        $manager = new Manager();
+        $manager = new ManagesItemsTraitStub();
         $manager->setItemsName('thisIsJustATest');
         $manager->add('one.two.three', 'three-value');
         $manager->add('one.four', 'four-value');
@@ -376,26 +386,6 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
-    }
-
-    public function test_customize_items_repo_nameInClass()
-    {
-        $manager = new CustomizedItemsNameStub();
-        $manager->add('one.two.three', 'three-value');
-        $manager->add('one.four', 'four-value');
-
-        $expected = [
-            'one' => [
-                'two' => [
-                    'three' => 'three-value',
-                ],
-                'four' => 'four-value'
-            ]
-        ];
-
-        $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
-        $this->assertEquals($expected, $manager->getItemsDirectly(), 'failed to set the new item repo');
-        $this->assertFalse(property_exists($manager, 'items'), 'still set items');
     }
 
     /**
@@ -420,7 +410,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function test_protect_items_under_anest()
     {
-        $manager = new Manager([
+        $manager = $this->getManager([
             'some' => [
                 'data' => [
                     'here' => 'value'
@@ -434,7 +424,7 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
 
     public function test_load_defaults_into_empty_manager()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
 
         $defaults = [
             'one' => [
@@ -552,5 +542,19 @@ class ManagesItemsTest extends \PHPUnit_Framework_TestCase
         $manager->push('one.two', 'three');
 
         $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
+    }
+
+    public function test_hydrate_append()
+    {
+        $manager = new Manager(['one' => ['two']]);
+        $hydrate = ['three' => ['three' => 'four']];
+        $manager->hydrate($hydrate, true);
+
+        $expected = [
+            'one' => ['two'],
+            'three' => ['three' => 'four']
+        ];
+
+        $this->assertEquals($expected, $manager->all(), "failed to append while hydrating");
     }
 }

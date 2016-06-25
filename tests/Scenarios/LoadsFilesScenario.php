@@ -1,35 +1,34 @@
 <?php
-namespace Michaels\Manager\Test\Traits;
+namespace Michaels\Manager\Test\Scenarios;
 
 use Michaels\Manager\Decoders\CustomXmlDecoder;
+use Michaels\Manager\FileLoader;
 use Michaels\Manager\Test\Stubs\LoadsFilesTraitStub;
 use Michaels\Manager\Test\Utilities\FileBagTestTrait;
 
-class LoadsFilesTest extends \PHPUnit_Framework_TestCase
+trait LoadsFilesScenario
 {
     use FileBagTestTrait;
 
     protected $defaultArray = [];
-    protected $testData;
-
-    public function setup()
-    {
-        $this->testData = [
-            'one' => [
-                'two' => [
-                    'three' => 'three-value',
-                    'four' => [
-                        'five' => 'five-value'
-                    ],
+    protected $testData = [
+        'one' => [
+            'two' => [
+                'three' => 'three-value',
+                'four' => [
+                    'five' => 'five-value'
                 ],
-                'six' => [
-                    'seven' => 'seven-value',
-                    'eight' => 'eight-value'
-                ]
             ],
-            'top' => 'top-value',
-        ];
+            'six' => [
+                'seven' => 'seven-value',
+                'eight' => 'eight-value'
+            ]
+        ],
+        'top' => 'top-value',
+    ];
 
+    public function setupDefaultArray()
+    {
         $this->defaultArray = [];
         $this->defaultArray['jsonConfig'] = $this->testData;
         $this->defaultArray['phpConfig'] = $this->testData;
@@ -59,7 +58,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $fileLoader->expects($this->once())
             ->method('process');
 
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->setFileLoader($fileLoader);
 
         $manager->loadFiles($files);
@@ -75,7 +74,7 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
             ->method('addDecoder')
             ->with($this->equalTo($decoder));
 
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->setFileLoader($fileLoader);
 
         $manager->addDecoder($decoder);
@@ -84,9 +83,10 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
     /* Integration Tests: uses true FileLoader and tests output */
     public function test_loading_files()
     {
+        $this->setupDefaultArray();
         $goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->loadFiles($goodFiles);
 
         $this->assertEquals($this->defaultArray, $manager->all());
@@ -97,12 +97,21 @@ class LoadsFilesTest extends \PHPUnit_Framework_TestCase
         $goodCustomTestFileDirectory = realpath(__DIR__ . '/../Fixtures/CustomFileWithGoodData');
         $customDecoder = new CustomXmlDecoder();
         $goodFiles =  $this->setFilesToSplInfoObjects($goodCustomTestFileDirectory);
-        $manager = new LoadsFilesTraitStub();
+        $manager = $this->getManager();
         $manager->addDecoder($customDecoder);
         $manager->loadFiles($goodFiles);
 
         $expected['xmlConfig'] = $this->testData;
 
         $this->assertEquals($expected, $manager->all());
+    }
+
+    public function test_get_fileloader()
+    {
+        $manager = $this->getManager();
+        $manager->setFileLoader(new FileLoader());
+        $loader = $manager->getFileLoader();
+
+        $this->assertInstanceOf('Michaels\Manager\FileLoader', $loader, "failed to return the file loader");
     }
 }

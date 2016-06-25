@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager\Test;
+namespace Michaels\Manager\Test\Unit\Decoders;
 
 use Michaels\Manager\Decoders\JsonDecoder;
 

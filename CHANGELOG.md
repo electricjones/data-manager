@@ -2,6 +2,8 @@
 All Notable changes to `Manager` will be documented in this file
 
 # v0.8.9 - NEXT
+ - Move to a new testing structure
+ - Update `ManagesIocInterface`
 
 # v0.8.8 - 12-29-2015
  - Auto namespaces FileLoader data under the file's name

@@ -1,19 +1,17 @@
 <?php
-namespace Michaels\Manager\Test;
-
-use Michaels\Manager\Manager;
+namespace Michaels\Manager\Test\Scenarios;
 
 /**
- * Tests customized implementations of Manager.
+ * Tests Array Access, JSON, and Iterator for Manager.
  * Does NOT test ManagesItemsTrait api.
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase {
-
+trait InitManagerScenario
+{
     public function test_init_manager()
     {
         $expectedItems = ['one' => 1, 'two' => 2];
 
-        $manager = new Manager($expectedItems);
+        $manager = $this->getManager($expectedItems);
 
         $this->assertEquals($expectedItems, $manager->getAll(), "failed to return the items from initManager");
     }

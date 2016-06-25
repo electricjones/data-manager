@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager\Test;
+namespace Michaels\Manager\Test\Unit;
 
 use Michaels\Manager\Manager;
 use Michaels\Manager\FileLoader;
@@ -12,6 +12,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     use FileBagTestTrait;
 
     protected $testData;
+
+    /** @var  FileLoader */
     private $fileLoader;
 
     private $defaultArray = [];
@@ -43,7 +45,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function test_adding_files_as_array()
     {
-        $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
+        $goodTestFileDirectory = realpath($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
         $this->fileLoader->addFiles($goodFiles);
         $this->assertEquals($this->defaultArray, $this->fileLoader->process());
@@ -51,7 +53,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function test_adding_file_bag()
     {
-        $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
+        $goodTestFileDirectory = realpath($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
         $fileBag = new FileBag($goodFiles);
         $this->fileLoader->addFiles($fileBag);
@@ -61,8 +63,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function test_adding_a_custom_decoder_and_processing()
     {
-        $goodTestFileDirectory = realpath(__DIR__ . '/Fixtures/FilesWithGoodData');
-        $goodCustomFileDirectory = realpath(__DIR__ . '/Fixtures/CustomFileWithGoodData');
+        $goodTestFileDirectory = realpath($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData');
+        $goodCustomFileDirectory = realpath($GLOBALS['test_config']['test_dir'] . '/Fixtures/CustomFileWithGoodData');
         $goodFiles =  $this->setFilesToSplInfoObjects($goodTestFileDirectory);
         $goodCustomFile = $this->setFilesToSplInfoObjects($goodCustomFileDirectory);
         $goodFiles = array_merge($goodFiles, $goodCustomFile);
@@ -150,8 +152,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $fileLoader = new FileLoader();
         $fileLoader->addFiles([
-            new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/jsonConfig.json'),
-            [new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/phpConfig.php'), 'customNs']
+            new \SplFileInfo($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData/jsonConfig.json'),
+            [new \SplFileInfo($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData/phpConfig.php'), 'customNs']
         ]);
 
         $expected['jsonConfig'] = $this->testData;
@@ -166,9 +168,9 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $fileLoader = new FileLoader();
         $fileLoader->addFiles([
-            __DIR__.'/Fixtures/FilesWithGoodData/yamlConfig.yaml',
-            [__DIR__.'/Fixtures/FilesWithGoodData/phpConfig.php', 'customNs'],
-            new \SplFileInfo(__DIR__.'/Fixtures/FilesWithGoodData/jsonConfig.json'),
+            $GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData/yamlConfig.yaml',
+            [$GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData/phpConfig.php', 'customNs'],
+            new \SplFileInfo($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData/jsonConfig.json'),
         ]);
 
         $expected['yamlConfig'] = $this->testData;
@@ -178,5 +180,16 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $actual = $fileLoader->process();
 
         $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function test_throws_exception_for_invalid_file_load()
+    {
+        $fileLoader = new FileLoader();
+        $file = new \SplFileInfo('nogo.nope');
+
+        $fileLoader->getFileContents($file);
     }
 }

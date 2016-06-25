@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager\Test;
+namespace Michaels\Manager\Test\Scenarios;
 
 use Michaels\Manager\Test\Stubs\ArrayableManagerStub as Manager;
 
@@ -7,12 +7,12 @@ use Michaels\Manager\Test\Stubs\ArrayableManagerStub as Manager;
  * Tests Array Access, JSON, and Iterator for Manager.
  * Does NOT test ManagesItemsTrait api.
  */
-class ArrayableTest extends \PHPUnit_Framework_TestCase
+trait ArrayableScenario
 {
 
     public function test_array_access_add()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager['alias'] = 'value';
 
         $this->assertEquals('value', $manager->get('alias'), 'failed to add item');
@@ -20,7 +20,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase
 
     public function test_array_access_retrieve()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->add('alias', 'value');
 
         $this->assertEquals('value', $manager['alias'], 'failed to retrieve item');
@@ -28,7 +28,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase
 
     public function test_array_access_update()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->add('alias', 'value');
         $manager['alias'] = 'new-value';
 
@@ -37,7 +37,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase
 
     public function test_array_access_delete()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->add('alias', 'value');
 
         unset($manager['alias']);
@@ -47,7 +47,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase
 
     public function test_array_access_is_set()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->add('alias', 'value');
 
         $this->assertTrue(isset($manager['alias']), "failed to confirm an existent item");
@@ -77,7 +77,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase
 
     public function test_countable()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->add('alias', 'value');
         $manager->add('alias2', 'value');
         $manager->add('alias3', 'value');
@@ -87,7 +87,7 @@ class ArrayableTest extends \PHPUnit_Framework_TestCase
 
     public function test_json_serializable()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $test = [
             'alias' => 'value',
             'alias2' => 'value',

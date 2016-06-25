@@ -5,7 +5,7 @@ namespace Michaels\Manager\Contracts;
  * Contract for Manager instances that manage dependencies
  * @package Michaels\Manager
  */
-interface IocManagerInterface extends IocContainerInterface
+interface ManagesIocInterface extends IocContainerInterface
 {
 
     /**
@@ -35,4 +35,17 @@ interface IocManagerInterface extends IocContainerInterface
      * @return mixed
      */
     public function share($alias);
+
+    /**
+     * Add a pipeline to to the que for a specific item
+     * @param $alias
+     * @param $pipeline
+     */
+    public function setup($alias, $pipeline);
+
+    /**
+     * Returns the entire IoC Manifest
+     * @return array
+     */
+    public function getIocManifest();
 }

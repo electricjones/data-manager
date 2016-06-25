@@ -153,15 +153,19 @@ trait CollectionTrait
 
         switch ($flag) {
             case (static::$RETURN_COLLECTION):
-                return $value;
+                $return = $value;
+                break;
 
             case (static::$MODIFY_MANIFEST):
                 $this->set($subject, $value->toArray());
-                return $this;
+                $return = $this;
+                break;
 
             default:
             case (static::$RETURN_ARRAY):
-                return $value->toArray();
+                $return = $value->toArray();
         }
+
+        return $return;
     }
 }

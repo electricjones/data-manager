@@ -137,7 +137,7 @@ class FileLoader
 
     /**
      * Check to make sure the mime type is ok.
-     * @param $type a mime type
+     * @param string $type A mime type
      * @return bool
      */
     protected function isSupportedMimeType($type)
@@ -148,10 +148,10 @@ class FileLoader
     /**
      * Returns the contents of the file.
      *
+     * @param \SplFileInfo $file
      * @return string the contents of the file
-     * @throws \RuntimeException
      */
-    protected function getFileContents($file)
+    public function getFileContents($file)
     {
         if ($file->getExtension() === 'php') {
             $content = include $file->getPathname();
@@ -188,7 +188,7 @@ class FileLoader
 
     /**
      * Decodes a single file using registered decoders
-     * @param $file
+     * @param \SplFileInfo $file
      * @return null
      */
     protected function decodeFile($file)

@@ -1,5 +1,5 @@
 <?php
-namespace Michaels\Manager\Test;
+namespace Michaels\Manager\Test\Unit\Bags;
 
 use Michaels\Manager\Bags\FileBag;
 use Michaels\Manager\Test\Utilities\FileBagTestTrait;
@@ -32,7 +32,7 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
      */
     public function setup()
     {
-        $this->goodTestFileDirectory = realpath(__DIR__ . '/../Fixtures/FilesWithGoodExtensions');
+        $this->goodTestFileDirectory = realpath($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodExtensions');
 
         $this->goodTestFileObjects = $this->setFilesToSplInfoObjects($this->goodTestFileDirectory);
         $this->badTestFileObjects = $this->setFilesToBadObjects();

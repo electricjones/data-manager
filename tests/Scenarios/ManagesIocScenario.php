@@ -1,16 +1,16 @@
 <?php
-namespace Michaels\Manager\Test\Traits;
+namespace Michaels\Manager\Test\Scenarios;
 
 use Michaels\Manager\IocManager as Manager;
 use Michaels\Manager\Test\Stubs\DependencyFactoryStub;
 use StdClass;
 
-class ManagesIocTest extends \PHPUnit_Framework_TestCase
+trait ManagesIocScenario
 {
     public $manager;
     public $testData;
 
-    public function setUp()
+    public function setupTestData()
     {
         $object = new stdClass();
         $object->type = 'object';
@@ -29,7 +29,8 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     /** Begin Tests **/
     public function test_init_ioc_container()
     {
-        $manager = new Manager();
+        $this->setupTestData();
+        $manager = $this->getManager();
         $manager->initDi($this->testData);
 
         $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
@@ -38,6 +39,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     // THIS IS NOT PART OF THE TRAIT, ONLY THE CONCRETE CLASS. Tested here to save time.
     public function test_init_via_constructor()
     {
+        $this->setupTestData();
         $manager = new Manager($this->testData, ['other' => ['items' => true]]);
         $this->assertTrue($manager->get("other.items"), "failed to set generic items");
         $this->assertEquals($this->testData, $manager->get('_diManifest'), "Failed to return di manifest");
@@ -45,6 +47,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_ioc_manifest()
     {
+        $this->setupTestData();
         $manager = new Manager($this->testData);
 
         $this->assertEquals($this->testData, $manager->getIocManifest(), "Failed to return di manifest");
@@ -52,14 +55,15 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_empty_manifest_if_uninitialized()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
 
         $this->assertEquals([], $manager->getIocManifest(), "Failed to return di manifest");
     }
 
     public function test_add_dependencies()
     {
-        $manager = new Manager();
+        $this->setupTestData();
+        $manager = $this->getManager();
 
         foreach ($this->testData as $key => $value) {
             $manager->di($key, $value);
@@ -70,7 +74,8 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_fetch_dependencies()
     {
-        $manager = new Manager();
+        $this->setupTestData();
+        $manager = $this->getManager();
 
         $manager->initDi($this->testData);
 
@@ -103,7 +108,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
      */
     public function test_exception_on_invalid_factory()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
 
         $manager->di('one', true);
 
@@ -113,7 +118,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     public function test_share_object()
     {
         // Setup
-        $manager = new Manager();
+        $manager = $this->getManager();
         $object = new stdClass();
         $object->prop = 'property';
 
@@ -133,7 +138,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
     public function test_share_string()
     {
         // Setup
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initDi([
             'string' => 'stdClass'
         ]);
@@ -149,7 +154,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_share_factory()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->initDi([
             'factory' => function () {
                 return new stdClass();
@@ -164,7 +169,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_factory_manager_injection()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $email = new stdClass();
         $email->test = 'testing';
 
@@ -190,7 +195,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_fallbacks()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $fallback = new stdClass();
         $fallback->testing = "yes";
 
@@ -201,7 +206,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_prepare_dependencies()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->di('prepared', new stdClass());
         $manager->di('unprepared', new stdClass());
 
@@ -216,7 +221,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_declaring_dependencies_with_classnames()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
 
         // Setup the dependencies
         $one = new stdClass();
@@ -240,7 +245,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_declaring_dependencies_with_objects()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
 
         // Setup the dependencies
         $one = new stdClass();
@@ -264,7 +269,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_declaring_dependencies_with_closures()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
 
         // Setup the dependencies
         $one = new stdClass();
@@ -290,7 +295,7 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_and_set_items_name()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $this->assertEquals("_diManifest", $manager->getDiItemsName(), "failed to retrieve default manifest name");
 
         $manager->setDiItemsName("test");
@@ -307,19 +312,20 @@ class ManagesIocTest extends \PHPUnit_Framework_TestCase
      */
     public function test_throws_exception_for_no_item_set()
     {
-        $manager = new Manager();
+        $manager = $this->getManager();
         $manager->fetch('nothing_set');
     }
 
     public function test_complex_example()
     {
+        $this->setupTestData();
         /* Create some managers */
         $firstManager = new Manager(
             ['first' => '\stdClass'],
             ['one' => ['two' => ['three' => 'three-value']]]
         );
 
-        $secondManager = new Manager();
+        $secondManager = $this->getManager();
         $secondManager->setDiItemsName("test");
 
         foreach ($this->testData as $key => $value) {

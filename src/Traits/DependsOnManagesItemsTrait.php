@@ -12,7 +12,16 @@ trait DependsOnManagesItemsTrait
      * @param array $items
      * @return $this
      */
-    abstract public function initManager($items = []);
+    abstract public function initManager($items = null);
+
+    /**
+     * Hydrate with external data, optionally append
+     *
+     * @param $data string     The data to be hydrated into the manager
+     * @param bool $append When true, data will be appended to the current set
+     * @return $this
+     */
+    abstract public function hydrate($data, $append = false);
 
     /**
      * Adds a single item.
@@ -26,14 +35,50 @@ trait DependsOnManagesItemsTrait
     abstract public function add($alias, $item = null);
 
     /**
+     * Updates an item
+     *
+     * @param string $alias
+     * @param null $item
+     *
+     * @return $this
+     */
+    abstract public function set($alias, $item = null);
+
+    /**
+     * Push a value or values onto the end of an array inside manager
+     * @param string $alias The level of nested data
+     * @param mixed $value The first value to append
+     * @param null|mixed $_ Optional other values to apend
+     * @return int Number of items pushed
+     * @throws ItemNotFoundException If pushing to unset array
+     */
+    abstract public function push($alias, $value, $_ = null);
+
+    /**
      * Get a single item
      *
      * @param string $alias
-     * @param null $fallback
+     * @param string $fallback Defaults to '_michaels_no_fallback' so null can be a fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
      * @return mixed
      */
-    abstract public function get($alias, $fallback = null);
+    abstract public function get($alias, $fallback = '_michaels_no_fallback');
+
+    /**
+     * Return an item if it exist
+     * @param $alias
+     * @return NoItemFoundMessage
+     */
+    abstract public function getIfExists($alias);
+
+    /**
+     * Return an item if it exist
+     * Alias of getIfExists()
+     *
+     * @param $alias
+     * @return NoItemFoundMessage
+     */
+    abstract public function getIfHas($alias);
 
     /**
      * Return all items as array
@@ -44,7 +89,7 @@ trait DependsOnManagesItemsTrait
 
     /**
      * Return all items as array
-     *
+     * Alias of getAll()
      * @return array
      */
     abstract public function all();
@@ -59,6 +104,7 @@ trait DependsOnManagesItemsTrait
 
     /**
      * Confirm or deny that an item exists
+     * Alias of exists()
      *
      * @param $alias
      * @return bool
@@ -66,21 +112,10 @@ trait DependsOnManagesItemsTrait
     abstract public function has($alias);
 
     /**
-     * Updates an item
-     *
-     * @param string $alias
-     * @param null $item
-     *
-     * @return $this
+     * Confirm that manager has no items
+     * @return boolean
      */
-    abstract public function set($alias, $item = null);
-
-    /**
-     * Return an item if it exists
-     * @param $alias
-     * @return \Michaels\Manager\Messages\NoItemFoundMessage|mixed
-     */
-    abstract public function getIfExists($alias);
+    abstract public function isEmpty();
 
     /**
      * Deletes an item
@@ -98,6 +133,7 @@ trait DependsOnManagesItemsTrait
 
     /**
      * Reset the manager with an array of items
+     * Alias of initManager()
      *
      * @param array $items
      * @return mixed
@@ -105,21 +141,16 @@ trait DependsOnManagesItemsTrait
     abstract public function reset($items);
 
     /**
-     * Returns json serialized representation of array of items
+     * Get the collection of items as JSON.
+     *
      * @param  int $options
      * @return string
      */
     abstract public function toJson($options = 0);
 
     /**
-     * Confirm that manager has no items
-     * @return boolean
-     */
-    abstract public function isEmpty();
-
-    /**
      * When manager instance is used as a string, return json of items
-     * @return mixed
+     * @return string
      */
     abstract public function __toString();
 }
