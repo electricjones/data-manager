@@ -63,6 +63,11 @@ $manager->fetch('two');
 $manager->fetch('three'); // All the same
 ```
 
+And, just ask for a class. If it exists (and nothing by that name was registered), it will be loaded.
+```php
+$manager->fetch('Some/Class')
+```
+
 ## Dependencies that need Dependencies
 The easiest way to setup a dependency that needs a dependency is to use a closure.
 ```php

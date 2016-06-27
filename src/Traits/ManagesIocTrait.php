@@ -181,6 +181,8 @@ trait ManagesIocTrait
         if ($factory instanceof NoItemFoundMessage) {
             if ($fallback !== '_michaels_no_fallback') {
                 return $fallback;
+            } elseif (class_exists($alias)) {
+                return new $alias;
             } else {
                 throw new ItemNotFoundException("$alias not found");
             }

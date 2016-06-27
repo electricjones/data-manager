@@ -333,6 +333,12 @@ trait ManagesIocScenario
         $this->assertInstanceOf('\stdClass', $manager->fetch('three'), "failed to produce the second link'");
     }
 
+    public function test_get_class()
+    {
+        $manager = $this->getManager();
+        $this->assertInstanceOf('Michaels\Manager\Manager', $manager->fetch('\Michaels\Manager\Manager'), "failed to produce a dependency from a class'");
+    }
+
     public function test_complex_example()
     {
         $this->setupTestData();
