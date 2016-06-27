@@ -35,7 +35,7 @@ class Manager implements
      * The items stored in the manager
      * @var array $items Items governed by manager
      */
-    protected $items;
+    protected $_items;
 
     /**
      * Build a new manager instance
