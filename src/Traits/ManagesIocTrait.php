@@ -51,7 +51,7 @@ trait ManagesIocTrait
      *
      * @param string $alias
      * @param string|mixed $fallback
-     * @return object
+     * @return mixed
      * @throws \Exception
      */
     public function fetch($alias, $fallback = '_michaels_no_fallback')

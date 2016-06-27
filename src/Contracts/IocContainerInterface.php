@@ -13,7 +13,7 @@ interface IocContainerInterface
      * Returns the request object with all dependencies
      *
      * @param string $alias
-     * @return object
+     * @return mixed
      */
     public function fetch($alias);
 }
