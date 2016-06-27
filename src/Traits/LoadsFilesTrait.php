@@ -40,17 +40,17 @@ trait LoadsFilesTrait
      * @param $append boolean true, if data should be appended to the manager.
      * @return array
      */
-    public function loadFiles(array $files, $append = false)
+    public function loadFiles(array $files, $append = false, $namespace = true)
     {
         $this->initializeFileLoader();
         $this->fileLoader->addFiles($files);
-        $data = $this->fileLoader->process();
+        $data = $this->fileLoader->process($namespace);
         $this->hydrate($data, $append);
     }
 
-    public function loadFile($file, $append = false)
+    public function loadFile($file, $append = false, $namespace = true)
     {
-        return $this->loadFiles([$file], $append);
+        return $this->loadFiles([$file], $append, $namespace = true);
     }
 
     /**

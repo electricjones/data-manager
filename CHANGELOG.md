@@ -8,6 +8,7 @@ All Notable changes to `Manager` will be documented in this file
  - add `has('$dep.whatever')` interpolation
  - add linking (multiple aliases) to ioc manager
  - add to ioc manager, fetch a class by string
+ - Allow user to force no namespacing in file loading
  
 # v0.8.9 - 3-11-2016
  - Add full composer.json

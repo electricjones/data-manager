@@ -74,7 +74,7 @@ class FileLoader
      */
     public function addFiles($files)
     {
-        if ($files instanceof Filebag) {
+        if ($files instanceof FileBag) {
             $this->fileBag = $files;
             return;
         }
@@ -92,9 +92,9 @@ class FileLoader
      * @return array
      * @throws Exception
      */
-    public function process()
+    public function process($ns = true)
     {
-        return $this->decodedData = $this->decodeFileBagData($this->fileBag);
+        return $this->decodedData = $this->decodeFileBagData($this->fileBag, $ns);
     }
 
     /**
@@ -102,10 +102,11 @@ class FileLoader
      * A file bag is an array of SplFileInfo objects.
      *
      * @param array|FileBag $fileBag
+     * @param bool $ns
      * @return array
      * @throws Exception
      */
-    public function decodeFileBagData(FileBag $fileBag)
+    public function decodeFileBagData(FileBag $fileBag, $ns = true)
     {
         $decodedData = [];
         $files = $fileBag->getAllFileInfoObjects();
@@ -120,7 +121,11 @@ class FileLoader
             $fileData = $this->decodeFile($file);
             if ($fileData) {
                 foreach ($fileData as $k => $v) {
-                    $decodedData[$namespace][$k] = $v;
+                    if ($ns === true) {
+                        $decodedData[$namespace][$k] = $v;
+                    } else {
+                        $decodedData[$k] = $v;
+                    }
                 }
             }
         }

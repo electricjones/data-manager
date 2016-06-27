@@ -164,6 +164,20 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
     }
 
+    public function test_using_no_namespaces()
+    {
+        $fileLoader = new FileLoader();
+        $fileLoader->addFiles([
+            new \SplFileInfo($GLOBALS['test_config']['test_dir'] . '/Fixtures/FilesWithGoodData/jsonConfig.json')
+        ]);
+
+        $expected = $this->testData;
+
+        $actual = $fileLoader->process(false);
+
+        $this->assertEquals($expected, $actual, "failed to disaple namespacing");
+    }
+
     public function test_loading_files_as_a_path()
     {
         $fileLoader = new FileLoader();
