@@ -38,6 +38,7 @@ trait LoadsFilesTrait
      *
      * @param array $files an array of SplFileInfo Objects
      * @param $append boolean true, if data should be appended to the manager.
+     * @param bool $namespace
      * @return array
      */
     public function loadFiles(array $files, $append = false, $namespace = true)
@@ -50,7 +51,7 @@ trait LoadsFilesTrait
 
     public function loadFile($file, $append = false, $namespace = true)
     {
-        return $this->loadFiles([$file], $append, $namespace = true);
+        return $this->loadFiles([$file], $append, $namespace);
     }
 
     /**

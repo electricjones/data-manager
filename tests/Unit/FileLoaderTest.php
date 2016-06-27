@@ -175,7 +175,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $actual = $fileLoader->process(false);
 
-        $this->assertEquals($expected, $actual, "failed to disaple namespacing");
+        $this->assertEquals($expected, $actual, "failed to disable namespacing");
     }
 
     public function test_loading_files_as_a_path()
