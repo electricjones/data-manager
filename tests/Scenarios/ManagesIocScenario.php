@@ -323,6 +323,16 @@ trait ManagesIocScenario
         $this->assertTrue($manager->has('$dep.dependency'), "Failed to interpolate `dep` ");
     }
 
+    public function test_links()
+    {
+        $manager = $this->getManager();
+        $manager->di(['one', 'two', 'three'], '\\stdClass');
+
+        $this->assertInstanceOf('\stdClass', $manager->fetch('one'), "failed to produce the master'");
+        $this->assertInstanceOf('\stdClass', $manager->fetch('two'), "failed to produce the first link'");
+        $this->assertInstanceOf('\stdClass', $manager->fetch('three'), "failed to produce the second link'");
+    }
+
     public function test_complex_example()
     {
         $this->setupTestData();

@@ -55,6 +55,14 @@ When you're ready to call dependencies:
 $manager->fetch('event_dispatcher');
 ```
 
+You may also register multiple aliases to a single dependency
+```php
+$manager->di(['one', 'two', 'three'], $factory);
+$manager->fetch('one');
+$manager->fetch('two');
+$manager->fetch('three'); // All the same
+```
+
 ## Dependencies that need Dependencies
 The easiest way to setup a dependency that needs a dependency is to use a closure.
 ```php

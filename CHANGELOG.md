@@ -6,6 +6,7 @@ All Notable changes to `Manager` will be documented in this file
  - Add integration tests
  - Cleanup and refactor
  - add `has('$dep.whatever')` interpolation
+ - add linking (multiple aliases) to ioc manager
  
 # v0.8.9 - 3-11-2016
  - Add full composer.json
