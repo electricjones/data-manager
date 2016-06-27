@@ -315,6 +315,14 @@ trait ManagesIocScenario
         $manager->fetch('nothing_set');
     }
 
+    public function test_has_with_dep()
+    {
+        $manager = $this->getManager();
+        $manager->di('dependency', 'A\\Test\\Class');
+
+        $this->assertTrue($manager->has('$dep.dependency'), "Failed to interpolate `dep` ");
+    }
+
     public function test_complex_example()
     {
         $this->setupTestData();

@@ -258,6 +258,11 @@ trait ManagesItemsTrait
      */
     public function exists($alias)
     {
+        // If we are looking for a dependency
+        if (strpos($alias, '$dep.') !== false) {
+            $alias = str_replace('$dep', $this->getDiItemsName(), $alias);
+        }
+
         $repo = $this->getItemsName();
         $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {

@@ -125,4 +125,7 @@ If you pass a value that is not a registered dependency, then the value itself i
 
 NOTE: For the moment, you cannot prepare dependencies that are instances of containers.
 
+
+### Has()
+If you want to check if a dependency exists, use `$manager->has('$dep.whatever')`. Not the single quotes.
 Any feedback here would be appreciated. Take a look at `IocManagerInterface` for future plans.

@@ -5,6 +5,7 @@ All Notable changes to `Manager` will be documented in this file
  - Move to a new testing structure
  - Add integration tests
  - Cleanup and refactor
+ - add `has('$dep.whatever')` interpolation
  
 # v0.8.9 - 3-11-2016
  - Add full composer.json
