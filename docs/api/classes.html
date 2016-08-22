@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>All Classes | Data Manager API</title>
+
+            <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="css/sami.css">
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/typeahead.min.js"></script>
+        <script src="sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="classes" data-name="" data-root-path="">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <form id="search-form" action="search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Data Manager API</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="classes.html">Classes</a></li>
+                                            <li><a href="namespaces.html">Namespaces</a></li>
+                                        <li><a href="interfaces.html">Interfaces</a></li>
+                    <li><a href="traits.html">Traits</a></li>
+                    <li><a href="doc-index.html">Index</a></li>
+                    <li><a href="search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div id="page-content">
+                    <div class="page-header">
+        <h1>Classes</h1>
+    </div>
+
+    
+    <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Bags/FileBag.html"><abbr title="Michaels\Manager\Bags\FileBag">FileBag</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Class FileBag - a collection object needed to create SplFileInfo objects from file references, in order to inject
+into the FileLoader. This collection class can only store SplFileInfo objects. Anything else will cause exceptions.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/BasicManager.html"><abbr title="Michaels\Manager\BasicManager">BasicManager</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages deeply nested, complex data.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/ConfigManager.html"><abbr title="Michaels\Manager\ConfigManager">ConfigManager</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages deeply nested, complex data.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <em><a href="Michaels/Manager/Contracts/ChainsNestedItemsInterface.html"><abbr title="Michaels\Manager\Contracts\ChainsNestedItemsInterface">ChainsNestedItemsInterface</abbr></a></em>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Contract for Managers that use magic methods to burrow into the item store
+See src/Traits/ChainsNestedItemsTrait.php for implementation example.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <em><a href="Michaels/Manager/Contracts/DecoderInterface.html"><abbr title="Michaels\Manager\Contracts\DecoderInterface">DecoderInterface</abbr></a></em>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Contract for Decoders
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <em><a href="Michaels/Manager/Contracts/IocContainerInterface.html"><abbr title="Michaels\Manager\Contracts\IocContainerInterface">IocContainerInterface</abbr></a></em>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Contract for Manager instances that return prepared data
+Does NOT include methods for managing dependencies
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <em><a href="Michaels/Manager/Contracts/IocManagerInterface.html"><abbr title="Michaels\Manager\Contracts\IocManagerInterface">IocManagerInterface</abbr></a></em>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Contract for Manager instances that manage dependencies
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <em><a href="Michaels/Manager/Contracts/LoadsFilesInterface.html"><abbr title="Michaels\Manager\Contracts\LoadsFilesInterface">LoadsFilesInterface</abbr></a></em>
+                                            
+                </div>
+                <div class="col-md-6">
+                    API Methods for loading file data into the manager
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <em><a href="Michaels/Manager/Contracts/ManagesItemsInterface.html"><abbr title="Michaels\Manager\Contracts\ManagesItemsInterface">ManagesItemsInterface</abbr></a></em>
+                                            
+                </div>
+                <div class="col-md-6">
+                    API Methods for managing items
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Decoders/CustomXmlDecoder.html"><abbr title="Michaels\Manager\Decoders\CustomXmlDecoder">CustomXmlDecoder</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    This is just a simple XML decoder for test purposes.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Decoders/JsonDecoder.html"><abbr title="Michaels\Manager\Decoders\JsonDecoder">JsonDecoder</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    A standard Json Decoder Module for the data manager file loader.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Decoders/PhpDecoder.html"><abbr title="Michaels\Manager\Decoders\PhpDecoder">PhpDecoder</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    A wrapper for the PHP Decoder Module for the data manager file loader.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Decoders/YamlDecoder.html"><abbr title="Michaels\Manager\Decoders\YamlDecoder">YamlDecoder</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    SerializationTypeNotSupportedException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Decoders/YmlDecoder.html"><abbr title="Michaels\Manager\Decoders\YmlDecoder">YmlDecoder</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/BadFileDataException.html"><abbr title="Michaels\Manager\Exceptions\BadFileDataException">BadFileDataException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    BadFileDataException - used, when file data being added to the loaded is not compatible.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/BadFileInfoObjectException.html"><abbr title="Michaels\Manager\Exceptions\BadFileInfoObjectException">BadFileInfoObjectException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    SerializationTypeNotSupportedException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/IncorrectDataException.html"><abbr title="Michaels\Manager\Exceptions\IncorrectDataException">IncorrectDataException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    IncorrectDataException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/ItemNotFoundException.html"><abbr title="Michaels\Manager\Exceptions\ItemNotFoundException">ItemNotFoundException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    ItemNotFoundException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/JsonDecodingFailedException.html"><abbr title="Michaels\Manager\Exceptions\JsonDecodingFailedException">JsonDecodingFailedException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Json Decoding failed
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/ModifyingProtectedValueException.html"><abbr title="Michaels\Manager\Exceptions\ModifyingProtectedValueException">ModifyingProtectedValueException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    ModifyingProtectedValueException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/NestingUnderNonArrayException.html"><abbr title="Michaels\Manager\Exceptions\NestingUnderNonArrayException">NestingUnderNonArrayException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    NestingUnderNonArrayException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/SerializationTypeNotSupportedException.html"><abbr title="Michaels\Manager\Exceptions\SerializationTypeNotSupportedException">SerializationTypeNotSupportedException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    SerializationTypeNotSupportedException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Exceptions/UnsupportedFilesException.html"><abbr title="Michaels\Manager\Exceptions\UnsupportedFilesException">UnsupportedFilesException</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Class UnsupportedFilesException
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/FileLoader.html"><abbr title="Michaels\Manager\FileLoader">FileLoader</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Loads configuration files and converts them to php arrays using Decoders
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Helpers.html"><abbr title="Michaels\Manager\Helpers">Helpers</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Class Helpers
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/IocManager.html"><abbr title="Michaels\Manager\IocManager">IocManager</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages deeply nested, complex data.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Manager.html"><abbr title="Michaels\Manager\Manager">Manager</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages deeply nested, complex data.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Messages/NoItemFoundMessage.html"><abbr title="Michaels\Manager\Messages\NoItemFoundMessage">NoItemFoundMessage</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Class NoItemFoundMessage
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/ArrayableTrait.html"><abbr title="Michaels\Manager\Traits\ArrayableTrait">ArrayableTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Class ArrayableTrait
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/ChainsNestedItemsTrait.html"><abbr title="Michaels\Manager\Traits\ChainsNestedItemsTrait">ChainsNestedItemsTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Access Deeply nested manager items through magic methods
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/CollectionTrait.html"><abbr title="Michaels\Manager\Traits\CollectionTrait">CollectionTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Access Deeply nested manager items through magic methods
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/DependsOnManagesItemsTrait.html"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/LoadsFilesTrait.html"><abbr title="Michaels\Manager\Traits\LoadsFilesTrait">LoadsFilesTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Loads data from configuration-type files into Manager
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/ManagesIocTrait.html"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages complex, nested data
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/Traits/ManagesItemsTrait.html"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages complex, nested data
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="Michaels/Manager/UberManager.html"><abbr title="Michaels\Manager\UberManager">UberManager</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Manages deeply nested, complex data.
+                </div>
+            </div>
+            </div>
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>

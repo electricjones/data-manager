@@ -17,5 +17,3 @@ $manager->some()->item()->drop(); // deletes some.item
 ```
 
 Note that levels are called as a method with no params. The data is then called, updated, or set as a property.
-
-[API](me.html)

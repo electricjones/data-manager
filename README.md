@@ -13,6 +13,8 @@ Simple data manager for nested data, dot notation access, extendability, and con
 
 This project began as a three part tutorial series which can be found at http://phoenixlabstech.org/2015/04/17/building-a-data-manager/
 
+**[See Full Documentation](http://data-manager.readthedocs.io/en/latest/)**
+
 ## Goals
   * Light weight and fluent, simple, clear API
   * Manage nested data via dot-notation

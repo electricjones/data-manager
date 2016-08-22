@@ -1,6 +1,8 @@
 # Data Manager
 Simple data manager for nested data, dot notation access, extendability, and container interoperability.
 
+**See Also the Auto Generated [API Documentation](api/index.html)**
+
 ## Goals
   * Light weight with a fluent, simple, clear API
   * Manage any data type (closure, object, primitives, etc.)
