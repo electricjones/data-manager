@@ -1,0 +1,12 @@
+site_name: PHP Data Manager
+
+pages:
+  - Home: index.md
+  - Composing Traits: index.md#compose
+  - Collections: collections.md
+  - IoC Container: ioc.md
+  - Config Manager: load-files.md
+  - Contributing: contributing.md
+  - License:  license.md
+
+theme: readthedocs

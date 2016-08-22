@@ -107,7 +107,7 @@ Note that fallbacks are not sent through the pipeline.
 
 Also note that you must setup pipelines BEFORE you `fetch()` the first instance of a `share()`d dependency.
 
-## Setting Dependencies Implicitly (Not Yet Implemented)
+## Setting Dependencies Implicitly
 You can tell Manager how to configure a certain dependency when you register it.
 For the example, let's assume:
 ```php
