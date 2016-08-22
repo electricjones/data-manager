@@ -143,7 +143,7 @@ trait CollectionTrait
      *
      * @param string $method name
      * @param array $arguments to be passed along
-     * @param object $instance of the Collection
+     * @param CollectionTrait $instance of the Collection
      * @param string $flag corresponding to the properties above
      * @param string $subject Alias of data in Manager
      * @return mixed
