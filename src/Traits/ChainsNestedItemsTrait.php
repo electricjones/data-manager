@@ -91,7 +91,7 @@ trait ChainsNestedItemsTrait
 
     /**
      * Adds to the chain
-     * @param $name
+     * @param string $name
      * @return $this
      */
     protected function addToChain($name)

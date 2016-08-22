@@ -10,7 +10,7 @@ use Michaels\Manager\Helpers;
  * MUST be used with ManagesItemsTrait
  *
  * @implements Michaels\Manager\Contracts\ChainsNestedItemsInterface
- * @method addToChain() from ChainsNestedItems
+ * @method $this addToChain(string $name) From ChainsNestedItemsTrait
  * @package Michaels\Manager
  */
 trait CollectionTrait

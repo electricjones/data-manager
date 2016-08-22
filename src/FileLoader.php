@@ -156,7 +156,7 @@ class FileLoader
      * @param \SplFileInfo $file
      * @return string the contents of the file
      */
-    public function getFileContents($file)
+    public function getFileContents(\SplFileInfo $file)
     {
         if ($file->getExtension() === 'php') {
             $content = include $file->getPathname();
@@ -194,9 +194,9 @@ class FileLoader
     /**
      * Decodes a single file using registered decoders
      * @param \SplFileInfo $file
-     * @return string
+     * @return array|bool
      */
-    protected function decodeFile($file)
+    protected function decodeFile(\SplFileInfo $file)
     {
         $mimeType = $file->getExtension();
 
