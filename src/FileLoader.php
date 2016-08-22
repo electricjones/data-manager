@@ -119,7 +119,7 @@ class FileLoader
 
             // Decode the actual file and save data
             $fileData = $this->decodeFile($file);
-            if ($fileData) {
+            if (is_array($fileData)) {
                 foreach ($fileData as $k => $v) {
                     if ($ns === true) {
                         $decodedData[$namespace][$k] = $v;
