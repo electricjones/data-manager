@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Data-manager by chrismichaels84</title>
+    <title>Data Manager by chrismichaels84</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Data-manager</h1>
+      <h1 class="project-name">Data Manager</h1>
       <h2 class="project-tagline">Simple data manager for nested data and dot notation access</h2>
       <a href="https://github.com/chrismichaels84/data-manager" class="btn">View on GitHub</a>
       <a href="https://github.com/chrismichaels84/data-manager/zipball/master" class="btn">Download .zip</a>
@@ -23,6 +23,7 @@
 <a id="data-manager" class="anchor" href="#data-manager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data Manager</h1>
 
 <p><a href="https://github.com/chrismichaels84/data-manager/releases"><img src="https://img.shields.io/github/release/chrismichaels84/data-manager.svg?style=flat-square" alt="Latest Version"></a>
+<a href="http://data-manager.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/data-manager/badge/?version=latest" alt="Documentation Status"></a>
 <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
 <a href="https://travis-ci.org/chrismichaels84/data-manager"><img src="https://img.shields.io/travis/chrismichaels84/data-manager/master.svg?style=flat-square" alt="Build Status"></a>
 <a href="https://coveralls.io/r/chrismichaels84/data-manager?branch=master"><img src="https://coveralls.io/repos/chrismichaels84/data-manager/badge.svg?branch=master" alt="Coverage Status"></a>
@@ -39,38 +40,30 @@
 <a id="goals" class="anchor" href="#goals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Goals</h2>
 
 <ul>
-<li>Light weight</li>
-<li>Fluent, simple, clear API</li>
-<li>Manage any data type (closure, object, primitives, etc.)</li>
+<li>Light weight and fluent, simple, clear API</li>
 <li>Manage nested data via dot-notation</li>
-<li>Manage nested data via magic methods ($manager-&gt;one()-&gt;two()-&gt;three)</li>
-<li>Be composable - integrate into current containers via traits</li>
-<li>Be extensible.</li>
-<li>Allow for protected data (immutable)</li>
-<li>Test coverage, PSR compliant, <a href="https://github.com/container-interop/container-interop">container interoperability</a>, and best practices</li>
-</ul>
-
-<h2>
-<a id="extras" class="anchor" href="#extras" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Extras</h2>
-
-<p>On top of being a powerful data-manager, there are traits that add features.
-They are not documented here, but see other readmes for:</p>
+<li>Be <a href="docs/compose.md">composable</a> - integrate into current containers via traits (extras)</li>
+<li>Include extras for 
 
 <ul>
 <li>
-<a href="ioc.md">IoC Container</a>: Use Manager as a simple but powerful Dependency Injection Container. Includes
-
-<ul>
-<li>Resolving dependencies from classnames, closures, eager loading, and more,</li>
-<li>Creating singletons,</li>
-<li>Configuring dependencies for dependencies,</li>
-<li>Fallbacks, preparing objects, and more.</li>
+<a href="docs/collections.md">Collections</a>, </li>
+<li>
+<a href="docs/load-files.md">Loading Files</a>, </li>
+<li>
+<a href="docs/ioc.md">Managing IoC</a> / Dependencies.</li>
 </ul>
 </li>
-<li>Use Manager as a configuration bank, complete with defaults.</li>
-<li>Load configuration files (php, yaml, json, xml, and custom)</li>
-<li>
-<a href="collections.md">Collections</a> for extra array-helper methods (based on <a href="https://github.com/bocharsky-bw/Arrayzy">Arrayzy</a>)</li>
+<li>Allow for protected data (immutable) and default values.</li>
+<li>IoC container should: 
+
+<ul>
+<li>Resolve via classes, factories, etc </li>
+<li>Configure dependencies for dependencies,</li>
+<li>Allow for fallbacks, preparing objects, and more.</li>
+</ul>
+</li>
+<li>Full test coverage, PSR compliant, <a href="https://github.com/container-interop/container-interop">container interoperability</a>, and best practices</li>
 </ul>
 
 <h2>
@@ -137,237 +130,9 @@ The best way to get started is simply instantiate <code>Michaels\Manager\Manager
 <span class="pl-s1"><span class="pl-c">// Note that levels are called as a method with no params. The data is then called, updated, or set as a property.</span></span></pre></div>
 
 <h2>
-<a id="protecting-data" class="anchor" href="#protecting-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Protecting Data</h2>
+<a id="advanced-features" class="anchor" href="#advanced-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advanced Features</h2>
 
-<p>You can also guard any item or nest from being changed. Simply,</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>protect(<span class="pl-s"><span class="pl-pds">'</span>some.data<span class="pl-pds">'</span></span>); <span class="pl-c">//now some.data and everything under it cannot be altered</span></span>
-<span class="pl-s1"><span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>set(<span class="pl-s"><span class="pl-pds">'</span>some.data.here<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>new-value<span class="pl-pds">'</span></span>); <span class="pl-c">// throws an exception</span></span></pre></div>
-
-<h2>
-<a id="merging-defaults-into-current-dataset" class="anchor" href="#merging-defaults-into-current-dataset" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Merging Defaults Into Current Dataset</h2>
-
-<p>When using Manager to store configuration data, it is important to be able to set defaults.
-You can merge an array of defaults into manager via <code>loadDefaults(array $defaults)</code></p>
-
-<p>Imagine your configuration starts like</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$manager</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Manager</span>([</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>My Awesome App<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>site<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>https://youwishyouwerethiscool.com/<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>protocol<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>https<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">    ]</span>
-<span class="pl-s1">]);</span></pre></div>
-
-<p>But your app needs <code>site.assets</code> for the assets directory. Simply</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>loadDefaults([</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>site<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>http://the_default_url.com/<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>assets<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>/assets<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">    ],</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>mysql<span class="pl-pds">"</span></span></span>
-<span class="pl-s1">]);</span></pre></div>
-
-<p>And now, your configuration looks like</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>My Awesome App<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>site<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>https://youwishyouwerethiscool.com/<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>protocol<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>https<span class="pl-pds">"</span></span>,</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>assets<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>/assets<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">    ],</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>database<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">"</span>mysql<span class="pl-pds">"</span></span></span></pre></div>
-
-<p>A couple of things to keep in mind:</p>
-
-<ul>
-<li>This works recursively and as far down as you want.</li>
-<li>If any value is set before loading defaults, that value is preserved</li>
-<li>If a starting value is set to an array (<code>one.two = []</code>) and a default lives beneath (<code>one.two.three = default</code>), then the default <strong>will</strong> be set.</li>
-<li>On the other hand, if the value exists and is <strong>not</strong> an array, the default will be ignored. 
-(<code>one.two = 'something'</code>) In this case, there is no <code>one.two.three</code>, even after loading defaults.</li>
-</ul>
-
-<h2>
-<a id="using-manager-traits" class="anchor" href="#using-manager-traits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Manager Traits</h2>
-
-<p>If you have your own container objects and want to add Manager functionality to them, you may import traits into your class.</p>
-
-<p>There are 3 Traits that make up Manager:</p>
-
-<ol>
-<li>
-<code>ManagesItemsTrait</code> fulfills <code>ManagesItemsInterface</code> and adds most functionality. Look at the interface for full list.</li>
-<li>
-<code>ArrayableTrait</code> makes the class usable as an array (<code>$manager['some']['data']</code>) or in loops and such</li>
-<li>
-<code>ChainsNestedItemsTrait</code> allows you to use fluent properties to manage data (<code>$manager-&gt;one()-&gt;two()-&gt;three = 'three</code>)</li>
-</ol>
-
-<p>And 3 extra Traits to give additional functionality:</p>
-
-<ol>
-<li>
-<code>CollectionTrait</code> returns collections with all sorts of <a href="https://github.com/bocharsky-bw/Arrayzy">array helpers</a>
-</li>
-<li>
-<code>ManagesIocTrait</code> turns Manager into a simple, but complete IoC or Dependency Injection manager</li>
-<li>
-<code>LoadsFilesTrait</code> allows Manager to load data from config files.</li>
-</ol>
-
-<p>Each of these traits is documented below. To include the functionality simply <code>use</code> the trait.
-it is possible to use ALL traits together in one class, though I don't know why you would need to.</p>
-
-<p><em>NOTE THAT</em> all traits depend on ManagesItemsTrait. If you try to use ChainsNestedItemsTrait or ArrayableTrait without ManagesItemsTrait, you will get all sorts of errors.</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">/* An example for UberManager */</span></span>
-<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">MyContainer</span> {</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">Michaels\Manager\Traits\ManagesItemsTrait</span>;</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">Michaels\Manager\Traits\ChainsNestedItemsTrait</span>;</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">Michaels\Manager\Traits\ArrayableTrait</span>;</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">Michaels\Manager\Traits\CollectionTrait</span>; </span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">Michaels\Manager\Traits\LoadsFilesTrait</span>;</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">Michaels\Manager\Traits\ManagesIocTrait</span>;</span>
-<span class="pl-s1"></span>
-<span class="pl-s1">    <span class="pl-c">// Your stuff here. And you may override anything you like.</span></span>
-<span class="pl-s1">    <span class="pl-c">// Remember to add a constructor if you want :)</span></span>
-<span class="pl-s1">}</span></pre></div>
-
-<p>If you do use a trait, and want to initialize your class at construction, use the <code>initManager()</code> method.</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">MyClass</span></span>
-<span class="pl-s1">{</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">ManagesItemsTrait</span>;</span>
-<span class="pl-s1"></span>
-<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-c1">__construct</span>(<span class="pl-smi">$beginningItems</span>)</span>
-<span class="pl-s1">    {</span>
-<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>initManager(<span class="pl-smi">$beginningItems</span>);</span>
-<span class="pl-s1">    }</span>
-<span class="pl-s1">}</span>
-<span class="pl-s1"></span></pre></div>
-
-<p>initManager() is used so it doesn't conflict with user-defined init() methods.</p>
-
-<h4>
-<a id="two-important-notes" class="anchor" href="#two-important-notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Two important notes</h4>
-
-<ol>
-<li>Using <code>ManagesItemsTrait</code> does not implement ArrayAccess, so you can't use your manager as an array (<code>$manager['one']</code>). Use <code>ArrayableTrait</code> for that.</li>
-<li>
-<code>ManagesItemsTrait</code> no longer includes a constructor. It is just best not to include constructors in traits. It is recommended (though not necessary) to use a constructor in your class:</li>
-</ol>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-c1">__construct</span>(<span class="pl-smi">$items</span> <span class="pl-k">=</span> [])</span>
-<span class="pl-s1">{</span>
-<span class="pl-s1">    <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>initManager(<span class="pl-smi">$items</span>);</span>
-<span class="pl-s1">}</span></pre></div>
-
-<p>You may also use the <strong>tests</strong> under <code>tests/traits</code> to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your <code>require</code></p>
-
-<h2>
-<a id="additional-features" class="anchor" href="#additional-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Features</h2>
-
-<h3>
-<a id="collections" class="anchor" href="#collections" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Collections</h3>
-
-<p>Right now, you may choose to return a <code>MutableArray</code> which comes with a lot of helpers.
-Simply include <code>Michaels\Manager\Traits\CollectionTrait</code> into your class. By default, <code>get()</code> and <code>getAll()</code> will return collections.
-These collections behave <em>identically</em> to arrays, but come with extra methods. See <a href="https://github.com/bocharsky-bw/Arrayzy">Arrayzy</a> for a full api.</p>
-
-<p>It is possible to chain things for brevity:</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$value</span> <span class="pl-k">=</span> <span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>get(<span class="pl-s"><span class="pl-pds">'</span>one.two.three<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>walk(<span class="pl-k">function</span>(){});</span></pre></div>
-
-<p>In this case, <code>walk()</code> is part of the collection and will apply the callback to each value, then return the updated contents.</p>
-
-<p>You may also disable this by <code>$manager-&gt;useCollections = false</code></p>
-
-<h3>
-<a id="loading-files" class="anchor" href="#loading-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Loading Files</h3>
-
-<p>Manager also gives you the ability to load file data into the Manager. 
-A good use case for this is loading configuration data out of different configuration files.</p>
-
-<ol>
-<li><code>use LoadsFilesTrait</code></li>
-<li>Use <code>$manager-&gt;loadFiles($files)</code> to load a group of files. </li>
-</ol>
-
-<p>The <code>$files</code> argument can be a <code>FileBag</code> object or an array of:</p>
-
-<ol>
-<li>
-<code>\SplFileInfo</code> objects</li>
-<li>Valid paths (<code>__DIR__.'/some/path/here.json'</code>)</li>
-</ol>
-
-<p>For more powerful uses (like loading entire directories or advanced filesystem searches), you may also us <a href="https://github.com/symfony/Finder">Symfony's Finder Component</a>.</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$finder</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Finder</span>();</span>
-<span class="pl-s1"><span class="pl-smi">$finder</span><span class="pl-k">-&gt;</span>files()<span class="pl-k">-&gt;</span>in(<span class="pl-c1">__DIR__</span>);</span>
-<span class="pl-s1"><span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>loadFiles(<span class="pl-smi">$finder</span>);</span></pre></div>
-
-<p>The data will be added to manager under the filename. So, if you load <code>config.json</code> you could <code>$manager-&gt;get('config.item')</code>;
-It is possible to set a custom namespace for each file:</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>loadFiles([</span>
-<span class="pl-s1">  <span class="pl-c1">__DIR__</span><span class="pl-k">.</span><span class="pl-s"><span class="pl-pds">'</span>/path/to/filename.json<span class="pl-pds">'</span></span>, <span class="pl-c">// auto namespaces under filename</span></span>
-<span class="pl-s1">  [<span class="pl-k">new</span> <span class="pl-c1">\SplFileInfo</span>(<span class="pl-s"><span class="pl-pds">'</span>path/to/file.yaml<span class="pl-pds">'</span></span>), <span class="pl-s"><span class="pl-pds">'</span>namespace<span class="pl-pds">'</span></span>], <span class="pl-c">// will namespace like -&gt;get('namespace.item')</span></span>
-<span class="pl-s1">  [<span class="pl-c1">__DIR__</span><span class="pl-k">.</span><span class="pl-s"><span class="pl-pds">'</span>/path/to/another.php, <span class="pl-pds">'</span></span><span class="pl-c1">another</span><span class="pl-s"><span class="pl-pds">'</span>] // will namespace like -&gt;get(<span class="pl-pds">'</span></span><span class="pl-c1">another</span><span class="pl-k">.</span><span class="pl-c1">item</span><span class="pl-s"><span class="pl-pds">'</span>)</span></span>
-<span class="pl-s1"><span class="pl-s">]);</span></span></pre></div>
-
-<h4>
-<a id="adding-a-decoder" class="anchor" href="#adding-a-decoder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Adding a Decoder</h4>
-
-<p>Manager supports Yaml, Json and PHP file formats out of the box. To use the Yaml decoder, you must require the Symfony Yaml Component in your composer.json file.</p>
-
-<p>If you have special files not covered by the decoders available in Manager, you can also create your own and add it to the Manager prior to decoding the files.
-Simply implement the <code>Contracts\DecoderInterface</code> and return an array of data (not namespaced).
-For an example custom decoder, have a look at the <code>\CustomXmlDecoder</code> class in the <code>/Decoders</code> directory. </p>
-
-<p>Once you've created your custom decoder, you can add it with the <code>$manager-&gt;addDecoder()</code> method <em>before</em> loading any file data. </p>
-
-<h3>
-<a id="managing-dependencies" class="anchor" href="#managing-dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Managing Dependencies</h3>
-
-<p>Please see <a href="ioc.md">ioc.md</a> for details.</p>
-
-<h2>
-<a id="some-advanced-features" class="anchor" href="#some-advanced-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some Advanced Features</h2>
-
-<p>By default, Manager stores all the items in an <code>$items</code> property. 
-If you are using the <code>ManagesItemsTrait</code> and want to use an internal property besides <code>$items</code> to avoid collisions, you have two options:</p>
-
-<ol>
-<li>Use <code>$manager-&gt;setItemsName($nameOfProperty)</code> either in your constructor or before you add anything</li>
-<li>Set the <code>$dataItemsName</code> property to a string of the new property name. Then be sure to call <code>initManager()</code> in your constructor.</li>
-</ol>
-
-<h2>
-<a id="exceptions" class="anchor" href="#exceptions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Exceptions</h2>
-
-<p>If you try to <code>get()</code> an item that doesn't exist, and there is no fallback, an <code>ItemNotFoundException</code> will be thrown.</p>
-
-<p>If you do not want an exception, use <code>getIfHas($alias)</code> which will return a <code>NoItemFoundMessage</code> object, or use a fallback value <code>get($item, $fallback)</code>.</p>
-
-<p>If you try to nest under an existing value that is not an array, an <code>NestingUnderNonArrayException</code> will be thrown.</p>
-
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$manager</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Manager</span>([<span class="pl-s"><span class="pl-pds">'</span>one<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">1</span>]);</span>
-<span class="pl-s1"><span class="pl-smi">$manager</span><span class="pl-k">-&gt;</span>add(<span class="pl-s"><span class="pl-pds">"</span>one.two<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>two-value<span class="pl-pds">"</span></span>); <span class="pl-c">// exception</span></span></pre></div>
-
-<p>If you try to alter a protected item, a <code>ModifyingProtectedItemException</code> will be thrown.</p>
-
-<p>See /exceptions for more</p>
-
-<h2>
-<a id="upgrading" class="anchor" href="#upgrading" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Upgrading</h2>
-
-<p>Note that between 0.8.2 and 0.8.3, the <code>__constuct()</code> method was removed from <code>ManagesItemsTrait</code>. If you are using that trait directly, you should implement your own. </p>
-
-<p>See <code>Michaels\Manager\Manager</code> for an example.</p>
+<p>See <a href="http://data-manager.readthedocs.io/en/latest/">documentation</a> for topics like protecting data, using as an ioc container, loading files, using as an array, defaults, composing, and more.</p>
 
 <h2>
 <a id="interoperability" class="anchor" href="#interoperability" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interoperability</h2>
@@ -408,7 +173,7 @@ If you are using the <code>ManagesItemsTrait</code> and want to use an internal 
 <p>The MIT License (MIT). Please see <a href="LICENSE.md">License File</a> for more information.</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/chrismichaels84/data-manager">Data-manager</a> is maintained by <a href="https://github.com/chrismichaels84">chrismichaels84</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/chrismichaels84/data-manager">Data Manager</a> is maintained by <a href="https://github.com/chrismichaels84">chrismichaels84</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
