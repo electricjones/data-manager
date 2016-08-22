@@ -32,12 +32,6 @@ class Manager implements
     use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait;
 
     /**
-     * The items stored in the manager
-     * @var array $items Items governed by manager
-     */
-    protected $items;
-
-    /**
      * Build a new manager instance
      * @param array $items
      */

@@ -7,6 +7,8 @@ class PhpDecoderTest extends \PHPUnit_Framework_TestCase
 {
     private $phpData;
     private $testArrayData;
+
+    /** @var PhpDecoder */
     private $phpDecoder;
 
     public function setup()

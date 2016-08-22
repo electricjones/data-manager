@@ -92,6 +92,19 @@ trait LoadsFilesScenario
         $this->assertEquals($this->defaultArray, $manager->all());
     }
 
+    public function test_load_single_file()
+    {
+        $this->setupDefaultArray();
+        $manager = $this->getManager();
+        $manager->loadFile(new \SplFileInfo(realpath(__DIR__ . '/../Fixtures/FilesWithGoodData/jsonConfig.json')));
+
+        $expected = $this->defaultArray;
+        unset($expected['phpConfig']);
+        unset($expected['yamlConfig']);
+
+        $this->assertEquals($expected, $manager->all());
+    }
+
     public function test_with_decoder()
     {
         $goodCustomTestFileDirectory = realpath(__DIR__ . '/../Fixtures/CustomFileWithGoodData');

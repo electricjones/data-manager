@@ -53,11 +53,11 @@ interface ManagesItemsInterface
      * Push a value or values onto the end of an array inside manager
      * @param string $alias The level of nested data
      * @param mixed $value The first value to append
-     * @param null|mixed $_ Optional other values to apend
+     * @param null|mixed $other Optional other values to amend
      * @return int Number of items pushed
      * @throws ItemNotFoundException If pushing to unset array
      */
-    public function push($alias, $value, $_ = null);
+    public function push($alias, $value, $other = null);
 
     /**
      * Get a single item

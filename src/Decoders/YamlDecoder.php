@@ -22,7 +22,7 @@ class YamlDecoder implements DecoderInterface
     public function decode($data)
     {
         $parser = new Parser();
-        $this->arrayData = $parser->parse($data);
+        $this->arrayData = (array) $parser->parse($data);
         return $this->arrayData;
     }
 

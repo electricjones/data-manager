@@ -38,15 +38,8 @@ class UberManager implements
 
     // Standards
     ContainerInterface
-
 {
     use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait, ManagesIocTrait, LoadsFilesTrait;
-
-    /**
-     * The items stored in the manager
-     * @var array $items Items governed by manager
-     */
-    protected $items;
 
     /**
      * Build a new manager instance

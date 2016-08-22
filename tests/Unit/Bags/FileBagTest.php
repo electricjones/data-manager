@@ -25,6 +25,7 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
 
     private $badTestFileObjects = [];
 
+    /** @var FileBag */
     private $fileBag;
 
     /**

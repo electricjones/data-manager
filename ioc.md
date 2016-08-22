@@ -55,6 +55,19 @@ When you're ready to call dependencies:
 $manager->fetch('event_dispatcher');
 ```
 
+You may also register multiple aliases to a single dependency
+```php
+$manager->di(['one', 'two', 'three'], $factory);
+$manager->fetch('one');
+$manager->fetch('two');
+$manager->fetch('three'); // All the same
+```
+
+And, just ask for a class. If it exists (and nothing by that name was registered), it will be loaded.
+```php
+$manager->fetch('Some/Class')
+```
+
 ## Dependencies that need Dependencies
 The easiest way to setup a dependency that needs a dependency is to use a closure.
 ```php
@@ -125,4 +138,7 @@ If you pass a value that is not a registered dependency, then the value itself i
 
 NOTE: For the moment, you cannot prepare dependencies that are instances of containers.
 
+
+### Has()
+If you want to check if a dependency exists, use `$manager->has('$dep.whatever')`. Not the single quotes.
 Any feedback here would be appreciated. Take a look at `IocManagerInterface` for future plans.

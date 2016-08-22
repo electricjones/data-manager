@@ -315,6 +315,30 @@ trait ManagesIocScenario
         $manager->fetch('nothing_set');
     }
 
+    public function test_has_with_dep()
+    {
+        $manager = $this->getManager();
+        $manager->di('dependency', 'A\\Test\\Class');
+
+        $this->assertTrue($manager->has('$dep.dependency'), "Failed to interpolate `dep` ");
+    }
+
+    public function test_links()
+    {
+        $manager = $this->getManager();
+        $manager->di(['one', 'two', 'three'], '\\stdClass');
+
+        $this->assertInstanceOf('\stdClass', $manager->fetch('one'), "failed to produce the master'");
+        $this->assertInstanceOf('\stdClass', $manager->fetch('two'), "failed to produce the first link'");
+        $this->assertInstanceOf('\stdClass', $manager->fetch('three'), "failed to produce the second link'");
+    }
+
+    public function test_get_class()
+    {
+        $manager = $this->getManager();
+        $this->assertInstanceOf('Michaels\Manager\Manager', $manager->fetch('\Michaels\Manager\Manager'), "failed to produce a dependency from a class'");
+    }
+
     public function test_complex_example()
     {
         $this->setupTestData();

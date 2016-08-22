@@ -33,7 +33,7 @@ trait ManagesIocTrait
 
     /**
      * Returns the entire IoC Manifest
-     * @return array
+     * @return array|NoItemFoundMessage
      */
     public function getIocManifest()
     {
@@ -51,11 +51,18 @@ trait ManagesIocTrait
      *
      * @param string $alias
      * @param string|mixed $fallback
-     * @return object
+     * @return mixed
      * @throws \Exception
      */
     public function fetch($alias, $fallback = '_michaels_no_fallback')
     {
+        // If this is a link, just go back to the master
+        $link = $this->getIfExists($this->nameOfIocManifest . ".$alias");
+        if (is_string($link) && strpos($link, '_michaels_link_') !== false) {
+            return $this->fetch(str_replace('_michaels_link_', '', $link));
+        }
+
+        // Otherwise, continue
         $shared = $this->getIfExists($this->nameOfIocManifest . "._singletons.$alias");
 
         if ($shared instanceof NoItemFoundMessage) {
@@ -66,7 +73,7 @@ trait ManagesIocTrait
             if (is_object($shared)) {
                 return $shared;
 
-                // This is shared, but we must produce and cache it
+            // This is shared, but we must produce and cache it
             } else {
                 $object = $this->produceDependency($alias, $fallback);
                 $this->set($this->nameOfIocManifest . "._singletons.$alias", $object);
@@ -90,11 +97,25 @@ trait ManagesIocTrait
      */
     public function di($alias, $factory, array $declared = null)
     {
+        // Setup links, if necessary
+        if (is_array($alias)) {
+            $links = $alias;
+            $alias = $alias[0];
+            unset($links[0]);
+        }
+
         $this->set($this->nameOfIocManifest . ".$alias", $factory);
 
         // Setup any declared dependencies
         if ($declared) {
             $this->set($this->nameOfIocManifest . "._declarations.$alias", $declared);
+        }
+
+        // Add Links
+        if (!empty($links)) {
+            foreach ($links as $link) {
+                $this->set($this->nameOfIocManifest . ".$link", "_michaels_link_$alias");
+            }
         }
 
         return $this;
@@ -160,6 +181,8 @@ trait ManagesIocTrait
         if ($factory instanceof NoItemFoundMessage) {
             if ($fallback !== '_michaels_no_fallback') {
                 return $fallback;
+            } elseif (class_exists($alias)) {
+                return new $alias;
             } else {
                 throw new ItemNotFoundException("$alias not found");
             }

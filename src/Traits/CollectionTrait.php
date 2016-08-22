@@ -10,6 +10,7 @@ use Michaels\Manager\Helpers;
  * MUST be used with ManagesItemsTrait
  *
  * @implements Michaels\Manager\Contracts\ChainsNestedItemsInterface
+ * @method addToChain() from ChainsNestedItems
  * @package Michaels\Manager
  */
 trait CollectionTrait
@@ -30,7 +31,7 @@ trait CollectionTrait
     /**
      * Converts an array to a collection if value is arrayable and config is set
      * @param $value
-     * @return static
+     * @return ArrayImitator
      */
     public function toCollection($value)
     {
@@ -161,8 +162,8 @@ trait CollectionTrait
                 $return = $this;
                 break;
 
-            default:
             case (static::$RETURN_ARRAY):
+            default:
                 $return = $value->toArray();
         }
 

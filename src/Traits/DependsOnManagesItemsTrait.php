@@ -48,11 +48,11 @@ trait DependsOnManagesItemsTrait
      * Push a value or values onto the end of an array inside manager
      * @param string $alias The level of nested data
      * @param mixed $value The first value to append
-     * @param null|mixed $_ Optional other values to apend
+     * @param null|mixed $other Optional other values to apend
      * @return int Number of items pushed
      * @throws ItemNotFoundException If pushing to unset array
      */
-    abstract public function push($alias, $value, $_ = null);
+    abstract public function push($alias, $value, $other = null);
 
     /**
      * Get a single item

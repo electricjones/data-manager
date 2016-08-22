@@ -61,7 +61,7 @@ class FileBag
     /**
      * Check for an \SplFileInfo object or a custom namespaces object
      * @param $entity
-     * @return bool
+     * @return \SplFileInfo|\SplFileInfo[]|string
      */
     protected function createSplFileInfoObject($entity)
     {
