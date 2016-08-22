@@ -10,7 +10,8 @@ All Notable changes to `Manager` will be documented in this file
  - add to ioc manager, fetch a class by string
  - Allow user to force no namespacing in file loading
  - Cleanup Test Coverage and Code Analysis
- - Initialize new Docs
+ - Initialize new Docs and Readme
+ - Initialize API Documentation and Marketing Site
  
 # v0.8.9 - 3-11-2016
  - Add full composer.json

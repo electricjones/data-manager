@@ -24,7 +24,12 @@ Each file is decoded via an instance of a `DecoderInterface`. There are three in
   
 There is also a standard `YamlDecoder`, but you must include `symfony/yaml` via composer.
 
-You may create a decoder for anything you like. Simply implement the `DecoderInterface` and `$manager->addDecoder($decoder)`
+You may create a decoder for anything you like. 
+Simply implement the `DecoderInterface` and `$manager->addDecoder($decoder)`
+
+For an example custom decoder, have a look at the `\CustomXmlDecoder` class in the `/Decoders` directory. 
+
+Once you've created your custom decoder, you can add it with the `$manager->addDecoder()` method *before* loading any file data. 
 
 
 ## Namespaces
