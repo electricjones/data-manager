@@ -147,13 +147,13 @@ trait ManagesItemsTrait
      * Push a value or values onto the end of an array inside manager
      * @param string $alias The level of nested data
      * @param mixed $value The first value to append
-     * @param null|mixed $_ Optional other values to apend
+     * @param null|mixed $other Optional other values to apend
      * @return int Number of items pushed
      * @throws ItemNotFoundException If pushing to unset array
      */
-    public function push($alias, $value, $_ = null)
+    public function push($alias, $value, $other = null)
     {
-        if (isset($_)) {
+        if (isset($other)) {
             $values = func_get_args();
             array_shift($values);
         } else {

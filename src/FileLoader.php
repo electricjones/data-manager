@@ -194,7 +194,7 @@ class FileLoader
     /**
      * Decodes a single file using registered decoders
      * @param \SplFileInfo $file
-     * @return null
+     * @return string
      */
     protected function decodeFile($file)
     {

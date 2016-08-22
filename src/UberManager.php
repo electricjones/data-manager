@@ -38,7 +38,6 @@ class UberManager implements
 
     // Standards
     ContainerInterface
-
 {
     use ManagesItemsTrait, ChainsNestedItemsTrait, ArrayableTrait, ManagesIocTrait, LoadsFilesTrait;
 

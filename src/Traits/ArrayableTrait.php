@@ -68,7 +68,7 @@ trait ArrayableTrait
 
     /**
      * @implements JSONSerializable
-     * @return string
+     * @return array
      */
     public function jsonSerialize()
     {

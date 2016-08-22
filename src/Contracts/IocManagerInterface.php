@@ -40,6 +40,7 @@ interface IocManagerInterface extends IocContainerInterface
      * Add a pipeline to to the que for a specific item
      * @param $alias
      * @param $pipeline
+     * @return void
      */
     public function setup($alias, $pipeline);
 

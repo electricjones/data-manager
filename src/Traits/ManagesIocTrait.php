@@ -33,7 +33,7 @@ trait ManagesIocTrait
 
     /**
      * Returns the entire IoC Manifest
-     * @return array
+     * @return array|NoItemFoundMessage
      */
     public function getIocManifest()
     {
