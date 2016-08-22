@@ -89,8 +89,8 @@ class FileLoader
 
     /**
      * Process the current FileBag and return an array
+     * @param bool $ns
      * @return array
-     * @throws Exception
      */
     public function process($ns = true)
     {

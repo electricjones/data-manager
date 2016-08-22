@@ -8,6 +8,8 @@ class YamlDecoderTest extends \PHPUnit_Framework_TestCase
 {
     private $yamlData;
     private $testArrayData;
+
+    /** @var YamlDecoder */
     private $yamlDecoder;
 
     public function setup()

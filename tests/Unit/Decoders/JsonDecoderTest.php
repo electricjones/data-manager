@@ -7,6 +7,8 @@ class JsonDecoderTest extends \PHPUnit_Framework_TestCase
 {
     private $jsonData;
     private $testArrayData;
+
+    /** @var JsonDecoder */
     private $jsonDecoder;
 
     public function setup()
