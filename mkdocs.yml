@@ -2,11 +2,13 @@ site_name: PHP Data Manager
 
 pages:
   - Home: index.md
-  - Composing Traits: index.md#compose
+  - Composing Traits: compose.md
   - Collections: collections.md
   - IoC Container: ioc.md
   - Config Manager: load-files.md
-  - Contributing: contributing.md
-  - License:  license.md
+  - As an Array: arrayable.md
+  - As Chaniable Object: chains.md
+  - Contributing: CONTRIBUTING.md
+  - License:  LICENSE.md
 
 theme: readthedocs
