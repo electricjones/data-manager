@@ -132,11 +132,11 @@ A couple of things to keep in mind:
 ## Using Other Managers
 Each feature of Manager is a different trait, but they are all designed to work in whatever combination you want.
 You can either [composer your own](#compose) or use one of the build in classes
-  * **Basic Manager**: Only manages items (what you see above).
-  * **Manager**: The basic manager with array access and the ability to chain nested items
-  * **Config Manager**: Manages items like above, loads config files, allows for defaults.
-  * **IoC Manager**: Manages an IoC (DI) container. You can resolve dependencies, etc.
-  * **Uber Manager**: Everything in one place. Just for fun, really.
+  - **Basic Manager**: Only manages items (what you see above).
+  - **Manager**: The basic manager with array access and the ability to chain nested items
+  - **Config Manager**: Manages items like above, loads config files, allows for defaults.
+  - **IoC Manager**: Manages an IoC (DI) container. You can resolve dependencies, etc.
+  - **Uber Manager**: Everything in one place. Just for fun, really.
 
 
 ## Some Advanced Features

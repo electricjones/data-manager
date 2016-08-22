@@ -3,11 +3,11 @@ site_name: PHP Data Manager
 pages:
   - Home: index.md
   - Composing Traits: compose.md
-  - Collections: collections.md
   - IoC Container: ioc.md
-  - Config Manager: load-files.md
-  - As an Array: arrayable.md
-  - As Chaniable Object: chains.md
+  - Collections: collections.md
+  - Loading Files: load-files.md
+  - Use As an Array: arrayable.md
+  - Use As Chaniable Object: chains.md
   - Contributing: CONTRIBUTING.md
   - License:  LICENSE.md
 
