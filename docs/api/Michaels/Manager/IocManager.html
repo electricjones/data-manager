@@ -153,7 +153,7 @@ Container interoperability and various array functionality.</p>        </div>
                     <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_add">add</a>(string $alias, mixed $item = null)
+                    <a href="#method_add">add</a>(string $alias, mixed $item = null, array $options = null)
         
                                             <p>Adds a single item.</p>                </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_add"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a></small></div>
@@ -187,6 +187,16 @@ Container interoperability and various array functionality.</p>        </div>
         
                                             <p>Get a single item</p>                </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_get"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getRaw">getRaw</a>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
+        
+                                            <p>Get a single item</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_getRaw"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a></small></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
@@ -354,43 +364,13 @@ Alias of initManager()</p>                </div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-                </div>
-                <div class="col-md-8 type">
-                    <a href="#method_initDi">initDi</a>(array $components = array())
-        
-                                            <p>Initializes IoC Container</p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_initDi"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    array|<a href="../../Michaels/Manager/Messages/NoItemFoundMessage.html"><abbr title="Michaels\Manager\Messages\NoItemFoundMessage">NoItemFoundMessage</abbr></a>
-                </div>
-                <div class="col-md-8 type">
-                    <a href="#method_getIocManifest">getIocManifest</a>()
-        
-                                            <p>Returns the entire IoC Manifest</p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_getIocManifest"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
                     mixed
                 </div>
                 <div class="col-md-8 type">
                     <a href="#method_fetch">fetch</a>(string $alias, string|mixed $fallback = &#039;_michaels_no_fallback&#039;)
         
-                                            <p>Returns the request object with all dependencies</p>                </div>
+                                            <p>Alias of get() for backwards comparability</p>                </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_fetch"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-                </div>
-                <div class="col-md-8 type">
-                    <a href="#method_di">di</a>(string $alias, callable|string|object $factory, array $declared = null)
-        
-                                            <p>Adds a dependency to the manager</p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_di"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a></small></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
@@ -414,30 +394,10 @@ Alias of initManager()</p>                </div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    string
-                </div>
-                <div class="col-md-8 type">
-                    <a href="#method_getDiItemsName">getDiItemsName</a>()
-        
-                                            <p>Returns the name of the property that holds data items</p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_getDiItemsName"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-                </div>
-                <div class="col-md-8 type">
-                    <a href="#method_setDiItemsName">setDiItemsName</a>($nameOfItemsRepository)
-        
-                                            <p>Sets the name of the property that holds data items</p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_setDiItemsName"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
                     
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method___construct">__construct</a>(array $di = array(), array $items = array())
+                    <a href="#method___construct">__construct</a>(array $items = array())
         
                                             <p>Build a new manager instance</p>                </div>
                 <div class="col-md-2"></div>
@@ -536,9 +496,9 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_add">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_add"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 35</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_add"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 36</div>
         <code>    abstract                <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-    <strong>add</strong>(string $alias, mixed $item = null)
+    <strong>add</strong>(string $alias, mixed $item = null, array $options = null)
         </code>
     </h3>
     <div class="details">
@@ -561,6 +521,11 @@ This is an alias for reset()</p>            </div>
                 <td>$item</td>
                 <td>Value to be stored</td>
             </tr>
+                    <tr>
+                <td>array</td>
+                <td>$options</td>
+                <td></td>
+            </tr>
             </table>
 
             
@@ -581,7 +546,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_set">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_set"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 45</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_set"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 46</div>
         <code>    abstract                <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>set</strong>(string $alias, null $item = null)
         </code>
@@ -626,7 +591,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_push">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_push"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 55</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_push"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 56</div>
         <code>    abstract                int
     <strong>push</strong>(string $alias, mixed $value, null|mixed $other = null)
         </code>
@@ -685,7 +650,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_get">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_get"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 65</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_get"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 66</div>
         <code>    abstract                mixed
     <strong>get</strong>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
         </code>
@@ -738,8 +703,62 @@ This is an alias for reset()</p>            </div>
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_getRaw">
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_getRaw"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 214</div>
+        <code>                    mixed
+    <strong>getRaw</strong>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get a single item</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$alias</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$fallback</td>
+                <td>Defaults to '<em>michaels</em>no_fallback' so null can be a fallback</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../Michaels/Manager/Exceptions/ItemNotFoundException.html"><abbr title="Michaels\Manager\Exceptions\ItemNotFoundException">ItemNotFoundException</abbr></a></td>
+                <td>If item not found</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_getIfExists">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_getIfExists"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 72</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_getIfExists"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 73</div>
         <code>    abstract                <abbr title="Michaels\Manager\Traits\NoItemFoundMessage">NoItemFoundMessage</abbr>
     <strong>getIfExists</strong>($alias)
         </code>
@@ -779,7 +798,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getIfHas">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_getIfHas"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 81</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_getIfHas"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 82</div>
         <code>    abstract                <abbr title="Michaels\Manager\Traits\NoItemFoundMessage">NoItemFoundMessage</abbr>
     <strong>getIfHas</strong>($alias)
         </code>
@@ -820,7 +839,7 @@ Alias of getIfExists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAll">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_getAll"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 88</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_getAll"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 89</div>
         <code>    abstract                array
     <strong>getAll</strong>()
         </code>
@@ -850,7 +869,7 @@ Alias of getIfExists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_all">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_all"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 95</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_all"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 96</div>
         <code>    abstract                array
     <strong>all</strong>()
         </code>
@@ -881,7 +900,7 @@ Alias of getAll()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_exists">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_exists"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 103</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_exists"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 104</div>
         <code>    abstract                bool
     <strong>exists</strong>($alias)
         </code>
@@ -921,7 +940,7 @@ Alias of getAll()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_has">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_has"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 112</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_has"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 113</div>
         <code>    abstract                bool
     <strong>has</strong>($alias)
         </code>
@@ -962,7 +981,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isEmpty">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_isEmpty"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 118</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_isEmpty"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 119</div>
         <code>    abstract                boolean
     <strong>isEmpty</strong>()
         </code>
@@ -992,7 +1011,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_remove">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_remove"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 126</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_remove"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 127</div>
         <code>    abstract                <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>remove</strong>($alias)
         </code>
@@ -1032,7 +1051,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_clear">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_clear"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 132</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_clear"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 133</div>
         <code>    abstract                <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>clear</strong>()
         </code>
@@ -1062,7 +1081,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_reset">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_reset"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 141</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_reset"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 142</div>
         <code>    abstract                mixed
     <strong>reset</strong>(array $items)
         </code>
@@ -1103,7 +1122,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_protect">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_protect"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 350</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_protect"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 376</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>protect</strong>($item)
         </code>
@@ -1143,7 +1162,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_loadDefaults">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_loadDefaults"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 361</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_loadDefaults"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 387</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>loadDefaults</strong>(array $defaults)
         </code>
@@ -1183,7 +1202,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getItemsName">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_getItemsName"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 371</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_getItemsName"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 397</div>
         <code>                    string
     <strong>getItemsName</strong>()
         </code>
@@ -1213,7 +1232,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_setItemsName">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_setItemsName"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 381</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesItemsTrait.html#method_setItemsName"><abbr title="Michaels\Manager\Traits\ManagesItemsTrait">ManagesItemsTrait</abbr></a> at line         line 407</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>setItemsName</strong>($nameOfItemsRepository)
         </code>
@@ -1253,7 +1272,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_toJson">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_toJson"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 149</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method_toJson"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 150</div>
         <code>    abstract                string
     <strong>toJson</strong>(int $options)
         </code>
@@ -1293,7 +1312,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method___toString">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method___toString"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 155</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/DependsOnManagesItemsTrait.html#method___toString"><abbr title="Michaels\Manager\Traits\DependsOnManagesItemsTrait">DependsOnManagesItemsTrait</abbr></a> at line         line 156</div>
         <code>    abstract                string
     <strong>__toString</strong>()
         </code>
@@ -1322,78 +1341,8 @@ Alias of initManager()</p>                                </div>
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_initDi">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_initDi"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 26</div>
-        <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-    <strong>initDi</strong>(array $components = array())
-        </code>
-    </h3>
-    <div class="details">
-            
-    
-
-                    <div class="method-description">
-                                    <p>Initializes IoC Container</p>                                </div>
-                <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>array</td>
-                <td>$components</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td><abbr title="Michaels\Manager\Traits\$this">$this</abbr></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_getIocManifest">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_getIocManifest"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 38</div>
-        <code>                    array|<a href="../../Michaels/Manager/Messages/NoItemFoundMessage.html"><abbr title="Michaels\Manager\Messages\NoItemFoundMessage">NoItemFoundMessage</abbr></a>
-    <strong>getIocManifest</strong>()
-        </code>
-    </h3>
-    <div class="details">
-            
-    
-
-                    <div class="method-description">
-                                    <p>Returns the entire IoC Manifest</p>                                </div>
-                <div class="tags">
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>array|<a href="../../Michaels/Manager/Messages/NoItemFoundMessage.html"><abbr title="Michaels\Manager\Messages\NoItemFoundMessage">NoItemFoundMessage</abbr></a></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_fetch">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_fetch"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 57</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_fetch"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 69</div>
         <code>                    mixed
     <strong>fetch</strong>(string $alias, string|mixed $fallback = &#039;_michaels_no_fallback&#039;)
         </code>
@@ -1403,9 +1352,7 @@ Alias of initManager()</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Returns the request object with all dependencies</p>                    <p>string      Full class name for a new object each time
-callable    Factory to create new object (passed manager)
-object      The exact object to be returned</p>            </div>
+                                    <p>Alias of get() for backwards comparability</p>                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -1448,61 +1395,8 @@ object      The exact object to be returned</p>            </div>
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_di">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_di"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 98</div>
-        <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-    <strong>di</strong>(string $alias, callable|string|object $factory, array $declared = null)
-        </code>
-    </h3>
-    <div class="details">
-            
-    
-
-                    <div class="method-description">
-                                    <p>Adds a dependency to the manager</p>                    <p>$factory can be a:
-     string      Full class name for a new object each time
-     callable    Factory to create new object (passed manager)
-     object      The exact object to be returned</p>            </div>
-                <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$alias</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>callable|string|object</td>
-                <td>$factory</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>array</td>
-                <td>$declared</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td><abbr title="Michaels\Manager\Traits\$this">$this</abbr></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_share">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_share"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 129</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_share"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 118</div>
         <code>                    mixed
     <strong>share</strong>($alias)
         </code>
@@ -1542,7 +1436,7 @@ object      The exact object to be returned</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_setup">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_setup"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 141</div>
+        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_setup"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 130</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>setup</strong>($alias, $pipeline)
         </code>
@@ -1586,80 +1480,10 @@ object      The exact object to be returned</p>            </div>
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_getDiItemsName">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_getDiItemsName"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 151</div>
-        <code>                    string
-    <strong>getDiItemsName</strong>()
-        </code>
-    </h3>
-    <div class="details">
-            
-    
-
-                    <div class="method-description">
-                                    <p>Returns the name of the property that holds data items</p>                                </div>
-                <div class="tags">
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>string</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_setDiItemsName">
-        <div class="location">in <a href="../../Michaels/Manager/Traits/ManagesIocTrait.html#method_setDiItemsName"><abbr title="Michaels\Manager\Traits\ManagesIocTrait">ManagesIocTrait</abbr></a> at line         line 161</div>
-        <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-    <strong>setDiItemsName</strong>($nameOfItemsRepository)
-        </code>
-    </h3>
-    <div class="details">
-            
-    
-
-                    <div class="method-description">
-                                    <p>Sets the name of the property that holds data items</p>                                </div>
-                <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td></td>
-                <td>$nameOfItemsRepository</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td><abbr title="Michaels\Manager\Traits\$this">$this</abbr></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line         line 27</div>
+        <div class="location">at line         line 29</div>
         <code>                    
-    <strong>__construct</strong>(array $di = array(), array $items = array())
+    <strong>__construct</strong>(array $items = array())
         </code>
     </h3>
     <div class="details">
@@ -1672,11 +1496,6 @@ object      The exact object to be returned</p>            </div>
                             <h4>Parameters</h4>
 
                     <table class="table table-condensed">
-                    <tr>
-                <td>array</td>
-                <td>$di</td>
-                <td></td>
-            </tr>
                     <tr>
                 <td>array</td>
                 <td>$items</td>
