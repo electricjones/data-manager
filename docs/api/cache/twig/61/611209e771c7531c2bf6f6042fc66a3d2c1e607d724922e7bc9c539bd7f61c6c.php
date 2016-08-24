@@ -220,7 +220,7 @@ class __TwigTemplate_df89f146ce5e5bd7387841ceb1c6aae4a7eb94285f73e08a32fd417fea9
         ob_start();
         try {
             // line 28
-            $context["__internal_aa4457db5f376eaa98f6ab24401bc14cfd42c3bf478e1fca043e6335e8410680"] = $this;
+            $context["__internal_1197f94d4c03a2f9e74a2d4d7631780ab829b49ea7af97e41a2074da17af083d"] = $this;
             // line 30
             if ((isset($context["hints"]) ? $context["hints"] : $this->getContext($context, "hints"))) {
                 // line 31
@@ -243,7 +243,7 @@ class __TwigTemplate_df89f146ce5e5bd7387841ceb1c6aae4a7eb94285f73e08a32fd417fea9
                     // line 32
                     if ($this->getAttribute($context["hint"], "class", array())) {
                         // line 33
-                        echo $context["__internal_aa4457db5f376eaa98f6ab24401bc14cfd42c3bf478e1fca043e6335e8410680"]->getclass_link($this->getAttribute($context["hint"], "name", array()));
+                        echo $context["__internal_1197f94d4c03a2f9e74a2d4d7631780ab829b49ea7af97e41a2074da17af083d"]->getclass_link($this->getAttribute($context["hint"], "name", array()));
                     } elseif ($this->getAttribute(                    // line 34
 $context["hint"], "name", array())) {
                         // line 35
@@ -399,7 +399,7 @@ $context["hint"], "name", array())) {
         ob_start();
         try {
             // line 62
-            $context["__internal_83cc147ed1eef284176f45c0b5356f56536328767f55591e9f2c2c2ba44520f2"] = $this->loadTemplate("macros.twig", "macros.twig", 62);
+            $context["__internal_32f1c52eafeeb39dedebf1be8949ff51e77769b6fa25952d6219b2af9248c96f"] = $this->loadTemplate("macros.twig", "macros.twig", 62);
             // line 63
             echo "(";
             // line 64
@@ -421,7 +421,7 @@ $context["hint"], "name", array())) {
             foreach ($context['_seq'] as $context["_key"] => $context["parameter"]) {
                 // line 65
                 if ($this->getAttribute($context["parameter"], "hashint", array())) {
-                    echo $context["__internal_83cc147ed1eef284176f45c0b5356f56536328767f55591e9f2c2c2ba44520f2"]->gethint_link($this->getAttribute($context["parameter"], "hint", array()));
+                    echo $context["__internal_32f1c52eafeeb39dedebf1be8949ff51e77769b6fa25952d6219b2af9248c96f"]->gethint_link($this->getAttribute($context["parameter"], "hint", array()));
                     echo " ";
                 }
                 // line 66
@@ -476,7 +476,7 @@ $context["hint"], "name", array())) {
         ob_start();
         try {
             // line 74
-            $context["__internal_105fd4738f4323d4064943fc09ee4778bf76f7e03ae2d7650dfffaaab0be5088"] = $this;
+            $context["__internal_56c87b7cf00c6fc6ee8505ba9b3225ed344bbfc58e42ff7ade5dedf2b6ab7407"] = $this;
             // line 75
             echo "
     <div class=\"container-fluid underlined\">
@@ -493,19 +493,19 @@ $context["hint"], "name", array())) {
                 if ($this->getAttribute($context["class"], "isInterface", array())) {
                     // line 81
                     echo "                        <em>";
-                    echo $context["__internal_105fd4738f4323d4064943fc09ee4778bf76f7e03ae2d7650dfffaaab0be5088"]->getclass_link($context["class"], true);
+                    echo $context["__internal_56c87b7cf00c6fc6ee8505ba9b3225ed344bbfc58e42ff7ade5dedf2b6ab7407"]->getclass_link($context["class"], true);
                     echo "</em>
                     ";
                 } else {
                     // line 83
                     echo "                        ";
-                    echo $context["__internal_105fd4738f4323d4064943fc09ee4778bf76f7e03ae2d7650dfffaaab0be5088"]->getclass_link($context["class"], true);
+                    echo $context["__internal_56c87b7cf00c6fc6ee8505ba9b3225ed344bbfc58e42ff7ade5dedf2b6ab7407"]->getclass_link($context["class"], true);
                     echo "
                     ";
                 }
                 // line 85
                 echo "                    ";
-                echo $context["__internal_105fd4738f4323d4064943fc09ee4778bf76f7e03ae2d7650dfffaaab0be5088"]->getdeprecated($context["class"]);
+                echo $context["__internal_56c87b7cf00c6fc6ee8505ba9b3225ed344bbfc58e42ff7ade5dedf2b6ab7407"]->getdeprecated($context["class"]);
                 echo "
                 </div>
                 <div class=\"col-md-6\">
@@ -638,7 +638,7 @@ $context["hint"], "name", array())) {
         try {
             // line 112
             echo "    ";
-            $context["__internal_f59e0fc423de9b92b8dc90cb9a08c0bea426dd301f085d2553c0a8a9b5a1dfbe"] = $this;
+            $context["__internal_36f03ee5fa22b2d0894830e43cc833cd79847bfcc75816546e6454c4d84e538c"] = $this;
             // line 113
             echo "
     ";
@@ -648,7 +648,7 @@ $context["hint"], "name", array())) {
                 echo "        <p>
             ";
                 // line 116
-                echo $context["__internal_f59e0fc423de9b92b8dc90cb9a08c0bea426dd301f085d2553c0a8a9b5a1dfbe"]->getdeprecated((isset($context["reflection"]) ? $context["reflection"] : $this->getContext($context, "reflection")));
+                echo $context["__internal_36f03ee5fa22b2d0894830e43cc833cd79847bfcc75816546e6454c4d84e538c"]->getdeprecated((isset($context["reflection"]) ? $context["reflection"] : $this->getContext($context, "reflection")));
                 echo "
             ";
                 // line 117

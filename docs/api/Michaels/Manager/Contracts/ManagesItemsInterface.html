@@ -120,7 +120,7 @@
                     <abbr title="Michaels\Manager\Contracts\$this">$this</abbr>
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_add">add</a>(string $alias, mixed $item = null)
+                    <a href="#method_add">add</a>(string $alias, mixed $item = null, array $options = null)
         
                                             <p>Adds a single item.</p>                </div>
                 <div class="col-md-2"></div>
@@ -373,9 +373,9 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_add">
-        <div class="location">at line         line 40</div>
+        <div class="location">at line         line 41</div>
         <code>                    <abbr title="Michaels\Manager\Contracts\$this">$this</abbr>
-    <strong>add</strong>(string $alias, mixed $item = null)
+    <strong>add</strong>(string $alias, mixed $item = null, array $options = null)
         </code>
     </h3>
     <div class="details">
@@ -398,6 +398,11 @@ This is an alias for reset()</p>            </div>
                 <td>$item</td>
                 <td>Value to be stored</td>
             </tr>
+                    <tr>
+                <td>array</td>
+                <td>$options</td>
+                <td>Only used for some extra features</td>
+            </tr>
             </table>
 
             
@@ -418,7 +423,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_set">
-        <div class="location">at line         line 50</div>
+        <div class="location">at line         line 51</div>
         <code>                    <abbr title="Michaels\Manager\Contracts\$this">$this</abbr>
     <strong>set</strong>(string $alias, null $item = null)
         </code>
@@ -463,7 +468,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_push">
-        <div class="location">at line         line 60</div>
+        <div class="location">at line         line 61</div>
         <code>                    int
     <strong>push</strong>(string $alias, mixed $value, null|mixed $other = null)
         </code>
@@ -522,7 +527,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_get">
-        <div class="location">at line         line 70</div>
+        <div class="location">at line         line 71</div>
         <code>                    mixed
     <strong>get</strong>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
         </code>
@@ -576,7 +581,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getIfExists">
-        <div class="location">at line         line 77</div>
+        <div class="location">at line         line 78</div>
         <code>                    <abbr title="Michaels\Manager\Contracts\NoItemFoundMessage">NoItemFoundMessage</abbr>
     <strong>getIfExists</strong>($alias)
         </code>
@@ -616,7 +621,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getIfHas">
-        <div class="location">at line         line 86</div>
+        <div class="location">at line         line 87</div>
         <code>                    <abbr title="Michaels\Manager\Contracts\NoItemFoundMessage">NoItemFoundMessage</abbr>
     <strong>getIfHas</strong>($alias)
         </code>
@@ -657,7 +662,7 @@ Alias of getIfExists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAll">
-        <div class="location">at line         line 93</div>
+        <div class="location">at line         line 94</div>
         <code>                    array
     <strong>getAll</strong>()
         </code>
@@ -687,7 +692,7 @@ Alias of getIfExists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_all">
-        <div class="location">at line         line 100</div>
+        <div class="location">at line         line 101</div>
         <code>                    array
     <strong>all</strong>()
         </code>
@@ -718,7 +723,7 @@ Alias of getAll()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_exists">
-        <div class="location">at line         line 108</div>
+        <div class="location">at line         line 109</div>
         <code>                    bool
     <strong>exists</strong>($alias)
         </code>
@@ -758,7 +763,7 @@ Alias of getAll()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_has">
-        <div class="location">at line         line 117</div>
+        <div class="location">at line         line 118</div>
         <code>                    bool
     <strong>has</strong>($alias)
         </code>
@@ -799,7 +804,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isEmpty">
-        <div class="location">at line         line 123</div>
+        <div class="location">at line         line 124</div>
         <code>                    boolean
     <strong>isEmpty</strong>()
         </code>
@@ -829,7 +834,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_remove">
-        <div class="location">at line         line 131</div>
+        <div class="location">at line         line 132</div>
         <code>                    <abbr title="Michaels\Manager\Contracts\$this">$this</abbr>
     <strong>remove</strong>($alias)
         </code>
@@ -869,7 +874,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_clear">
-        <div class="location">at line         line 137</div>
+        <div class="location">at line         line 138</div>
         <code>                    <abbr title="Michaels\Manager\Contracts\$this">$this</abbr>
     <strong>clear</strong>()
         </code>
@@ -899,7 +904,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_reset">
-        <div class="location">at line         line 146</div>
+        <div class="location">at line         line 147</div>
         <code>                    mixed
     <strong>reset</strong>(array $items)
         </code>
@@ -940,7 +945,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_toJson">
-        <div class="location">at line         line 154</div>
+        <div class="location">at line         line 155</div>
         <code>                    string
     <strong>toJson</strong>(int $options)
         </code>
@@ -980,7 +985,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method___toString">
-        <div class="location">at line         line 160</div>
+        <div class="location">at line         line 161</div>
         <code>                    string
     <strong>__toString</strong>()
         </code>

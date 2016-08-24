@@ -120,7 +120,7 @@
                     <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_add">add</a>(string $alias, mixed $item = null)
+                    <a href="#method_add">add</a>(string $alias, mixed $item = null, array $options = null)
         
                                             <p>Adds a single item.</p>                </div>
                 <div class="col-md-2"></div>
@@ -151,6 +151,16 @@
                 </div>
                 <div class="col-md-8 type">
                     <a href="#method_get">get</a>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
+        
+                                            <p>Get a single item</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getRaw">getRaw</a>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
         
                                             <p>Get a single item</p>                </div>
                 <div class="col-md-2"></div>
@@ -413,9 +423,9 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_add">
-        <div class="location">at line         line 92</div>
+        <div class="location">at line         line 93</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
-    <strong>add</strong>(string $alias, mixed $item = null)
+    <strong>add</strong>(string $alias, mixed $item = null, array $options = null)
         </code>
     </h3>
     <div class="details">
@@ -438,6 +448,11 @@ This is an alias for reset()</p>            </div>
                 <td>$item</td>
                 <td>Value to be stored</td>
             </tr>
+                    <tr>
+                <td>array</td>
+                <td>$options</td>
+                <td>THIS IS NOT USED HERE</td>
+            </tr>
             </table>
 
             
@@ -458,7 +473,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_set">
-        <div class="location">at line         line 139</div>
+        <div class="location">at line         line 155</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>set</strong>(string $alias, null $item = null)
         </code>
@@ -503,7 +518,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_push">
-        <div class="location">at line         line 152</div>
+        <div class="location">at line         line 168</div>
         <code>                    int
     <strong>push</strong>(string $alias, mixed $value, null|mixed $other = null)
         </code>
@@ -562,9 +577,63 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_get">
-        <div class="location">at line         line 183</div>
+        <div class="location">at line         line 201</div>
         <code>                    mixed
     <strong>get</strong>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get a single item</p>                    <p>Note: When editing, update ManagesIocTrait::getRaw()</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$alias</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$fallback</td>
+                <td>Defaults to '<em>michaels</em>no_fallback' so null can be a fallback</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../Michaels/Manager/Exceptions/ItemNotFoundException.html"><abbr title="Michaels\Manager\Exceptions\ItemNotFoundException">ItemNotFoundException</abbr></a></td>
+                <td>If item not found</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getRaw">
+        <div class="location">at line         line 214</div>
+        <code>                    mixed
+    <strong>getRaw</strong>(string $alias, string $fallback = &#039;_michaels_no_fallback&#039;)
         </code>
     </h3>
     <div class="details">
@@ -616,7 +685,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getIfExists">
-        <div class="location">at line         line 204</div>
+        <div class="location">at line         line 235</div>
         <code>                    <a href="../../../Michaels/Manager/Messages/NoItemFoundMessage.html"><abbr title="Michaels\Manager\Messages\NoItemFoundMessage">NoItemFoundMessage</abbr></a>
     <strong>getIfExists</strong>($alias)
         </code>
@@ -656,7 +725,7 @@ This is an alias for reset()</p>            </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getIfHas">
-        <div class="location">at line         line 225</div>
+        <div class="location">at line         line 256</div>
         <code>                    <a href="../../../Michaels/Manager/Messages/NoItemFoundMessage.html"><abbr title="Michaels\Manager\Messages\NoItemFoundMessage">NoItemFoundMessage</abbr></a>
     <strong>getIfHas</strong>($alias)
         </code>
@@ -697,7 +766,7 @@ Alias of getIfExists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAll">
-        <div class="location">at line         line 235</div>
+        <div class="location">at line         line 266</div>
         <code>                    array
     <strong>getAll</strong>()
         </code>
@@ -727,7 +796,7 @@ Alias of getIfExists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_all">
-        <div class="location">at line         line 246</div>
+        <div class="location">at line         line 277</div>
         <code>                    array
     <strong>all</strong>()
         </code>
@@ -758,7 +827,7 @@ Alias of getAll()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_exists">
-        <div class="location">at line         line 257</div>
+        <div class="location">at line         line 288</div>
         <code>                    bool
     <strong>exists</strong>($alias)
         </code>
@@ -798,7 +867,7 @@ Alias of getAll()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_has">
-        <div class="location">at line         line 283</div>
+        <div class="location">at line         line 309</div>
         <code>                    bool
     <strong>has</strong>($alias)
         </code>
@@ -839,7 +908,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isEmpty">
-        <div class="location">at line         line 293</div>
+        <div class="location">at line         line 319</div>
         <code>                    boolean
     <strong>isEmpty</strong>()
         </code>
@@ -869,7 +938,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_remove">
-        <div class="location">at line         line 305</div>
+        <div class="location">at line         line 331</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>remove</strong>($alias)
         </code>
@@ -909,7 +978,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_clear">
-        <div class="location">at line         line 326</div>
+        <div class="location">at line         line 352</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>clear</strong>()
         </code>
@@ -939,7 +1008,7 @@ Alias of exists()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_reset">
-        <div class="location">at line         line 340</div>
+        <div class="location">at line         line 366</div>
         <code>                    mixed
     <strong>reset</strong>(array $items)
         </code>
@@ -980,7 +1049,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_protect">
-        <div class="location">at line         line 350</div>
+        <div class="location">at line         line 376</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>protect</strong>($item)
         </code>
@@ -1020,7 +1089,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_loadDefaults">
-        <div class="location">at line         line 361</div>
+        <div class="location">at line         line 387</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>loadDefaults</strong>(array $defaults)
         </code>
@@ -1060,7 +1129,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getItemsName">
-        <div class="location">at line         line 371</div>
+        <div class="location">at line         line 397</div>
         <code>                    string
     <strong>getItemsName</strong>()
         </code>
@@ -1090,7 +1159,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_setItemsName">
-        <div class="location">at line         line 381</div>
+        <div class="location">at line         line 407</div>
         <code>                    <abbr title="Michaels\Manager\Traits\$this">$this</abbr>
     <strong>setItemsName</strong>($nameOfItemsRepository)
         </code>
@@ -1130,7 +1199,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_toJson">
-        <div class="location">at line         line 393</div>
+        <div class="location">at line         line 419</div>
         <code>                    string
     <strong>toJson</strong>(int $options)
         </code>
@@ -1170,7 +1239,7 @@ Alias of initManager()</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method___toString">
-        <div class="location">at line         line 402</div>
+        <div class="location">at line         line 428</div>
         <code>                    string
     <strong>__toString</strong>()
         </code>

@@ -30,9 +30,10 @@ trait DependsOnManagesItemsTrait
      *
      * @param string $alias Key to be stored
      * @param mixed $item Value to be stored
+     * @param array $options
      * @return $this
      */
-    abstract public function add($alias, $item = null);
+    abstract public function add($alias, $item = null, array $options = null);
 
     /**
      * Updates an item

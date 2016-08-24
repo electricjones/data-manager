@@ -72,7 +72,7 @@ trait ManagesItemsTrait
     public function hydrate($data, $append = false)
     {
         if ($append) {
-            $this->add($data);
+            $this->addItem($data);
         } else {
             $this->reset($data);
         }
@@ -87,16 +87,32 @@ trait ManagesItemsTrait
      *
      * @param string $alias Key to be stored
      * @param mixed $item Value to be stored
+     * @param array $options THIS IS NOT USED HERE
      * @return $this
      */
-    public function add($alias, $item = null)
+    public function add($alias, $item = null, array $options = null)
+    {
+        $this->addItem($alias, $item, $options);
+    }
+
+    /**
+     * Adds a single item.
+     *
+     * Allow for dot notation (one.two.three) and item nesting.
+     *
+     * @param string $alias Key to be stored
+     * @param mixed $item Value to be stored
+     * @param array $options THIS IS NOT USED HERE
+     * @return $this
+     */
+    protected function addItem($alias, $item = null, array $options = null)
     {
         $this->checkIfProtected($alias);
 
         // Are we adding multiple items?
         if (is_array($alias)) {
             foreach ($alias as $key => $value) {
-                $this->add($key, $value);
+                $this->addItem($key, $value);
             }
             return $this;
         }
@@ -138,7 +154,7 @@ trait ManagesItemsTrait
      */
     public function set($alias, $item = null)
     {
-        return $this->add($alias, $item);
+        return $this->addItem($alias, $item);
     }
 
     /**
@@ -175,12 +191,27 @@ trait ManagesItemsTrait
     /**
      * Get a single item
      *
+     * Note: When editing, update ManagesIocTrait::getRaw()
+     *
      * @param string $alias
      * @param string $fallback Defaults to '_michaels_no_fallback' so null can be a fallback
      * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
      * @return mixed
      */
     public function get($alias, $fallback = '_michaels_no_fallback')
+    {
+        return $this->getRaw($alias, $fallback);
+    }
+
+    /**
+     * Get a single item
+     *
+     * @param string $alias
+     * @param string $fallback Defaults to '_michaels_no_fallback' so null can be a fallback
+     * @throws \Michaels\Manager\Exceptions\ItemNotFoundException If item not found
+     * @return mixed
+     */
+    public function getRaw($alias, $fallback = '_michaels_no_fallback')
     {
         $item = $this->getIfExists($alias);
 
@@ -256,11 +287,6 @@ trait ManagesItemsTrait
      */
     public function exists($alias)
     {
-        // If we are looking for a dependency
-        if (strpos($alias, '$dep.') !== false) {
-            $alias = str_replace('$dep', $this->getDiItemsName(), $alias);
-        }
-
         $repo = $this->getItemsName();
         $loc = &$this->$repo;
         foreach (explode('.', $alias) as $step) {

@@ -15,5 +15,5 @@ interface IocContainerInterface
      * @param string $alias
      * @return mixed
      */
-    public function fetch($alias);
+    public function get($alias);
 }

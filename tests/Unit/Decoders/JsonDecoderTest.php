@@ -50,11 +50,9 @@ class JsonDecoderTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\JsonDecodingFailedException
-     */
     public function test_invalid_json_decoding()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\JsonDecodingFailedException');
         $this->jsonDecoder->decode($this->testArrayData);
     }
 

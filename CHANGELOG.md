@@ -1,6 +1,12 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
+# v0.9.2
+ - IoC Manager is 100% compliant with container-interop
+ - Moved to PHPUnit 3 to keep php 5.4 compatibility
+ - Removed @expectedExceptions for php 5.4 compatibility
+ - Remove `UberManager`, it was begging for trouble
+
 # v0.9.1 - 8-22-2016
  - Move to a new testing structure
  - Add integration tests
