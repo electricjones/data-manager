@@ -99,6 +99,3 @@ class MyCoolCollection implements ManagesItemsInterface
     }
 }
 ```
-
-## Contributing
-Any feedback here would be appreciated. Open an issue or PR. See [contributing](contributing.md) for more info.

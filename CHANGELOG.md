@@ -1,7 +1,7 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
-# v0.9 - NEXT
+# v0.9.1 - 8-22-2016
  - Move to a new testing structure
  - Add integration tests
  - Cleanup and refactor
@@ -9,6 +9,9 @@ All Notable changes to `Manager` will be documented in this file
  - add linking (multiple aliases) to ioc manager
  - add to ioc manager, fetch a class by string
  - Allow user to force no namespacing in file loading
+ - Cleanup Test Coverage and Code Analysis
+ - Initialize new Docs and Readme
+ - Initialize API Documentation and Marketing Site
  
 # v0.8.9 - 3-11-2016
  - Add full composer.json

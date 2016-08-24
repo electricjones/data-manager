@@ -1,0 +1,14 @@
+site_name: PHP Data Manager
+
+pages:
+  - Home: index.md
+  - Composing Traits: compose.md
+  - IoC Container: ioc.md
+  - Collections: collections.md
+  - Loading Files: load-files.md
+  - Use As an Array: arrayable.md
+  - Use As Chaniable Object: chains.md
+  - Contributing: CONTRIBUTING.md
+  - License:  LICENSE.md
+
+theme: readthedocs
