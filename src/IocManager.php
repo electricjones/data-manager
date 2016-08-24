@@ -17,16 +17,17 @@ use Michaels\Manager\Traits\ManagesItemsTrait;
  */
 class IocManager implements ManagesItemsInterface, ContainerInterface, IocManagerInterface
 {
-    use ManagesItemsTrait, ManagesIocTrait;
+    use ManagesItemsTrait, ManagesIocTrait {
+        ManagesIocTrait::add insteadof ManagesItemsTrait;
+        ManagesIocTrait::get insteadof ManagesItemsTrait;
+    }
 
     /**
      * Build a new manager instance
-     * @param array $di
      * @param array $items
      */
-    public function __construct(array $di = [], array $items = [])
+    public function __construct(array $items = [])
     {
         $this->initManager($items);
-        $this->initDi($di);
     }
 }
