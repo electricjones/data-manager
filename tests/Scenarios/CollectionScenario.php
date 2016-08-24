@@ -76,11 +76,10 @@ trait CollectionScenario
         $this->assertEquals('two-value', $actual, "failed to return raw value");
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function test_throws_exception_for_undefined_collection_method()
     {
+        $this->setExpectedException('\BadMethodCallException');
+
         $manager = $this->getManager();
         $manager->doesNotExist();
     }

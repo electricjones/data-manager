@@ -107,20 +107,18 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $actual, "failed to add a single mime type");
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function test_error_when_decoding_empty_file_bag()
     {
+        $this->setExpectedException('\Exception');
+
         $fileLoader = new FileLoader();
         $fileLoader->decodeFileBagData(new FileBag());
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\UnsupportedFilesException
-     */
     public function test_error_when_decoding_invalid_file_types()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\UnsupportedFilesException');
+
         $this->fileLoader->addFiles([
             new \SplFileInfo(realpath('/Fixtures/FilesWithBadNames/config.ini')),
             new \SplFileInfo(realpath('/Fixtures/FilesWithBadNames/config.txt')),
@@ -129,11 +127,10 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->fileLoader->process();
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\BadFileDataException
-     */
     public function test_error_when_adding_invalid_file_bag()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\BadFileDataException');
+
         $fileLoader = new FileLoader();
         $fileLoader->addFiles('string');
     }
@@ -196,11 +193,10 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, "failed to custom namespace the second file");
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function test_throws_exception_for_invalid_file_load()
     {
+        $this->setExpectedException('\RuntimeException');
+
         $fileLoader = new FileLoader();
         $file = new \SplFileInfo('nogo.nope');
 
