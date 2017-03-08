@@ -14,9 +14,11 @@ interface LoadsFilesInterface
      *
      * @param array $files an array of SplFileInfo Objects
      * @param $append boolean
+     * @param bool $namespace
+     * @param bool $strict
      * @return array
      */
-    public function loadFiles(array $files, $append = false);
+    public function loadFiles(array $files, $append = false, $namespace = true, $strict = true);
 
     /**
      * Allows for the addition of a custom decoder to load custom files..
