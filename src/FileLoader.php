@@ -90,11 +90,12 @@ class FileLoader
     /**
      * Process the current FileBag and return an array
      * @param bool $ns
+     * @param bool $strict
      * @return array
      */
-    public function process($ns = true)
+    public function process($ns = true, $strict = true)
     {
-        return $this->decodedData = $this->decodeFileBagData($this->fileBag, $ns);
+        return $this->decodedData = $this->decodeFileBagData($this->fileBag, $ns, $strict);
     }
 
     /**
@@ -103,10 +104,11 @@ class FileLoader
      *
      * @param array|FileBag $fileBag
      * @param bool $ns
+     * @param bool $strict
      * @return array
      * @throws Exception
      */
-    public function decodeFileBagData(FileBag $fileBag, $ns = true)
+    public function decodeFileBagData(FileBag $fileBag, $ns = true, $strict = true)
     {
         $decodedData = [];
         $files = $fileBag->getAllFileInfoObjects();
@@ -118,7 +120,7 @@ class FileLoader
             list($namespace, $file) = $this->getFilesNamespace($file);
 
             // Decode the actual file and save data
-            $fileData = $this->decodeFile($file);
+            $fileData = $this->decodeFile($file, $strict);
             if (is_array($fileData)) {
                 foreach ($fileData as $k => $v) {
                     if ($ns === true) {
@@ -194,16 +196,27 @@ class FileLoader
     /**
      * Decodes a single file using registered decoders
      * @param \SplFileInfo $file
+     * @param bool $strict
      * @return array|bool
+     * @throws Exception
      */
-    protected function decodeFile(\SplFileInfo $file)
+    protected function decodeFile(\SplFileInfo $file, $strict = true)
     {
         $mimeType = $file->getExtension();
 
         $this->checkAndAddDefaultDecoder($mimeType);
 
         if ($this->isSupportedMimeType($mimeType)) {
-            $data = $this->getFileContents($file);
+            try {
+                $data = $this->getFileContents($file);
+            } catch (\Exception $exception) {
+                if ($strict) {
+                    throw $exception;
+                } else {
+                    return [];
+                }
+            }
+
             return $this->decoders[$mimeType]->decode($data);
         }
 
