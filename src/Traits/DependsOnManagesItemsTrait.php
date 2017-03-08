@@ -21,7 +21,7 @@ trait DependsOnManagesItemsTrait
      * @param bool $append When true, data will be appended to the current set
      * @return $this
      */
-    abstract public function hydrate(array $data, $append = false);
+    abstract public function hydrate($data, $append = false);
 
     /**
      * Adds a single item.

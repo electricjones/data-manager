@@ -28,7 +28,7 @@ interface ManagesItemsInterface
      * @param bool $append When true, data will be appended to the current set
      * @return $this
      */
-    public function hydrate(array $data, $append = false);
+    public function hydrate($data, $append = false);
 
     /**
      * Adds a single item.
