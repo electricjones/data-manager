@@ -207,11 +207,12 @@ class FileLoader
         $this->checkAndAddDefaultDecoder($mimeType);
 
         if ($this->isSupportedMimeType($mimeType)) {
-            try {
+
+            if (is_readable($file->getPathname())) {
                 $data = $this->getFileContents($file);
-            } catch (\Exception $exception) {
+            } else {
                 if ($strict) {
-                    throw $exception;
+                    throw new \Exception("File not found: {$file->getPathname()}");
                 } else {
                     return [];
                 }

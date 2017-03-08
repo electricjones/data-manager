@@ -1,5 +1,7 @@
 <?php
 namespace Michaels\Manager\Contracts;
+use Michaels\Manager\Exceptions\ItemNotFoundException;
+use Michaels\Manager\Messages\NoItemFoundMessage;
 
 /**
  * API Methods for managing items
