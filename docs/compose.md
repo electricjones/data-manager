@@ -33,9 +33,8 @@ initManager() is used so it doesn't conflict with user-defined init() methods.
   1. [`ManagesItemsTrait`](#getting-started) fulfills `ManagesItemsInterface` and adds most functionality. Look at the interface for full list.
   2. [`ArrayableTrait`](arrayable.md) makes the class usable as an array (`$manager['some']['data']`) or in loops and such
   3. [`ChainsNestedItemsTrait`](chains.md) allows you to use fluent properties to manage data (`$manager->one()->two()->three = 'three`)
-  4. [`CollectionTrait`](collections.md) returns collections with all sorts of [array helpers](https://github.com/bocharsky-bw/Arrayzy)
-  5. [`ManagesIocTrait`](ioc.md) turns Manager into a simple, but complete IoC or Dependency Injection manager
-  6. [`LoadsFilesTrait`](load-files.md) allows Manager to load data from config files.
+  4. [`ManagesIocTrait`](ioc.md) turns Manager into a simple, but complete IoC or Dependency Injection manager
+  5. [`LoadsFilesTrait`](load-files.md) allows Manager to load data from config files.
 
 There are special considerations when using ManagesIocTrait. See its documentation.
 

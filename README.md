@@ -18,7 +18,6 @@ Simple data manager for nested data, dot notation access, extendability, and con
   * Manage nested data via dot-notation
   * Be [composable](docs/compose.md) - integrate into current containers via traits (extras)
   * Include extras for 
-    * [Collections](docs/collections.md), 
     * [Loading Files](docs/load-files.md), 
     * [Managing IoC](docs/ioc.md) / Dependencies.
   * Allow for protected data (immutable) and default values.

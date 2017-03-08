@@ -30,8 +30,6 @@ different traits into your project.
     * Use Manager as a configuration bank, complete with defaults.
     * Load configuration files (php, yaml, json, xml, and custom)
 
-* [Collections](collections.md): Adds extra array-helper methods (based on [Arrayzy](https://github.com/bocharsky-bw/Arrayzy))  
-
 * [Load From Files](load-files.md): 
 Load from various types of files. Json, Php, and Yaml supported by default.
 Add your own Custom Decoders easily.
