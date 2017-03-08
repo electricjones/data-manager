@@ -35,9 +35,10 @@ interface ManagesItemsInterface
      *
      * @param string $alias Key to be stored
      * @param mixed $item Value to be stored
+     * @param array $options Only used for some extra features
      * @return $this
      */
-    public function add($alias, $item = null);
+    public function add($alias, $item = null, array $options = null);
 
     /**
      * Updates an item

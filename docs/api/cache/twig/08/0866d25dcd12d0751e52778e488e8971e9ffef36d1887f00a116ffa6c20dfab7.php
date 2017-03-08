@@ -25,7 +25,7 @@ class __TwigTemplate_e70e62093e8f3084819c1df4e93d0e087a2a0e4bc73d6c9e00b07b6a037
     protected function doDisplay(array $context, array $blocks = array())
     {
         // line 2
-        $context["__internal_7d77848fe072a19ce1c194dcd815efc01316d1ff1ac5f5506bbb750580ab41bd"] = $this->loadTemplate("macros.twig", "search.twig", 2);
+        $context["__internal_022d252d9d059b29bb08d0e36ecfae58ad6138ebbe84e795afbe115575f85c8f"] = $this->loadTemplate("macros.twig", "search.twig", 2);
         // line 1
         $this->parent->display($context, array_merge($this->blocks, $blocks));
     }
