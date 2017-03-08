@@ -19,7 +19,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
     protected function doDisplay(array $context, array $blocks = array())
     {
         // line 1
-        $context["__internal_3abfe7d95b8e3dc37a5cb5534978c7915201cd06e8e3449801da4b7670b2eea7"] = $this;
+        $context["__internal_e5784faa6597f3eb138d3d2a8a1eaf32ee7d1c12952662de9f7e9a4159920a76"] = $this;
         // line 2
         echo "
 (function(root) {
@@ -28,7 +28,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
     var rootPath = '';
     var treeHtml = '";
         // line 7
-        echo twig_replace_filter($context["__internal_3abfe7d95b8e3dc37a5cb5534978c7915201cd06e8e3449801da4b7670b2eea7"]->getelement((isset($context["tree"]) ? $context["tree"] : $this->getContext($context, "tree")), $this->getAttribute((isset($context["project"]) ? $context["project"] : $this->getContext($context, "project")), "config", array(0 => "default_opened_level"), "method"), 0), array("'" => "\\'", "
+        echo twig_replace_filter($context["__internal_e5784faa6597f3eb138d3d2a8a1eaf32ee7d1c12952662de9f7e9a4159920a76"]->getelement((isset($context["tree"]) ? $context["tree"] : $this->getContext($context, "tree")), $this->getAttribute((isset($context["project"]) ? $context["project"] : $this->getContext($context, "project")), "config", array(0 => "default_opened_level"), "method"), 0), array("'" => "\\'", "
 " => ""));
         echo "';
 
@@ -212,7 +212,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
     {
         // line 20
         echo "            ";
-        $context["__internal_fec9f14ad72298db06597a5026d98ea3d54ffe884d2fe9be935abccf0d16efba"] = $this;
+        $context["__internal_cda1a6740f0a8856784bea2bcc88e41f986316741e554bc513889b2992693871"] = $this;
         // line 21
         echo "
             ";
@@ -257,7 +257,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
             echo "\"},
                 ";
             // line 28
-            echo $context["__internal_fec9f14ad72298db06597a5026d98ea3d54ffe884d2fe9be935abccf0d16efba"]->getadd_class_methods_index($context["class"]);
+            echo $context["__internal_cda1a6740f0a8856784bea2bcc88e41f986316741e554bc513889b2992693871"]->getadd_class_methods_index($context["class"]);
             echo "
             ";
         }
@@ -295,7 +295,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
             echo "\"},
                 ";
             // line 33
-            echo $context["__internal_fec9f14ad72298db06597a5026d98ea3d54ffe884d2fe9be935abccf0d16efba"]->getadd_class_methods_index($context["class"]);
+            echo $context["__internal_cda1a6740f0a8856784bea2bcc88e41f986316741e554bc513889b2992693871"]->getadd_class_methods_index($context["class"]);
             echo "
             ";
         }
@@ -424,7 +424,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
         try {
             // line 224
             echo "    ";
-            $context["__internal_203852106d81b21fad240b3e53ecbd07d6dc0c94215c15f2799adb4e5d97d8fa"] = $this;
+            $context["__internal_bebe8905e0900e01c1175fd00adacebfa5bb4679ea8f4414bb7daab08b65cf52"] = $this;
             // line 225
             echo "
     <ul>";
@@ -462,7 +462,7 @@ class __TwigTemplate_1af9ac9d8e6bdab055b91c0b315695ba76def72622bbd698fddd8fae39f
                     <div class=\"bd\">
                         ";
                     // line 234
-                    echo $context["__internal_203852106d81b21fad240b3e53ecbd07d6dc0c94215c15f2799adb4e5d97d8fa"]->getelement($this->getAttribute($context["element"], 2, array(), "array"), (isset($context["opened"]) ? $context["opened"] : $this->getContext($context, "opened")), ((isset($context["depth"]) ? $context["depth"] : $this->getContext($context, "depth")) + 1));
+                    echo $context["__internal_bebe8905e0900e01c1175fd00adacebfa5bb4679ea8f4414bb7daab08b65cf52"]->getelement($this->getAttribute($context["element"], 2, array(), "array"), (isset($context["opened"]) ? $context["opened"] : $this->getContext($context, "opened")), ((isset($context["depth"]) ? $context["depth"] : $this->getContext($context, "depth")) + 1));
                     // line 235
                     echo "</div>
                 </li>

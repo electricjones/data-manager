@@ -15,35 +15,11 @@ trait ManagesIocTrait
 {
     use DependsOnManagesItemsTrait;
 
-    /** @var string Name of the ioc manifest */
-    protected $nameOfIocManifest = '_diManifest';
-
-    /**
-     * Initializes IoC Container
-     * @param array $components
-     * @return $this
-     */
-    public function initDi(array $components = [])
-    {
-        $this->initManager();
-        $this->add($this->nameOfIocManifest, $components);
-
-        return $this;
-    }
-
-    /**
-     * Returns the entire IoC Manifest
-     * @return array|NoItemFoundMessage
-     */
-    public function getIocManifest()
-    {
-        $manifest = $this->getIfExists($this->nameOfIocManifest);
-
-        return ($manifest instanceof NoItemFoundMessage) ? [] : $manifest;
-    }
-
     /**
      * Returns the request object with all dependencies
+     *
+     * Overrides the `get()` method on ManagesItemsTrait
+     * Use getRaw() to return the raw value
      *
      * string      Full class name for a new object each time
      * callable    Factory to create new object (passed manager)
@@ -54,16 +30,16 @@ trait ManagesIocTrait
      * @return mixed
      * @throws \Exception
      */
-    public function fetch($alias, $fallback = '_michaels_no_fallback')
+    public function get($alias, $fallback = '_michaels_no_fallback')
     {
         // If this is a link, just go back to the master
-        $link = $this->getIfExists($this->nameOfIocManifest . ".$alias");
+        $link = $this->getIfExists("$alias");
         if (is_string($link) && strpos($link, '_michaels_link_') !== false) {
-            return $this->fetch(str_replace('_michaels_link_', '', $link));
+            return $this->get(str_replace('_michaels_link_', '', $link));
         }
 
         // Otherwise, continue
-        $shared = $this->getIfExists($this->nameOfIocManifest . "._singletons.$alias");
+        $shared = $this->getIfExists("_singletons.$alias");
 
         if ($shared instanceof NoItemFoundMessage) {
             // This is not a shared item. We want a new one each time
@@ -76,10 +52,23 @@ trait ManagesIocTrait
             // This is shared, but we must produce and cache it
             } else {
                 $object = $this->produceDependency($alias, $fallback);
-                $this->set($this->nameOfIocManifest . "._singletons.$alias", $object);
+                $this->set("_singletons.$alias", $object);
                 return $object;
             }
         }
+    }
+
+    /**
+     * Alias of get() for backwards comparability
+     *
+     * @param string $alias
+     * @param string|mixed $fallback
+     * @return mixed
+     * @throws \Exception
+     */
+    public function fetch($alias, $fallback = '_michaels_no_fallback')
+    {
+        return $this->get($alias, $fallback);
     }
 
     /**
@@ -95,7 +84,7 @@ trait ManagesIocTrait
      * @param array $declared
      * @return $this
      */
-    public function di($alias, $factory, array $declared = null)
+    public function add($alias, $factory = null, array $declared = null)
     {
         // Setup links, if necessary
         if (is_array($alias)) {
@@ -104,17 +93,17 @@ trait ManagesIocTrait
             unset($links[0]);
         }
 
-        $this->set($this->nameOfIocManifest . ".$alias", $factory);
+        $this->set("$alias", $factory);
 
         // Setup any declared dependencies
         if ($declared) {
-            $this->set($this->nameOfIocManifest . "._declarations.$alias", $declared);
+            $this->set("_declarations.$alias", $declared);
         }
 
         // Add Links
         if (!empty($links)) {
             foreach ($links as $link) {
-                $this->set($this->nameOfIocManifest . ".$link", "_michaels_link_$alias");
+                $this->set("$link", "_michaels_link_$alias");
             }
         }
 
@@ -128,7 +117,7 @@ trait ManagesIocTrait
      */
     public function share($alias)
     {
-        $this->add($this->nameOfIocManifest . "._singletons.$alias", true);
+        $this->set("_singletons.$alias", true);
         return $this;
     }
 
@@ -140,27 +129,7 @@ trait ManagesIocTrait
      */
     public function setup($alias, $pipeline)
     {
-        $this->add($this->nameOfIocManifest . "._pipelines.$alias", $pipeline);
-        return $this;
-    }
-
-    /**
-     * Returns the name of the property that holds data items
-     * @return string
-     */
-    public function getDiItemsName()
-    {
-        return $this->nameOfIocManifest;
-    }
-
-    /**
-     * Sets the name of the property that holds data items
-     * @param $nameOfItemsRepository
-     * @return $this
-     */
-    public function setDiItemsName($nameOfItemsRepository)
-    {
-        $this->nameOfIocManifest = $nameOfItemsRepository;
+        $this->set("_pipelines.$alias", $pipeline);
         return $this;
     }
 
@@ -175,7 +144,7 @@ trait ManagesIocTrait
     protected function produceDependency($alias, $fallback = '_michaels_no_fallback')
     {
         /* Get the registered factory (string, closure, object, container, NoItemFoundMessage) */
-        $factory = $this->getIfExists($this->nameOfIocManifest . ".$alias");
+        $factory = $this->getIfExists("$alias");
 
         /* Manage not founds and fallback */
         if ($factory instanceof NoItemFoundMessage) {
@@ -189,14 +158,14 @@ trait ManagesIocTrait
         }
 
         /* Get any declared dependencies */
-        $declared = $this->getIfExists($this->nameOfIocManifest . "._declarations.$alias");
+        $declared = $this->getIfExists("_declarations.$alias");
         $dependencies = [];
 
         // Now setup those dependencies into an array
         if (!$declared instanceof NoItemFoundMessage) {
             $dependencies = array_map(function(&$value) use ($alias) {
-                if (is_string($value) && $this->exists($this->nameOfIocManifest . ".$alias")) {
-                    return $this->fetch($value);
+                if (is_string($value) && $this->exists("$alias")) {
+                    return $this->get($value);
                 }
                 return $value;
             }, $declared);
@@ -204,7 +173,7 @@ trait ManagesIocTrait
 
         /* Produce the object itself */
         if ($factory instanceof IocContainerInterface) {
-            $object = $factory->fetch($alias);
+            $object = $factory->get($alias);
 
         } elseif (is_string($factory)) {
             $class = new \ReflectionClass($factory);
@@ -222,11 +191,11 @@ trait ManagesIocTrait
             }
 
         } else {
-            throw new \Exception("`fetch()` can only return from strings, callables, or objects");
+            throw new \Exception("`get()` can only return from strings, callables, or objects");
         }
 
         /* Run the object through the pipeline, if desired */
-        $pipeline = $this->getIfExists($this->nameOfIocManifest . "._pipelines.$alias");
+        $pipeline = $this->getIfExists("_pipelines.$alias");
 
         if (!$pipeline instanceof NoItemFoundMessage) {
             /** @var \Closure $pipeline */

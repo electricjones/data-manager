@@ -167,11 +167,9 @@ trait ManagesItemsScenario
         $this->assertEquals('default-value', $actual, 'failed to return a fallback value');
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
-     */
     public function test_throws_exception_if_item_not_found()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\ItemNotFoundException');
         $this->getManager()->get('doesntexist');
     }
 
@@ -342,7 +340,8 @@ trait ManagesItemsScenario
 
     public function test_to_string()
     {
-        $manager = $this->getManager()->add($this->managesItemsTestData);
+        $manager = $this->getManager();
+        $manager->add($this->managesItemsTestData);
 
         $expected = json_encode($this->managesItemsTestData);
 
@@ -358,11 +357,10 @@ trait ManagesItemsScenario
         $this->assertFalse($manager->isEmpty(), "failed to deny an empty manager");
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
-     */
     public function test_throw_exception_if_trying_to_nest_under_anon_array()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\NestingUnderNonArrayException');
+
         $manager = $this->getManager();
         $manager->initManager(['one' => 1, 'two' => 2]);
 
@@ -388,11 +386,9 @@ trait ManagesItemsScenario
         $this->assertEquals($expected, $manager->getAll(), 'failed to customize item repo name');
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
-     */
     public function test_protect_single_item()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\ModifyingProtectedValueException');
         $manager = new Manager([
             'some' => [
                 'data' => [
@@ -405,11 +401,10 @@ trait ManagesItemsScenario
         $manager->set('some.data.here', 'new-value');
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\ModifyingProtectedValueException
-     */
     public function test_protect_items_under_anest()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\ModifyingProtectedValueException');
+
         $manager = $this->getManager([
             'some' => [
                 'data' => [
@@ -522,22 +517,20 @@ trait ManagesItemsScenario
         $this->assertEquals(['three' => 'four', 'five'], $manager->get('one.two'), "failed to push value onto array");
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\NestingUnderNonArrayException
-     */
     public function test_push_single_value_onto_string()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\NestingUnderNonArrayException');
+
         $manager = new Manager(['one' => ['two' => 'string']]);
         $manager->push('one.two', 'three');
 
         $this->assertEquals(['three'], $manager->get('one.two'), "failed to push value onto array");
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\ItemNotFoundException
-     */
     public function test_push_single_value_onto_nothing()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\ItemNotFoundException');
+
         $manager = new Manager(['one' => ['two']]);
         $manager->push('one.two', 'three');
 

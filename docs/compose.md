@@ -36,20 +36,7 @@ initManager() is used so it doesn't conflict with user-defined init() methods.
   4. [`CollectionTrait`](collections.md) returns collections with all sorts of [array helpers](https://github.com/bocharsky-bw/Arrayzy)
   5. [`ManagesIocTrait`](ioc.md) turns Manager into a simple, but complete IoC or Dependency Injection manager
   6. [`LoadsFilesTrait`](load-files.md) allows Manager to load data from config files.
-  
-```php
-/* An example for UberManager */
-class MyContainer {
-    use Michaels\Manager\Traits\ManagesItemsTrait;
-    use Michaels\Manager\Traits\ChainsNestedItemsTrait;
-    use Michaels\Manager\Traits\ArrayableTrait;
-    use Michaels\Manager\Traits\CollectionTrait; 
-    use Michaels\Manager\Traits\LoadsFilesTrait;
-    use Michaels\Manager\Traits\ManagesIocTrait;
 
-    // Your stuff here. And you may override anything you like.
-    // Remember to add a constructor if you want :)
-}
-```
+There are special considerations when using ManagesIocTrait. See its documentation.
 
 You may also use the **tests** under `tests/traits` to test your integrated functionality. You may have to grab these through cloning the repo. composer usually won't include tests in your `require`

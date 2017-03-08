@@ -45,11 +45,10 @@ class FileBagTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    /**
-     * @expectedException \Michaels\Manager\Exceptions\BadFileInfoObjectException
-     */
     public function test_creation_of_file_bag_with_bad_file_objects()
     {
+        $this->setExpectedException('\Michaels\Manager\Exceptions\BadFileInfoObjectException');
+
         $this->fileBag = new FileBag($this->badTestFileObjects);
     }
 

@@ -7,92 +7,97 @@ Manager can:
   * Resolve dependencies from classnames, closures, already instantiated objects, and instances of Manager itself,
   * Create and Resolve Singletons
   * Configure dependencies for dependencies. This can be done a number of ways and to any depth.
-  * Allow for fallbacks, if you `fetch()` a dependency that doesn't exist.
+  * Allow for fallbacks, if you `get()` a dependency that doesn't exist.
   * Send any object through a closure so you can prepare objects globally.
 
+Please note that this overrides some of the features of `ManagesItemsTrait`. While you an use this to store regular values,
+you MUST use `getRaw($alias, $fallback)` to retrieve a value. Otherwise it will try to become a dependency and break.
+
+Also, the previous versions used `di()` and `fetch()`. These are still available, but deprecated.
+
 ## Setup
-Simply include the `Michaels\Manager\ManagesIocTrait` in your class, or create a new `Michaels\Manager\IocManager`.
+The easiest way is to `$manager = new \Michaels\Manager\IocManager`.
+
+If you want use the traits, you must resolve some conflicts.
+
+```php
+class IocManager
+{
+    use ManagesItemsTrait, ManagesIocTrait {
+        ManagesIocTrait::add insteadof ManagesItemsTrait;
+        ManagesIocTrait::get insteadof ManagesItemsTrait;
+    }
+```
+
 **NOTE THAT** `ManagesIocTrait` depend on ManagesItemsTrait. 
 If you to use `ManagesIocTrait` without `ManagesItemsTrait`, you will get all sorts of errors.
 
 The IoC container is inspired, mostly, by [Pimple](http://pimple.sensiolabs.org/)
 
-```php
-class MyContainer {
-    use Michaels\Manager\ManagesItemsTrait;
-    use Michaels\Manager\ManagesIocTrait;
-}
-
-$manager = new MyContainer();
-
-// Or, use the built in
-$manager = new Michaels\Manager\IocManager();
-```
-
 ## Basic Usage
 Now you can setup dependencies.
 ```php
 /* Setup a dependency using a classname */
-$manager->di('event_dispatcher', 'Full\Class\Here');
+$manager->add('event_dispatcher', 'Full\Class\Here');
 
 /* Setup a dependency using a factory (closure) for lazy loading */
-$manager->di('event_dispatcher', function ($di) {
+$manager->add('event_dispatcher', function ($di) {
     // you have access to the container through $di
-    return new WhateverObject($di->fetch('another_dependency'));
+    return new WhateverObject($di->get('another_dependency'));
 });
 
 /* Setup a dependency using an object for eager loading */
-$manager->di('event_dispatcher', new WhateverObject($manager->fetch('another_dependency'));
+$manager->add('event_dispatcher', new WhateverObject($manager->get('another_dependency'));
 
 /* Setup a dependency using an instance of the IoC container itself */
-$manager->di('cool_eventer', $myCoolEventer);
-$manager->di('event_dispatcher', $manager);
-// Which will call `fetch('event_dispatcher') on the manager you passed and return what it returns.
+$manager->add('cool_eventer', $myCoolEventer);
+$manager->add('event_dispatcher', $manager);
+// Which will call `get('event_dispatcher') on the manager you passed and return what it returns.
 ```
 
 When you're ready to call dependencies:
 ```php
-$manager->fetch('event_dispatcher');
+$manager->get('event_dispatcher');
 ```
 
 You may also register multiple aliases to a single dependency
 ```php
-$manager->di(['one', 'two', 'three'], $factory);
-$manager->fetch('one');
-$manager->fetch('two');
-$manager->fetch('three'); // All the same
+$manager->add(['one', 'two', 'three'], $factory);
+$manager->get('one');
+$manager->get('two');
+$manager->get('three'); // All the same
 ```
 
 And, just ask for a class. If it exists (and nothing by that name was registered), it will be loaded.
 ```php
-$manager->fetch('Some/Class')
+$manager->get('Some/Class')
 ```
 
 ## Dependencies that need Dependencies
 The easiest way to setup a dependency that needs a dependency is to use a closure.
 ```php
-$manager->di('email', 'Some\Email\Class');
+$manager->add('email', 'Some\Email\Class');
 
-$manager->di('logger', function ($di) {
-    return new Logger($di->fetch('email'));
+$manager->add('logger', function ($di) {
+    return new Logger($di->get('email'));
 });
 
-$manager->di('application', function ($di) {
-    return new Application($di->fetch('logger'));
+$manager->add('application', function ($di) {
+    return new Application($di->get('logger'));
 });
 ```
 Now an `Application` will have a `Logger` and a `Logger` will have an `Email`
 
 ## Fallbacks
-By default, if you fetch an item that does not exist, you will get an `ItemNotFoundException`.
-If you want a fallback, simply `$manager->fetch('doesnt_exist', $fallback);`
+By default, if you get an item that does not exist, you will get an `ItemNotFoundException`.
+If you want a fallback, simply `$manager->get('doesnt_exist', $fallback);`
 
 ## Using Singletons
-By default, every time you `fetch()` an item, it will return a new instance of that item (unless the item is an object).
+By default, every time you `get()` an item, it will return a new instance of that item (unless the item is an object).
 If you want a singleton (that is return the same one each time):
 ```php
 $events->share('event_dispatcher');
-$singleton = $events->fetch('event_dispatcher');
+$singleton = $events->get('event_dispatcher');
 ```
 
 ## Prepare an object after created but before returned
@@ -105,40 +110,35 @@ $manager->setup('event_dispatcher', function ($dispatcher, $manager) {
 
 Note that fallbacks are not sent through the pipeline.
 
-Also note that you must setup pipelines BEFORE you `fetch()` the first instance of a `share()`d dependency.
+Also note that you must setup pipelines BEFORE you `get()` the first instance of a `share()`d dependency.
 
 ## Setting Dependencies Implicitly
 You can tell Manager how to configure a certain dependency when you register it.
 For the example, let's assume:
 ```php
-$manager->di('one', new One());
-$manager->di('two', new Two());
+$manager->add('one', new One());
+$manager->add('two', new Two());
 ```
 
 **Setting up using a classname**
 ```php
-$manager->di('event_dispatcher', 'My\Event\Dispatcher', ['one', 'two']);
+$manager->add('event_dispatcher', 'My\Event\Dispatcher', ['one', 'two']);
 ```
 Will pass a `new One()` and `new Two()` into `Dispatcher($one, $two)`
 
 **Setting up using a closure**
 ```php
-$manager->di('event_dispatcher', function ($di, $one, $two) {
+$manager->add('event_dispatcher', function ($di, $one, $two) {
 }, ['one', 'two']);
 ```
 Will pass a `new One()` and `new Two()` into the closure.
 
 **Setting up using an object**
 ```php
-$manager->di('event_dispatcher', $object, ['one', 'two']);
+$manager->add('event_dispatcher', $object, ['one', 'two']);
 ```
 Will pass a `new One()` and `new Two()` into the `needs()` method of `$object` if it exists.
 
 If you pass a value that is not a registered dependency, then the value itself is passed.
 
 NOTE: For the moment, you cannot prepare dependencies that are instances of containers.
-
-
-### Has()
-If you want to check if a dependency exists, use `$manager->has('$dep.whatever')`. Not the single quotes.
-Any feedback here would be appreciated. Take a look at `IocManagerInterface` for future plans.

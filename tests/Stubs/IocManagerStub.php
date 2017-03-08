@@ -11,5 +11,8 @@ use Michaels\Manager\Traits\ManagesItemsTrait;
  */
 class IocManagerStub implements IocManagerInterface
 {
-    use ManagesItemsTrait, ManagesIocTrait;
+    use ManagesItemsTrait, ManagesIocTrait {
+        ManagesIocTrait::add insteadof ManagesItemsTrait;
+        ManagesIocTrait::get insteadof ManagesItemsTrait;
+    }
 }
