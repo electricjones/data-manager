@@ -20,11 +20,11 @@
     }
   ],
   "require": {
-    "php" : ">=5.4.0",
-    "container-interop/container-interop": "1.1.0"
+    "php" : ">=5.6.0",
+    "container-interop/container-interop": "1.2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "3.*",
+    "phpunit/phpunit": "5.7",
     "satooshi/php-coveralls": "1.*"
   },
   "suggest": {
