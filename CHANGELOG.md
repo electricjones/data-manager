@@ -1,6 +1,9 @@
 # Changelog
 All Notable changes to `Manager` will be documented in this file
 
+#v0.9.4
+ - Extracts Collections to another Repo
+
 #v0.9.3
  - Up minimum version to php 5.6 (though 5.4 still passes with older versions of phpunit)
  - Up to phpunit 5.7 (must composer update in 5.6 environment to pass with 5.6)
