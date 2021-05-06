@@ -1,4 +1,4 @@
-> While this still works, it should be considered abandond. Any PR issued will be accepted w/o question. If you want to own this repository, open an issue and contact me.
+> While this still works, it should be considered abandoned. Any PR issued will be accepted w/o question. If you want to own this repository, open an issue and contact me.
 
 # Data Manager
 [![Latest Version](https://img.shields.io/github/release/chrismichaels84/data-manager.svg?style=flat-square)](https://github.com/chrismichaels84/data-manager/releases)
